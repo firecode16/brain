@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">brain</string>
+    <string name="register">REGISTER</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="signup_login_hint">Already have an account? Sign In</string>
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
+
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Chat</string>
+    <string name="title_section3">Profile</string>
+
+    <string name="action_settings">Log out</string>
+    <string name="placeholder_search">Search…</string>
+</resources>

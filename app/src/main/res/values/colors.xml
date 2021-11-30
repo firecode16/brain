@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#131313</color>
+    <color name="colorPrimaryDark">#131313</color>
+    <color name="colorAccent">#9A9898</color>
+
+    <!-- colors for modern ui -->
+    <color name="whiteTextColor">#E8EAEA</color>
+    <color name="primaryTextColor">#575555</color>
+    <color name="loginBkColor">#E8EAEA</color>
+
+    <!-- colors for card -->
+    <color name="whiteCardColor">#C0C0C0</color>
+    <color name="black">#FF000000</color>
+
+    <!-- pager color background -->
+    <color name="pagerSilver">#EDEDED</color>
+
+    <!-- tab indicator color -->
+    <color name="selectedTabIndicatorColor">#00BCD4</color>
+</resources>
