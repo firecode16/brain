@@ -18,4 +18,6 @@
 
     <!-- tab indicator color -->
     <color name="selectedTabIndicatorColor">#00BCD4</color>
+    <!-- FAB color -->
+    <color name="colorFAB">#38C376</color>
 </resources>

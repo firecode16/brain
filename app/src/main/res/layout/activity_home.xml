@@ -39,25 +39,6 @@
             app:tabGravity="fill"
             app:tabMode="fixed" />
 
-        <LinearLayout
-            android:id="@+id/layoutForBtnThink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary"
-            android:padding="4dp">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnThink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="btnThinkOnClicked"
-                android:backgroundTint="#38C376"
-                android:src="@drawable/ic_touch_app"
-                app:elevation="6dp"
-                app:fabCustomSize="50dp" />
-        </LinearLayout>
+        <include layout="@layout/layout_fab" />
     </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
