@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -25,14 +28,21 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
-
     Toolbar toolbar;
     ViewPager viewPager;
     ActionBar actionBar;
     TabLayout tabLayout;
-    FloatingActionButton floatingButton;
-    LinearLayout linearLayout;
     AppBarLayout.LayoutParams layoutParams;
+    CoordinatorLayout coordinatorLayoutForFAB;
+
+    FloatingActionButton fabOptionMenuTouch;
+    FloatingActionButton fabTextPosting;
+    FloatingActionButton fabUploadVideoClip;
+
+    Animation fabOpen;
+    Animation fabClose;
+    Animation animationFabOptionMenuRotateForward;
+    Animation animationFabOptionMenuRotateBackward;
 
     private final int[] tabIcon = {
             R.drawable.ic_face,
@@ -40,11 +50,15 @@ public class HomeActivity extends AppCompatActivity {
             R.drawable.ic_profile
     };
 
+    private boolean fabStatus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         viewPager = (ViewPager) findViewById(R.id.pager);
+        fabTextPosting = findViewById(R.id.fabTextPosting);
+        fabUploadVideoClip = findViewById(R.id.fabUploadVideoClip);
 
         // add the toolbar
         setToolbar();
@@ -55,6 +69,15 @@ public class HomeActivity extends AppCompatActivity {
         // setup Taps
         setupTabSelectedChangeListener();
         setupTabIcons();
+
+        initFabAnimations();
+    }
+
+    private void initFabAnimations() {
+        fabOpen = AnimationUtils.loadAnimation(getApplication(), R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(getApplication(), R.anim.fab_close);
+        animationFabOptionMenuRotateForward = AnimationUtils.loadAnimation(getApplication(), R.anim.rotate_forward);
+        animationFabOptionMenuRotateBackward = AnimationUtils.loadAnimation(getApplication(), R.anim.rotate_backward);
     }
 
     /**
@@ -122,11 +145,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        floatingButton = findViewById(R.id.btnThink);
-                        floatingButton.setVisibility(View.VISIBLE);
+                        fabOptionMenuTouch = findViewById(R.id.fabOptionMenu);
+                        fabOptionMenuTouch.setVisibility(View.VISIBLE);
 
-                        linearLayout = findViewById(R.id.layoutForBtnThink);
-                        linearLayout.setVisibility(View.VISIBLE);
+                        coordinatorLayoutForFAB = findViewById(R.id.coordinatorForFAB);
+                        coordinatorLayoutForFAB.setVisibility(CoordinatorLayout.VISIBLE);
 
                         layoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
                         layoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
@@ -138,11 +161,11 @@ public class HomeActivity extends AppCompatActivity {
                         tabLayout.setLayoutParams(layoutParams);
                         break;
                     case 1:
-                        floatingButton = (FloatingActionButton) findViewById(R.id.btnThink);
-                        floatingButton.setVisibility(View.INVISIBLE);
+                        fabOptionMenuTouch = (FloatingActionButton) findViewById(R.id.fabOptionMenu);
+                        fabOptionMenuTouch.setVisibility(View.INVISIBLE);
 
-                        linearLayout = findViewById(R.id.layoutForBtnThink);
-                        linearLayout.setVisibility(LinearLayout.GONE);
+                        coordinatorLayoutForFAB = findViewById(R.id.coordinatorForFAB);
+                        coordinatorLayoutForFAB.setVisibility(CoordinatorLayout.GONE);
 
                         layoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
                         layoutParams.setScrollFlags(0);
@@ -150,11 +173,11 @@ public class HomeActivity extends AppCompatActivity {
                         toolbar.setVisibility(Toolbar.GONE);
                         break;
                     case 2:
-                        floatingButton = findViewById(R.id.btnThink);
-                        floatingButton.setVisibility(View.INVISIBLE);
+                        fabOptionMenuTouch = findViewById(R.id.fabOptionMenu);
+                        fabOptionMenuTouch.setVisibility(View.INVISIBLE);
 
-                        linearLayout = findViewById(R.id.layoutForBtnThink);
-                        linearLayout.setVisibility(LinearLayout.GONE);
+                        coordinatorLayoutForFAB = findViewById(R.id.coordinatorForFAB);
+                        coordinatorLayoutForFAB.setVisibility(CoordinatorLayout.GONE);
 
                         layoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
                         layoutParams.setScrollFlags(0);
@@ -175,10 +198,46 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void btnThinkOnClicked(View view) {
+    public void fabOptionMenuOnClicked(View view) {
+        if (!fabStatus) {
+            // display fab menu
+            expandFAB();
+            fabStatus = true;
+        } else {
+            //close fab menu
+            hideFAB();
+            fabStatus = false;
+        }
+    }
+
+    private void expandFAB() {
+        fabOptionMenuTouch.startAnimation(animationFabOptionMenuRotateForward);
+
+        fabTextPosting.startAnimation(fabOpen);
+        fabTextPosting.setClickable(true);
+
+        fabUploadVideoClip.startAnimation(fabOpen);
+        fabUploadVideoClip.setClickable(true);
+    }
+
+    private void hideFAB() {
+        fabOptionMenuTouch.startAnimation(animationFabOptionMenuRotateBackward);
+
+        fabTextPosting.startAnimation(fabClose);
+        fabTextPosting.setClickable(true);
+
+        fabUploadVideoClip.startAnimation(fabClose);
+        fabUploadVideoClip.setClickable(true);
+    }
+
+    public void fabTextPostingOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = DialogThinkFragment.newInstance();
         newFragment.show(fm, "Dialog");
+    }
+
+    public void fabUploadVideoClipOnClick(View view) {
+        Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
     }
 
 }
