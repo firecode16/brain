@@ -10,7 +10,8 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/whiteCardColor">
 
         <LinearLayout
             android:id="@+id/idCardTopBar"
@@ -51,7 +52,10 @@
                     android:id="@+id/visits"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginBottom="3dp"
                     android:padding="3dp"
                     android:textColor="@color/black"
                     android:textSize="11sp" />
@@ -64,14 +68,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idCardTopBar"
+            android:layout_marginTop="3dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:padding="5dp"
-            android:text="Description"
+            android:text="Description del posting"
             android:textColor="@color/black"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
 
         <!-- image view to display the post image -->
         <ImageView
@@ -80,26 +84,30 @@
             android:layout_height="300dp"
             android:layout_below="@id/idDescription"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
 
-        <!-- linear layout for displaying facebook actions -->
+        <!-- linear layout for displaying actions control -->
         <LinearLayout
-            android:id="@+id/layoutLine"
+            android:id="@+id/layoutFather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/image"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
-            android:padding="2dp"
+            android:padding="0dp"
             android:weightSum="3">
 
             <LinearLayout
+                android:id="@+id/layoutShare"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/background_drawable"
                 android:orientation="horizontal"
@@ -110,10 +118,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_like" />
+                    android:src="@drawable/ic_share" />
 
                 <TextView
-                    android:id="@+id/likes"
+                    android:id="@+id/share"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -122,16 +130,17 @@
                     android:background="@drawable/background_drawable"
                     android:drawablePadding="3dp"
                     android:padding="5dp"
-                    android:text="likes"
+                    android:text="Share"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -161,10 +170,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layoutShare"
+                android:id="@+id/layoutLikes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/background_drawable"
                 android:orientation="horizontal"
@@ -175,10 +187,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_share" />
+                    android:src="@drawable/ic_like" />
 
                 <TextView
-                    android:id="@+id/share"
+                    android:id="@+id/likes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -187,7 +199,7 @@
                     android:background="@drawable/background_drawable"
                     android:drawablePadding="3dp"
                     android:padding="5dp"
-                    android:text="Share"
+                    android:text="Likes"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>

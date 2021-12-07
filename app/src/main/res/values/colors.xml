@@ -10,11 +10,11 @@
     <color name="loginBkColor">#E8EAEA</color>
 
     <!-- colors for card -->
-    <color name="whiteCardColor">#C0C0C0</color>
+    <color name="whiteCardColor">#F3F1F1</color>
     <color name="black">#FF000000</color>
 
     <!-- pager color background -->
-    <color name="pagerSilver">#EDEDED</color>
+    <color name="pagerSilver">#DDDBDB</color>
 
     <!-- tab indicator color -->
     <color name="selectedTabIndicatorColor">#00BCD4</color>

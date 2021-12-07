@@ -61,7 +61,7 @@ public class GenericFragment extends Fragment {
                 List<Anime> animeItems = new ArrayList<>();
                 animeItems.add(new Anime(R.drawable.casa1, "Casa moderna EUA", 230));
                 animeItems.add(new Anime(R.drawable.casa2, "Los coyotes Ver", 456));
-                animeItems.add(new Anime(R.drawable.casa3, "Fate Stay Night", 342));
+                animeItems.add(new Anime(R.drawable.alcarbon, "Platanos al Carbon", 342));
                 animeItems.add(new Anime(R.drawable.casa4, "Casa de Campo Ver", 590));
 
                 RecyclerView.Adapter<AnimeViewHolder> animeViewHolderAdapter = new AnimeAdapter(getActivity(), animeItems);
