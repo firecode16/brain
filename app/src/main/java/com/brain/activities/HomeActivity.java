@@ -224,10 +224,10 @@ public class HomeActivity extends AppCompatActivity {
         fabOptionMenuTouch.startAnimation(animationFabOptionMenuRotateBackward);
 
         fabTextPosting.startAnimation(fabClose);
-        fabTextPosting.setClickable(true);
+        fabTextPosting.setClickable(false);
 
         fabUploadVideoClip.startAnimation(fabClose);
-        fabUploadVideoClip.setClickable(true);
+        fabUploadVideoClip.setClickable(false);
     }
 
     public void fabTextPostingOnClick(View view) {

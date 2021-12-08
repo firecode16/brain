@@ -4,12 +4,7 @@
 /local.properties
 
 # Intellij IDEA
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
 
 # Mac OS X clutter
 .DS_Store
