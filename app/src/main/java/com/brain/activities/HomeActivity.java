@@ -21,6 +21,7 @@ import com.brain.R;
 import com.brain.adapters.ViewPagerAdapter;
 import com.brain.fragments.DialogThinkFragment;
 import com.brain.fragments.GenericFragment;
+import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -43,12 +44,6 @@ public class HomeActivity extends AppCompatActivity {
     Animation fabClose;
     Animation animationFabOptionMenuRotateForward;
     Animation animationFabOptionMenuRotateBackward;
-
-    private final int[] tabIcon = {
-            R.drawable.ic_face,
-            R.drawable.ic_chat,
-            R.drawable.ic_profile
-    };
 
     private boolean fabStatus = false;
 
@@ -101,9 +96,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupTabIcons() {
-        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcon[0]);
-        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcon[1]);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcon[2]);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(Util.getTabIcon[0]);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(Util.getTabIcon[1]);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(Util.getTabIcon[2]);
     }
 
     @Override
