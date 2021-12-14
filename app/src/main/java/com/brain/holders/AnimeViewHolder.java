@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brain.R;
 
 public class AnimeViewHolder extends RecyclerView.ViewHolder {
-    public ImageView image;
+    public ImageView imagePost;
     public TextView name;
     public TextView visits;
 
     public AnimeViewHolder(@NonNull View itemView) {
         super(itemView);
-        image = (ImageView) itemView.findViewById(R.id.image);
+        imagePost = (ImageView) itemView.findViewById(R.id.imagePost);
         name = (TextView) itemView.findViewById(R.id.name);
         visits = (TextView) itemView.findViewById(R.id.visits);
     }

@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -45,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
     Animation animationFabOptionMenuRotateForward;
     Animation animationFabOptionMenuRotateBackward;
 
+    ImageView imageView;
+
     private boolean fabStatus = false;
 
     @Override
@@ -54,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         fabTextPosting = findViewById(R.id.fabTextPosting);
         fabUploadVideoClip = findViewById(R.id.fabUploadVideoClip);
+        imageView = findViewById(R.id.imagePost);
 
         // add the toolbar
         setToolbar();
@@ -193,7 +197,7 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void fabOptionMenuOnClicked(View view) {
+    public void getFabOptionMenuOnClicked(View view) {
         if (!fabStatus) {
             // display fab menu
             expandFAB();
@@ -225,14 +229,18 @@ public class HomeActivity extends AppCompatActivity {
         fabUploadVideoClip.setClickable(false);
     }
 
-    public void fabTextPostingOnClick(View view) {
+    public void getFabTextPostingOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = DialogThinkFragment.newInstance();
         newFragment.show(fm, "Dialog");
     }
 
-    public void fabUploadVideoClipOnClick(View view) {
+    public void getFabUploadVideoClipOnClick(View view) {
         Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getImagePostOnClicked(View view) {
+        Toast.makeText(getApplication(), "Image clicked", Toast.LENGTH_SHORT).show();
     }
 
 }
