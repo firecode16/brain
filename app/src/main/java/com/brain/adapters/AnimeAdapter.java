@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brain.R;
 import com.brain.holders.AnimeViewHolder;
 import com.brain.model.Anime;
+import com.brain.service.OnImageViewClickListenerService;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
     final Context context;
-    private final List<Anime> items;
+    private final ArrayList<Anime> items;
 
-    public AnimeAdapter(Context context, List<Anime> items) {
+    public AnimeAdapter(Context context, ArrayList<Anime> items) {
         this.context = context;
         this.items = items;
     }
@@ -32,9 +35,11 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull AnimeViewHolder holder, int position) {
-        holder.imagePost.setImageResource(items.get(position).getImage());
+        Glide.with(context).load(items.get(position).getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imagePost);
         holder.name.setText(items.get(position).getName());
         holder.visits.setText("Visits: " + String.valueOf(items.get(position).getVisits()));
+
+        holder.imagePost.setOnClickListener(new OnImageViewClickListenerService(items, position));
     }
 
     @Override

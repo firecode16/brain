@@ -20,8 +20,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.brain.R;
 import com.brain.adapters.ViewPagerAdapter;
-import com.brain.fragments.DialogThinkFragment;
 import com.brain.fragments.GenericFragment;
+import com.brain.fragments.ThinkDialogFragment;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -231,16 +231,12 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getFabTextPostingOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        DialogFragment newFragment = DialogThinkFragment.newInstance();
+        DialogFragment newFragment = ThinkDialogFragment.newInstance();
         newFragment.show(fm, "Dialog");
     }
 
     public void getFabUploadVideoClipOnClick(View view) {
         Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
-    }
-
-    public void getImagePostOnClicked(View view) {
-        Toast.makeText(getApplication(), "Image clicked", Toast.LENGTH_SHORT).show();
     }
 
 }

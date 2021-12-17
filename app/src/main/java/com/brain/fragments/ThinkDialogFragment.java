@@ -9,10 +9,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.brain.R;
 
-public class DialogThinkFragment extends DialogFragment {
+public class ThinkDialogFragment extends DialogFragment {
 
-    public static DialogThinkFragment newInstance() {
-        return new DialogThinkFragment();
+    public static ThinkDialogFragment newInstance() {
+        return new ThinkDialogFragment();
     }
 
     @Override

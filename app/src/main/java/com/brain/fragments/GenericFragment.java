@@ -6,16 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
 import com.brain.adapters.AnimeAdapter;
 import com.brain.adapters.UserAdapter;
-import com.brain.model.Anime;
 import com.brain.holders.AnimeViewHolder;
-import com.brain.model.User;
 import com.brain.holders.UserViewHolder;
+import com.brain.model.Anime;
+import com.brain.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 public class GenericFragment extends Fragment {
 
     protected RecyclerView recycler;
-    protected RecyclerView.LayoutManager manager;
+    protected RecyclerView.LayoutManager recyclerManager;
 
     private static final String SECTION_FRAGMENT_NUMBER = "section_fragment_number";
 
@@ -40,14 +41,8 @@ public class GenericFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.container_recycler, container, false);
-
-        recycler = (RecyclerView) rootView.findViewById(R.id.containerRecycler);
-        recycler.setHasFixedSize(true);
-
-        manager = new LinearLayoutManager(this.getContext());
-        recycler.setLayoutManager(manager);
-
+        View rootView = inflater.inflate(R.layout.recycler_view, container, false);
+        recycler = rootView.findViewById(R.id.recyclerView);
         setUpFragmentView(recycler);
         return rootView;
     }
@@ -58,16 +53,25 @@ public class GenericFragment extends Fragment {
 
         switch (sectionFragmentNumber) {
             case 1:
-                List<Anime> animeItems = new ArrayList<>();
+                recyclerManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(recyclerManager);
+
+                ArrayList<Anime> animeItems = new ArrayList<>();
                 animeItems.add(new Anime(R.drawable.casa1, "Casa moderna EUA", 230));
                 animeItems.add(new Anime(R.drawable.casa2, "Los coyotes Ver", 456));
                 animeItems.add(new Anime(R.drawable.alcarbon, "Platanos al Carbon", 342));
                 animeItems.add(new Anime(R.drawable.casa4, "Casa de Campo Ver", 590));
 
                 RecyclerView.Adapter<AnimeViewHolder> animeViewHolderAdapter = new AnimeAdapter(getActivity(), animeItems);
+
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(animeViewHolderAdapter);
                 break;
             case 2:
+                recyclerManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(recyclerManager);
+
                 List<User> userItems = new ArrayList<>();
                 userItems.add(new User("Fredi Hdz", "codefire@github.com"));
 

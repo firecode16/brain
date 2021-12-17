@@ -9,7 +9,7 @@
     card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/whiteCardColor">
 
@@ -83,9 +83,19 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_below="@id/idDescription"
-            android:onClick="getImagePostOnClicked"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="-32dp"
+            android:layout_above="@id/imagePost"
+            android:background="@drawable/rounded_button"
+            android:src="@drawable/ic_more_vert_24"
+            android:padding="4dp" />
 
         <!-- linear layout for displaying actions control -->
         <LinearLayout
