@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.brain.R;
-import com.brain.adapters.ViewPagerAdapter;
+import com.brain.adapters.ViewFragmentPagerAdapter;
 import com.brain.fragments.GenericFragment;
 import com.brain.fragments.ThinkDialogFragment;
 import com.brain.util.Util;
@@ -92,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewFragmentPagerAdapter adapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(GenericFragment.newInstance(1), getString(R.string.title_section1));
         adapter.addFragment(GenericFragment.newInstance(2), getString(R.string.title_section2));
         adapter.addFragment(GenericFragment.newInstance(3), getString(R.string.title_section3));

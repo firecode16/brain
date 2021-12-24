@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenericFragment extends Fragment {
-
     protected RecyclerView recycler;
     protected RecyclerView.LayoutManager recyclerManager;
 
@@ -56,13 +55,29 @@ public class GenericFragment extends Fragment {
                 recyclerManager = new LinearLayoutManager(getActivity());
                 recyclerView.setLayoutManager(recyclerManager);
 
-                ArrayList<Anime> animeItems = new ArrayList<>();
-                animeItems.add(new Anime(R.drawable.casa1, "Casa moderna EUA", 230));
-                animeItems.add(new Anime(R.drawable.casa2, "Los coyotes Ver", 456));
-                animeItems.add(new Anime(R.drawable.alcarbon, "Platanos al Carbon", 342));
-                animeItems.add(new Anime(R.drawable.casa4, "Casa de Campo Ver", 590));
+                final ArrayList<Anime> singleImage1 = new ArrayList<>();
+                singleImage1.add(new Anime(15243L, "Jorge Sanchez", "jorge@brain.com", R.drawable.civil_war, "Civil War 2021", 2060));
 
-                RecyclerView.Adapter<AnimeViewHolder> animeViewHolderAdapter = new AnimeAdapter(getActivity(), animeItems);
+                ArrayList<Anime> singleImage2 = new ArrayList<>();
+                singleImage2.add(new Anime(25354L, "Jorge Sanchez", "jorge@brain.com", R.drawable.casa2, "Casa moderna EUA", 321));
+
+                ArrayList<Anime> singleImage3 = new ArrayList<>();
+                singleImage3.add(new Anime(36465L, "Ernesto Jr", "ernesto@brain.com", R.drawable.bvs, "Batman vs Superman 2022", 3080));
+
+                ArrayList<Anime> multiImages = new ArrayList<>();
+                multiImages.add(new Anime(47586L, "Ernesto Jr", "ernesto@brain.com", R.drawable.alcarbon, "Platanos a la Carbonera", 257));
+                multiImages.add(new Anime(58697L, "Ernesto Jr", "ernesto@brain.com", R.drawable.casa4, "Casa de Campo, Ver", 587));
+                multiImages.add(new Anime(69788L, "Ernesto Jr", "ernesto@brain.com", R.drawable.bourne, "Bourne 2016", 954));
+                multiImages.add(new Anime(75342L, "Ernesto Jr", "ernesto@brain.com", R.drawable.doctor, "Doctor Strange 2021", 954));
+                multiImages.add(new Anime(94531L, "Ernesto Jr", "ernesto@brain.com", R.drawable.matrix, "Matrix 2021", 954));
+
+                final ArrayList<ArrayList<Anime>> objectMatrix = new ArrayList<>();
+                objectMatrix.add(singleImage1);
+                objectMatrix.add(singleImage2);
+                objectMatrix.add(singleImage3);
+                objectMatrix.add(multiImages);
+
+                RecyclerView.Adapter<AnimeViewHolder> animeViewHolderAdapter = new AnimeAdapter(getContext(), objectMatrix);
 
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -1,0 +1,92 @@
+package com.brain.fragments;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.brain.R;
+import com.brain.adapters.ViewImageSliderPagerAdapter;
+import com.brain.model.Anime;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+public class ImageSliderDialogFragment extends DialogFragment {
+    ViewPager viewPager;
+    ViewImageSliderPagerAdapter sliderPagerAdapter;
+    ArrayList<Anime> animeArrayList;
+    TextView lblCount, lblTitle, lblDate;
+    int selectedPosition = 0;
+    boolean isSingle;
+    Anime model;
+
+    public static ImageSliderDialogFragment newInstance() {
+        return new ImageSliderDialogFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_image_slider, container, false);
+        viewPager = view.findViewById(R.id.viewPager);
+        lblCount = view.findViewById(R.id.lbl_count);
+        lblTitle = view.findViewById(R.id.myTitle);
+        lblDate = view.findViewById(R.id.date);
+
+        assert getArguments() != null;
+        animeArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
+        selectedPosition = getArguments().getInt("position");
+        isSingle = getArguments().getBoolean("isSingle");
+
+        sliderPagerAdapter = new ViewImageSliderPagerAdapter(animeArrayList, view.getContext(), isSingle);
+        viewPager.setAdapter(sliderPagerAdapter);
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+
+        setCurrentItem(selectedPosition);
+        return view;
+    }
+
+    private void setCurrentItem(int position) {
+        viewPager.setCurrentItem(position, false);
+        displayMetaInfo(selectedPosition, isSingle);
+    }
+
+    private void displayMetaInfo(int position, boolean isSingle) {
+        Date currentTime = Calendar.getInstance().getTime();
+        if (isSingle) {
+            model = animeArrayList.get(0);
+        } else {
+            model = animeArrayList.get(position);
+            lblCount.setText((position + 1) + " of " + animeArrayList.size());
+        }
+        lblTitle.setText(model.getDescriptionFooter());
+        lblDate.setText(currentTime.toString());
+    }
+
+    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            displayMetaInfo(position, isSingle);
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
+
+}

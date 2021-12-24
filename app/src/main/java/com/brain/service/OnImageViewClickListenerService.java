@@ -5,14 +5,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.brain.fragments.SlideshowDialogFragment;
+import com.brain.fragments.ImageSliderDialogFragment;
 import com.brain.model.Anime;
 
 import java.util.ArrayList;
 
 public class OnImageViewClickListenerService implements View.OnClickListener {
-    private final ArrayList<Anime> items;
-    private final int position;
+    ArrayList<Anime> items;
+    int position;
     AppCompatActivity appActivity;
 
     public OnImageViewClickListenerService(ArrayList<Anime> items, int position) {
@@ -23,13 +23,14 @@ public class OnImageViewClickListenerService implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Bundle bundle = new Bundle();
+        bundle.putBoolean("isSingle", items.size() == 1);
         bundle.putParcelableArrayList("arrParcelableImages", items);
         bundle.putInt("position", position);
 
         appActivity = (AppCompatActivity) v.getContext();
-        SlideshowDialogFragment slideshowDialogFragment = SlideshowDialogFragment.newInstance();
-        slideshowDialogFragment.setArguments(bundle);
-        slideshowDialogFragment.show(appActivity.getSupportFragmentManager().beginTransaction(), "slideshow");
+        ImageSliderDialogFragment imageSlider = ImageSliderDialogFragment.newInstance();
+        imageSlider.setArguments(bundle);
+        imageSlider.show(appActivity.getSupportFragmentManager().beginTransaction(), "slideshow");
     }
 
 }

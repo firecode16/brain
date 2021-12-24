@@ -23,13 +23,13 @@
             <!-- circle image for displaying the user image -->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/idProfileImage"
-                android:src="@drawable/ic_my_profile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/ic_my_profile" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
 
                 <!--text view for displaying user name-->
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
@@ -52,8 +52,8 @@
                     android:id="@+id/visits"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
                     android:layout_marginStart="3dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="3dp"
                     android:layout_marginBottom="3dp"
                     android:padding="3dp"
@@ -64,12 +64,12 @@
 
         <!-- text view for displaying post description -->
         <TextView
-            android:id="@+id/idDescription"
+            android:id="@+id/descriptionPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idCardTopBar"
-            android:layout_marginTop="3dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:padding="5dp"
@@ -82,20 +82,31 @@
             android:id="@+id/imagePost"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_below="@id/idDescription"
+            android:layout_below="@id/descriptionPost"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="matrix" />
+
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/imageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@id/descriptionPost"
+            card_view:iss_corner_radius="5"
+            card_view:iss_error_image="@drawable/error"
+            card_view:iss_selected_dot="@drawable/default_selected_dot"
+            card_view:iss_text_align="CENTER"
+            card_view:iss_unselected_dot="@drawable/default_unselected_dot" />
 
         <ImageView
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/imagePost"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="-32dp"
-            android:layout_above="@id/imagePost"
             android:background="@drawable/rounded_button"
-            android:src="@drawable/ic_more_vert_24"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:src="@drawable/ic_more_vert_24" />
 
         <!-- linear layout for displaying actions control -->
         <LinearLayout
@@ -103,8 +114,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imagePost"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
@@ -115,8 +126,8 @@
                 android:id="@+id/layoutShare"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -150,8 +161,8 @@
                 android:id="@+id/layoutComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -184,8 +195,8 @@
                 android:id="@+id/layoutLikes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
