@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.brain.fragments.ImageSliderDialogFragment;
 import com.brain.model.Anime;
+import com.brain.views.PosterOverlayView;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
@@ -31,6 +31,7 @@ public class OnImageSliderClickListener implements ItemClickListener {
 
         for (int index = 0; index < listSlideModel.size(); ++index) {
             model = new Anime();
+            model.setId(listSlideModel.get(index).getId());
             model.setImage(listSlideModel.get(index).getImagePath());
             model.setDescriptionFooter(listSlideModel.get(index).getTitle());
             items.add(model);
@@ -40,9 +41,6 @@ public class OnImageSliderClickListener implements ItemClickListener {
         bundle.putParcelableArrayList("arrParcelableImages", items);
         bundle.putInt("position", position);
 
-        appActivity = (AppCompatActivity) context;
-        ImageSliderDialogFragment imageSlider = ImageSliderDialogFragment.newInstance();
-        imageSlider.setArguments(bundle);
-        imageSlider.show(appActivity.getSupportFragmentManager().beginTransaction(), "slideshow");
+        new PosterOverlayView(context, null, items, bundle);
     }
 }

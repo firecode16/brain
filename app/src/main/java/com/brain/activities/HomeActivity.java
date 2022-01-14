@@ -1,5 +1,6 @@
 package com.brain.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,7 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -32,7 +32,6 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager viewPager;
-    ActionBar actionBar;
     TabLayout tabLayout;
     AppBarLayout.LayoutParams layoutParams;
     CoordinatorLayout coordinatorLayoutForFAB;
@@ -79,18 +78,6 @@ public class HomeActivity extends AppCompatActivity {
         animationFabOptionMenuRotateBackward = AnimationUtils.loadAnimation(getApplication(), R.anim.rotate_backward);
     }
 
-    /**
-     * set the toolbar action bar
-     */
-    private void setToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("brain");
-        }
-    }
-
     private void setupViewPager(ViewPager viewPager) {
         ViewFragmentPagerAdapter adapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(GenericFragment.newInstance(1), getString(R.string.title_section1));
@@ -105,40 +92,52 @@ public class HomeActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(Util.getTabIcon[2]);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView search = (SearchView) item.getActionView();
+    private void setToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
-        if (search != null) {
-            search.setSubmitButtonEnabled(false);
-            search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
-                }
-            });
-        }
-        return super.onCreateOptionsMenu(menu);
+        ImageView actionAvatar = findViewById(R.id.actionAvatar);
+        actionAvatar.setOnClickListener(v -> Toast.makeText(getApplication(), "Action Avatar.", Toast.LENGTH_SHORT).show());
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
-            HomeActivity.this.onSearchRequested();
-            return true;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_search:
+                SearchView search = (SearchView) item.getActionView();
+                search.setSubmitButtonEnabled(false);
+                search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+                break;
+            case R.id.action_play_music:
+                Toast.makeText(getApplication(), "Play Music >>", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void setupTabSelectedChangeListener() {
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

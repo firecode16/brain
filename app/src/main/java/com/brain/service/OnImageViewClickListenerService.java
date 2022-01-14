@@ -3,17 +3,14 @@ package com.brain.service;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.brain.fragments.ImageSliderDialogFragment;
 import com.brain.model.Anime;
+import com.brain.views.PosterOverlayView;
 
 import java.util.ArrayList;
 
 public class OnImageViewClickListenerService implements View.OnClickListener {
     ArrayList<Anime> items;
     int position;
-    AppCompatActivity appActivity;
 
     public OnImageViewClickListenerService(ArrayList<Anime> items, int position) {
         this.items = items;
@@ -27,10 +24,6 @@ public class OnImageViewClickListenerService implements View.OnClickListener {
         bundle.putParcelableArrayList("arrParcelableImages", items);
         bundle.putInt("position", position);
 
-        appActivity = (AppCompatActivity) v.getContext();
-        ImageSliderDialogFragment imageSlider = ImageSliderDialogFragment.newInstance();
-        imageSlider.setArguments(bundle);
-        imageSlider.show(appActivity.getSupportFragmentManager().beginTransaction(), "slideshow");
+        new PosterOverlayView(v.getContext(), null, items, bundle);
     }
-
 }

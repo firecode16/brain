@@ -51,11 +51,10 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeViewHolder> {
             holder.imagePost.setOnClickListener(new OnImageViewClickListenerService(items, position));
         } else {
             for (int index = 0; index < items.size(); ++index) {
-                Glide.with(context).load(items.get(index).getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imagePost);
                 holder.userName.setText(items.get(index).getUserName());
                 holder.visits.setText(String.valueOf(items.get(index).getVisits()));
 
-                itemToSlideModel.add(new SlideModel(items.get(index).getImage(), items.get(index).getDescriptionFooter(), ScaleTypes.CENTER_CROP));
+                itemToSlideModel.add(new SlideModel(items.get(index).getId(), items.get(index).getImage(), items.get(index).getDescriptionFooter(), ScaleTypes.CENTER_CROP));
                 holder.imageSlider.setImageList(itemToSlideModel);
                 holder.imageSlider.setItemClickListener(new OnImageSliderClickListener(context, itemToSlideModel));
             }

@@ -1,19 +1,23 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/action_search"
+        android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
-        android:title="@string/placeholder_search"
+        android:iconifiedByDefault="true"
         android:orderInCategory="1"
+        android:title="@string/placeholder_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="collapseActionView|always"
-        android:iconifiedByDefault="true" />
+        app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:id="@+id/action_play_music"
+        android:orderInCategory="2"
+        android:title="@string/play_music"
+        android:icon="@drawable/ic_play_circle_outline"
+        app:showAsAction="always" />
 </menu>

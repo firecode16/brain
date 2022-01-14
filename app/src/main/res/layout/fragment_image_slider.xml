@@ -10,6 +10,12 @@
         android:layout_height="match_parent"
         android:background="@android:color/black" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/imgToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent" />
+
     <TextView
         android:id="@+id/lbl_count"
         android:layout_width="wrap_content"

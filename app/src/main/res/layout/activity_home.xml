@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator"
     android:layout_width="match_parent"
@@ -27,7 +28,24 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/actionAvatar"
+                    style="?attr/actionButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_avatar"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -35,9 +53,7 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             app:tabIndicatorHeight="@dimen/selected_tab_indicator_height"
-            app:tabIndicatorColor="@color/selectedTabIndicatorColor"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            app:tabIndicatorColor="@color/selectedTabIndicatorColor" />
 
         <include layout="@layout/layout_fab" />
     </com.google.android.material.appbar.AppBarLayout>

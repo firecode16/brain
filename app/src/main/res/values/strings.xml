@@ -12,4 +12,5 @@
 
     <string name="action_settings">Log out</string>
     <string name="placeholder_search">Search…</string>
+    <string name="play_music">play music</string>
 </resources>

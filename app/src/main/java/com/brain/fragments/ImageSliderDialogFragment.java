@@ -1,11 +1,13 @@
 package com.brain.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -25,6 +27,7 @@ public class ImageSliderDialogFragment extends DialogFragment {
     int selectedPosition = 0;
     boolean isSingle;
     Anime model;
+    Toolbar toolbar;
 
     public static ImageSliderDialogFragment newInstance() {
         return new ImageSliderDialogFragment();
@@ -43,6 +46,7 @@ public class ImageSliderDialogFragment extends DialogFragment {
         lblCount = view.findViewById(R.id.lbl_count);
         lblTitle = view.findViewById(R.id.myTitle);
         lblDate = view.findViewById(R.id.date);
+        toolbar = view.findViewById(R.id.imgToolbar);
 
         assert getArguments() != null;
         animeArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
@@ -62,6 +66,7 @@ public class ImageSliderDialogFragment extends DialogFragment {
         displayMetaInfo(selectedPosition, isSingle);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void displayMetaInfo(int position, boolean isSingle) {
         Date currentTime = Calendar.getInstance().getTime();
         if (isSingle) {
@@ -70,6 +75,14 @@ public class ImageSliderDialogFragment extends DialogFragment {
             model = animeArrayList.get(position);
             lblCount.setText((position + 1) + " of " + animeArrayList.size());
         }
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         lblTitle.setText(model.getDescriptionFooter());
         lblDate.setText(currentTime.toString());
     }
@@ -88,5 +101,4 @@ public class ImageSliderDialogFragment extends DialogFragment {
         public void onPageScrollStateChanged(int arg0) {
         }
     };
-
 }
