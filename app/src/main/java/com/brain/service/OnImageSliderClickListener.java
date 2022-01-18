@@ -3,21 +3,19 @@ package com.brain.service;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.brain.model.Anime;
+import com.brain.model.Poster;
 import com.brain.views.PosterOverlayView;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class OnImageSliderClickListener implements ItemClickListener {
     Context context;
     ArrayList<SlideModel> listSlideModel;
-    ArrayList<Anime> items;
-    Anime model;
-    AppCompatActivity appActivity;
+    ArrayList<Poster> items;
+    Poster model;
 
     public OnImageSliderClickListener(Context context, ArrayList<SlideModel> listSlideModel) {
         this.context = context;
@@ -30,9 +28,9 @@ public class OnImageSliderClickListener implements ItemClickListener {
         items = new ArrayList<>();
 
         for (int index = 0; index < listSlideModel.size(); ++index) {
-            model = new Anime();
+            model = new Poster();
             model.setId(listSlideModel.get(index).getId());
-            model.setImage(listSlideModel.get(index).getImagePath());
+            model.setImage(Objects.requireNonNull(listSlideModel.get(index).getImagePath()));
             model.setDescriptionFooter(listSlideModel.get(index).getTitle());
             items.add(model);
         }

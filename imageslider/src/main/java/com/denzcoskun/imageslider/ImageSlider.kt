@@ -75,7 +75,7 @@ class ImageSlider @JvmOverloads constructor(
         period = typedArray.getInt(R.styleable.ImageSlider_iss_period, 1000).toLong()
         delay = typedArray.getInt(R.styleable.ImageSlider_iss_delay, 1000).toLong()
         autoCycle = typedArray.getBoolean(R.styleable.ImageSlider_iss_auto_cycle, false)
-        placeholder = typedArray.getResourceId(R.styleable.ImageSlider_iss_placeholder, R.drawable.loading)
+        placeholder = typedArray.getResourceId(R.styleable.ImageSlider_iss_placeholder, R.drawable.default_placeholder)
         errorImage = typedArray.getResourceId(R.styleable.ImageSlider_iss_error_image, R.drawable.error)
         selectedDot = typedArray.getResourceId(R.styleable.ImageSlider_iss_selected_dot, R.drawable.default_selected_dot)
         unselectedDot = typedArray.getResourceId(R.styleable.ImageSlider_iss_unselected_dot, R.drawable.default_unselected_dot)

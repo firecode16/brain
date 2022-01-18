@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.brain.R;
 import com.brain.adapters.ViewImageSliderPagerAdapter;
-import com.brain.model.Anime;
+import com.brain.model.Poster;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,11 +22,11 @@ import java.util.Date;
 public class ImageSliderDialogFragment extends DialogFragment {
     ViewPager viewPager;
     ViewImageSliderPagerAdapter sliderPagerAdapter;
-    ArrayList<Anime> animeArrayList;
+    ArrayList<Poster> posterArrayList;
     TextView lblCount, lblTitle, lblDate;
     int selectedPosition = 0;
     boolean isSingle;
-    Anime model;
+    Poster model;
     Toolbar toolbar;
 
     public static ImageSliderDialogFragment newInstance() {
@@ -49,11 +49,11 @@ public class ImageSliderDialogFragment extends DialogFragment {
         toolbar = view.findViewById(R.id.imgToolbar);
 
         assert getArguments() != null;
-        animeArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
+        posterArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
         selectedPosition = getArguments().getInt("position");
         isSingle = getArguments().getBoolean("isSingle");
 
-        sliderPagerAdapter = new ViewImageSliderPagerAdapter(animeArrayList, view.getContext(), isSingle);
+        sliderPagerAdapter = new ViewImageSliderPagerAdapter(posterArrayList, view.getContext(), isSingle);
         viewPager.setAdapter(sliderPagerAdapter);
         viewPager.addOnPageChangeListener(onPageChangeListener);
 
@@ -70,10 +70,10 @@ public class ImageSliderDialogFragment extends DialogFragment {
     private void displayMetaInfo(int position, boolean isSingle) {
         Date currentTime = Calendar.getInstance().getTime();
         if (isSingle) {
-            model = animeArrayList.get(0);
+            model = posterArrayList.get(0);
         } else {
-            model = animeArrayList.get(position);
-            lblCount.setText((position + 1) + " of " + animeArrayList.size());
+            model = posterArrayList.get(position);
+            lblCount.setText((position + 1) + " of " + posterArrayList.size());
         }
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);

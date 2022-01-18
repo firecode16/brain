@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brain.R;
 import com.denzcoskun.imageslider.ImageSlider;
 
-public class AnimeViewHolder extends RecyclerView.ViewHolder {
+public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     public TextView userName;
     public ImageView imagePost;
     public TextView description;
     public TextView visits;
     public ImageSlider imageSlider;
 
-    public AnimeViewHolder(@NonNull View itemView) {
+    public MultimediaViewHolder(@NonNull View itemView) {
         super(itemView);
         imagePost = itemView.findViewById(R.id.imagePost);
         userName = itemView.findViewById(R.id.userName);

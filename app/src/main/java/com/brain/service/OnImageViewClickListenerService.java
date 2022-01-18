@@ -3,16 +3,16 @@ package com.brain.service;
 import android.os.Bundle;
 import android.view.View;
 
-import com.brain.model.Anime;
+import com.brain.model.Poster;
 import com.brain.views.PosterOverlayView;
 
 import java.util.ArrayList;
 
 public class OnImageViewClickListenerService implements View.OnClickListener {
-    ArrayList<Anime> items;
+    ArrayList<Poster> items;
     int position;
 
-    public OnImageViewClickListenerService(ArrayList<Anime> items, int position) {
+    public OnImageViewClickListenerService(ArrayList<Poster> items, int position) {
         this.items = items;
         this.position = position;
     }

@@ -78,14 +78,21 @@
             android:textColor="@color/black"
             android:textSize="13sp" />
 
-        <!-- image view to display the post image -->
+        <!-- video post -->
+        <VideoView
+            android:id="@+id/videoPost"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_below="@id/descriptionPost" />
+
+        <!-- image post -->
         <ImageView
             android:id="@+id/imagePost"
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:layout_below="@id/descriptionPost"
             android:adjustViewBounds="true"
-            android:scaleType="matrix"
+            android:scaleType="centerCrop"
             tools:ignore="ContentDescription" />
 
         <com.denzcoskun.imageslider.ImageSlider

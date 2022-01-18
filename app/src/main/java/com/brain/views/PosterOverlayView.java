@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,27 +16,26 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.brain.R;
-import com.brain.model.Anime;
+import com.brain.model.Poster;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.stfalcon.imageviewer.StfalconImageViewer;
-import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
 
 import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
 public class PosterOverlayView extends ConstraintLayout {
-    ArrayList<Anime> items;
+    ArrayList<Poster> items;
     int selectedPosition = 0;
     boolean isSingle;
-    Anime model;
+    Poster model;
     TextView txtView;
     Bundle bundle;
     Toolbar toolbar;
     ImageView imageVerticalDots;
-    StfalconImageViewer<Anime> imageViewer;
+    StfalconImageViewer<Poster> imageViewer;
 
-    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, ArrayList<Anime> items, Bundle bundle) {
+    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, ArrayList<Poster> items, Bundle bundle) {
         super(context, attrs);
         this.items = items;
         this.bundle = bundle;
@@ -55,9 +53,7 @@ public class PosterOverlayView extends ConstraintLayout {
         selectedPosition = bundle.getInt("position");
         isSingle = bundle.getBoolean("isSingle");
 
-        StfalconImageViewer.Builder<Anime> builder = new StfalconImageViewer.Builder<>(context, items, (imageView, image) -> {
-            Glide.with(context).load(image.getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
-        });
+        StfalconImageViewer.Builder<Poster> builder = new StfalconImageViewer.Builder<>(context, items, (imageView, image) -> Glide.with(context).load(image.getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView));
 
         if (isSingle) {
             model = items.get(0);
@@ -74,20 +70,10 @@ public class PosterOverlayView extends ConstraintLayout {
         }
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewer.dismiss();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> imageViewer.dismiss());
 
         imageVerticalDots = view.findViewById(R.id.menuVerticalDots);
-        imageVerticalDots.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Click download Image...", Toast.LENGTH_SHORT).show();
-            }
-        });
+        imageVerticalDots.setOnClickListener(v -> Toast.makeText(context, "Click download Image...", Toast.LENGTH_SHORT).show());
 
         builder.withOverlayView(view);
         imageViewer = builder.show();

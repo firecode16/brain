@@ -3,7 +3,7 @@ package com.brain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Anime implements Parcelable {
+public class Poster implements Parcelable {
     private Long id;
     private String userName;
     private String email;
@@ -11,10 +11,10 @@ public class Anime implements Parcelable {
     private String descriptionFooter;
     private int visits;
 
-    public Anime() {
+    public Poster() {
     }
 
-    public Anime(Long id, String userName, String email, int image, String descriptionFooter, int visits) {
+    public Poster(Long id, String userName, String email, int image, String descriptionFooter, int visits) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -23,7 +23,7 @@ public class Anime implements Parcelable {
         this.visits = visits;
     }
 
-    protected Anime(Parcel in) {
+    protected Poster(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
         } else {
@@ -36,15 +36,15 @@ public class Anime implements Parcelable {
         visits = in.readInt();
     }
 
-    public static final Creator<Anime> CREATOR = new Creator<Anime>() {
+    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
         @Override
-        public Anime createFromParcel(Parcel in) {
-            return new Anime(in);
+        public Poster createFromParcel(Parcel in) {
+            return new Poster(in);
         }
 
         @Override
-        public Anime[] newArray(int size) {
-            return new Anime[size];
+        public Poster[] newArray(int size) {
+            return new Poster[size];
         }
     };
 
