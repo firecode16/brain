@@ -1,29 +1,29 @@
 package com.brain.service;
 
-import android.os.Bundle;
 import android.view.View;
 
 import com.brain.model.Poster;
+import com.brain.util.SharedData;
 import com.brain.views.PosterOverlayView;
 
 import java.util.ArrayList;
 
 public class OnImageViewClickListenerService implements View.OnClickListener {
-    ArrayList<Poster> items;
+    ArrayList<Poster> postersList;
     int position;
 
-    public OnImageViewClickListenerService(ArrayList<Poster> items, int position) {
-        this.items = items;
+    public OnImageViewClickListenerService(ArrayList<Poster> postersList, int position) {
+        this.postersList = postersList;
         this.position = position;
     }
 
     @Override
     public void onClick(View v) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isSingle", items.size() == 1);
-        bundle.putParcelableArrayList("arrParcelableImages", items);
-        bundle.putInt("position", position);
+        SharedData extras = new SharedData(v.getContext());
+        extras.putBoolean("isSingle", postersList.size() == 1);
+        extras.putListPoster("listPoster", postersList);
+        extras.putInt("position", position);
 
-        new PosterOverlayView(v.getContext(), null, items, bundle);
+        new PosterOverlayView(v.getContext(), null, postersList, extras);
     }
 }

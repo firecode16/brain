@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="6dp"
@@ -83,7 +83,19 @@
             android:id="@+id/videoPost"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_below="@id/descriptionPost" />
+            android:layout_below="@id/descriptionPost"
+            android:orientation="vertical"
+            android:visibility="invisible" />
+
+        <!-- image play video -->
+        <ImageView
+            android:id="@+id/imagePlay"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_below="@id/descriptionPost"
+            android:scaleType="centerCrop"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
 
         <!-- image post -->
         <ImageView

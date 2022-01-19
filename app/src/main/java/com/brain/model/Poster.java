@@ -1,9 +1,8 @@
 package com.brain.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Poster implements Parcelable {
+public class Poster implements Serializable {
     private Long id;
     private String userName;
     private String email;
@@ -11,8 +10,7 @@ public class Poster implements Parcelable {
     private String descriptionFooter;
     private int visits;
 
-    public Poster() {
-    }
+    public Poster() {}
 
     public Poster(Long id, String userName, String email, int image, String descriptionFooter, int visits) {
         this.id = id;
@@ -21,51 +19,6 @@ public class Poster implements Parcelable {
         this.image = image;
         this.descriptionFooter = descriptionFooter;
         this.visits = visits;
-    }
-
-    protected Poster(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readLong();
-        }
-        userName = in.readString();
-        email = in.readString();
-        image = in.readInt();
-        descriptionFooter = in.readString();
-        visits = in.readInt();
-    }
-
-    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
-        @Override
-        public Poster createFromParcel(Parcel in) {
-            return new Poster(in);
-        }
-
-        @Override
-        public Poster[] newArray(int size) {
-            return new Poster[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(id);
-        }
-        dest.writeString(userName);
-        dest.writeString(email);
-        dest.writeInt(image);
-        dest.writeString(descriptionFooter);
-        dest.writeInt(visits);
     }
 
     public Long getId() {

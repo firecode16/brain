@@ -1,9 +1,9 @@
 package com.brain.service;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import com.brain.model.Poster;
+import com.brain.util.SharedData;
 import com.brain.views.PosterOverlayView;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -13,32 +13,32 @@ import java.util.Objects;
 
 public class OnImageSliderClickListener implements ItemClickListener {
     Context context;
-    ArrayList<SlideModel> listSlideModel;
-    ArrayList<Poster> items;
+    ArrayList<SlideModel> slideModelList;
+    ArrayList<Poster> postersList;
     Poster model;
 
-    public OnImageSliderClickListener(Context context, ArrayList<SlideModel> listSlideModel) {
+    public OnImageSliderClickListener(Context context, ArrayList<SlideModel> slideModelList) {
         this.context = context;
-        this.listSlideModel = listSlideModel;
+        this.slideModelList = slideModelList;
     }
 
     @Override
     public void onItemSelected(int position) {
-        Bundle bundle = new Bundle();
-        items = new ArrayList<>();
+        SharedData extras = new SharedData(context);
+        postersList = new ArrayList<>();
 
-        for (int index = 0; index < listSlideModel.size(); ++index) {
+        for (int index = 0; index < slideModelList.size(); ++index) {
             model = new Poster();
-            model.setId(listSlideModel.get(index).getId());
-            model.setImage(Objects.requireNonNull(listSlideModel.get(index).getImagePath()));
-            model.setDescriptionFooter(listSlideModel.get(index).getTitle());
-            items.add(model);
+            model.setId(slideModelList.get(index).getId());
+            model.setImage(Objects.requireNonNull(slideModelList.get(index).getImagePath()));
+            model.setDescriptionFooter(slideModelList.get(index).getTitle());
+            postersList.add(model);
         }
 
-        bundle.putBoolean("isSingle", items.size() == 1);
-        bundle.putParcelableArrayList("arrParcelableImages", items);
-        bundle.putInt("position", position);
+        extras.putBoolean("isSingle", postersList.size() == 1);
+        extras.putListPoster("listPoster", postersList);
+        extras.putInt("position", position);
 
-        new PosterOverlayView(context, null, items, bundle);
+        new PosterOverlayView(context, null, postersList, extras);
     }
 }

@@ -3,7 +3,6 @@ package com.brain.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.brain.R;
 import com.brain.model.Poster;
+import com.brain.util.SharedData;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.stfalcon.imageviewer.StfalconImageViewer;
@@ -25,20 +25,20 @@ import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
 public class PosterOverlayView extends ConstraintLayout {
-    ArrayList<Poster> items;
+    ArrayList<Poster> postersList;
     int selectedPosition = 0;
     boolean isSingle;
     Poster model;
     TextView txtView;
-    Bundle bundle;
     Toolbar toolbar;
     ImageView imageVerticalDots;
     StfalconImageViewer<Poster> imageViewer;
+    SharedData extras;
 
-    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, ArrayList<Poster> items, Bundle bundle) {
+    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, ArrayList<Poster> postersList, SharedData extras) {
         super(context, attrs);
-        this.items = items;
-        this.bundle = bundle;
+        this.postersList = postersList;
+        this.extras = extras;
         init(context);
     }
 
@@ -49,22 +49,22 @@ public class PosterOverlayView extends ConstraintLayout {
         toolbar = view.findViewById(R.id.toolbarForImageFullScreen);
         txtView = view.findViewById(R.id.footer);
 
-        items = bundle.getParcelableArrayList("arrParcelableImages");
-        selectedPosition = bundle.getInt("position");
-        isSingle = bundle.getBoolean("isSingle");
+        postersList = extras.getListPoster("listPoster", Poster.class);
+        selectedPosition = extras.getInt("position");
+        isSingle = extras.getBoolean("isSingle");
 
-        StfalconImageViewer.Builder<Poster> builder = new StfalconImageViewer.Builder<>(context, items, (imageView, image) -> Glide.with(context).load(image.getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView));
+        StfalconImageViewer.Builder<Poster> builder = new StfalconImageViewer.Builder<>(context, postersList, (imageView, image) -> Glide.with(context).load(image.getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView));
 
         if (isSingle) {
-            model = items.get(0);
+            model = postersList.get(0);
             txtView.setText(model.getDescriptionFooter());
         } else {
-            model = items.get(selectedPosition);
+            model = postersList.get(selectedPosition);
             txtView.setText(model.getDescriptionFooter());
 
             builder.withStartPosition(selectedPosition);
             builder.withImageChangeListener(position -> {
-                model = items.get(position);
+                model = postersList.get(position);
                 txtView.setText(model.getDescriptionFooter());
             });
         }

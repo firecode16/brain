@@ -49,7 +49,7 @@ public class ImageSliderDialogFragment extends DialogFragment {
         toolbar = view.findViewById(R.id.imgToolbar);
 
         assert getArguments() != null;
-        posterArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
+        //posterArrayList = getArguments().getParcelableArrayList("arrParcelableImages");
         selectedPosition = getArguments().getInt("position");
         isSingle = getArguments().getBoolean("isSingle");
 

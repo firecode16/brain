@@ -17,6 +17,7 @@ import com.brain.holders.MultimediaViewHolder;
 import com.brain.holders.UserViewHolder;
 import com.brain.model.Poster;
 import com.brain.model.User;
+import com.brain.model.Video;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,12 +75,16 @@ public class GenericFragment extends Fragment {
                 ArrayList<Poster> singleImage4 = new ArrayList<>();
                 singleImage4.add(new Poster(54421L, "Eliza Cardenas", "eliza@brain.com", R.drawable.omero, "Meme Omero", 7020));
 
-                ArrayList<ArrayList<Poster>> objectMatrix = new ArrayList<>();
+                ArrayList<Video> singleVideo1 = new ArrayList<>();
+                singleVideo1.add(new Video(18372L, R.raw.alan_walker_darkside, R.drawable.placeholder_play, "Eithan Hdz", "eithan@brain.com", "Alan Walker - Darkside", 1234));
+
+                final ArrayList<Object> objectMatrix = new ArrayList<>();
                 objectMatrix.add(singleImage1);
                 objectMatrix.add(singleImage2);
                 objectMatrix.add(singleImage3);
                 objectMatrix.add(multiImages);
                 objectMatrix.add(singleImage4);
+                objectMatrix.add(singleVideo1);
 
                 RecyclerView.Adapter<MultimediaViewHolder> animeViewHolderAdapter = new MultimediaAdapter(getContext(), objectMatrix);
 
