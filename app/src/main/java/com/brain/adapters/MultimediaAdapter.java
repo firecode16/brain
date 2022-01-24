@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +21,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 
 import java.util.ArrayList;
 
@@ -35,6 +39,9 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     Poster modelPoster;
     Video modelVideo;
 
+    DataSource.Factory factory;
+    ProgressiveMediaSource.Factory mediaFactory;
+
     public MultimediaAdapter(Context context, ArrayList<Object> objectMatrix) {
         this.context = context;
         this.objectMatrix = objectMatrix;
@@ -45,6 +52,8 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     public MultimediaViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.container_cards, viewGroup, false);
         slideModelList = new ArrayList<>();
+        factory = new DefaultDataSourceFactory(context, "Ex90ExoPlayer");
+        mediaFactory = new ProgressiveMediaSource.Factory(factory);
         return new MultimediaViewHolder(view);
     }
 
@@ -75,26 +84,19 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
                     }
                 }
             } else if (containsInstance(objectList, Video.class)) {
-                holder.imagePlay.setVisibility(View.VISIBLE);
                 holder.videoPost.setVisibility(View.VISIBLE);
 
                 modelVideo = (Video) objectList.get(0);
                 String videoPath = "android.resource://" + context.getPackageName() + "/" + modelVideo.getVideoPath();
                 Uri uri = Uri.parse(videoPath);
-                MediaController controller = new MediaController(context);
+                MediaItem mediaItem = MediaItem.fromUri(uri);
+                ExoPlayer player = new ExoPlayer.Builder(context).build();
 
-                Glide.with(context).load(modelVideo.getImagePlay()).into(holder.imagePlay);
+                holder.videoPost.setPlayer(player);
 
-                controller.setAnchorView(holder.videoPost);
-                holder.videoPost.setMediaController(controller);
-                holder.videoPost.setVideoURI(uri);
-
-                holder.imagePlay.setOnClickListener(v -> {
-                    holder.imagePlay.setVisibility(View.GONE);
-                    holder.videoPost.start();
-                });
-
-                holder.videoPost.setOnCompletionListener(mp -> holder.imagePlay.setVisibility(View.VISIBLE));
+                player.setMediaItem(mediaItem);
+                player.prepare();
+                player.play();
             }
         }
     }

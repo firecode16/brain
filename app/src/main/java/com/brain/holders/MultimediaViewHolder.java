@@ -3,16 +3,16 @@ package com.brain.holders;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
 import com.denzcoskun.imageslider.ImageSlider;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 
 public class MultimediaViewHolder extends RecyclerView.ViewHolder {
-    public VideoView videoPost;
+    public StyledPlayerView videoPost;
 
     public ImageView imagePlay;
     public ImageView imagePost;
