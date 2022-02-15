@@ -3,12 +3,13 @@ package com.brain.adapters;
 import static com.brain.util.Util.containsInstance;
 
 import android.content.Context;
-import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
@@ -17,15 +18,11 @@ import com.brain.model.Poster;
 import com.brain.model.Video;
 import com.brain.service.OnImageSliderClickListener;
 import com.brain.service.OnImageViewClickListenerService;
+import com.brain.service.VideoPlayService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 
 import java.util.ArrayList;
 
@@ -35,16 +32,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     ArrayList<Object> objectMatrix;
     ArrayList<Poster> postersList;
     ArrayList<Video> videoList;
+    RecyclerView recyclerView;
 
     Poster modelPoster;
     Video modelVideo;
 
-    DataSource.Factory factory;
-    ProgressiveMediaSource.Factory mediaFactory;
-
-    public MultimediaAdapter(Context context, ArrayList<Object> objectMatrix) {
+    public MultimediaAdapter(Context context, ArrayList<Object> objectMatrix, RecyclerView recyclerView) {
         this.context = context;
         this.objectMatrix = objectMatrix;
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -52,8 +48,6 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     public MultimediaViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.container_cards, viewGroup, false);
         slideModelList = new ArrayList<>();
-        factory = new DefaultDataSourceFactory(context, "Ex90ExoPlayer");
-        mediaFactory = new ProgressiveMediaSource.Factory(factory);
         return new MultimediaViewHolder(view);
     }
 
@@ -84,19 +78,31 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
                     }
                 }
             } else if (containsInstance(objectList, Video.class)) {
-                holder.videoPost.setVisibility(View.VISIBLE);
-
                 modelVideo = (Video) objectList.get(0);
-                String videoPath = "android.resource://" + context.getPackageName() + "/" + modelVideo.getVideoPath();
-                Uri uri = Uri.parse(videoPath);
-                MediaItem mediaItem = MediaItem.fromUri(uri);
-                ExoPlayer player = new ExoPlayer.Builder(context).build();
+                holder.userName.setText(modelVideo.getUserName());
+                holder.visits.setText(String.valueOf(modelVideo.getVisits()));
 
-                holder.videoPost.setPlayer(player);
+                holder.progressBar.setVisibility(View.VISIBLE);
+                holder.volumeControl.setVisibility(View.VISIBLE);
+                holder.videoPost.setVisibility(View.VISIBLE);
+                int itemIndex = holder.getBindingAdapterPosition();
 
-                player.setMediaItem(mediaItem);
-                player.prepare();
-                player.play();
+                VideoPlayService.Companion.initPlayer(context, modelVideo.getUrlVideo(), itemIndex, false, holder);
+
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        assert layoutManager != null;
+                        int index = layoutManager.findFirstCompletelyVisibleItemPosition();
+
+                        // play just visible item
+                        if (index != -1) {
+                            VideoPlayService.Companion.playIndexThenPausePreviousPlayer(index);
+                        }
+                    }
+                });
             }
         }
     }
@@ -104,5 +110,11 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     @Override
     public int getItemCount() {
         return objectMatrix.size();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull MultimediaViewHolder holder) {
+        super.onViewRecycled(holder);
+        Log.e("onViewRecycled >> ", "recycled...");
     }
 }

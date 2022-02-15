@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="6dp"
+    card_view:cardCornerRadius="5dp"
     card_view:cardElevation="3dp"
     card_view:cardUseCompatPadding="true">
 
@@ -84,20 +84,35 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:layout_below="@id/descriptionPost"
-            android:visibility="invisible"
+            android:visibility="gone"
             card_view:resize_mode="fixed_height"
             card_view:show_shuffle_button="false"
-            card_view:show_subtitle_button="false" />
+            card_view:show_subtitle_button="false"
+            card_view:surface_type="texture_view">
 
-        <!-- image play video -->
-        <ImageView
-            android:id="@+id/imagePlay"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_below="@id/descriptionPost"
-            android:scaleType="centerCrop"
-            android:visibility="invisible"
-            tools:ignore="ContentDescription" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <!-- volume control -->
+            <ImageView
+                android:id="@+id/volumeControl"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
+                android:alpha="5"
+                android:animateLayoutChanges="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_volume_off"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+        </com.google.android.exoplayer2.ui.StyledPlayerView>
 
         <!-- image post -->
         <ImageView

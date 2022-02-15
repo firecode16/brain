@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.brain">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.brain">
     <!-- permission -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,7 +25,21 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
-            tools:ignore="MissingClass" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="content" />
+                <data android:scheme="asset" />
+                <data android:scheme="file" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.RegisterActivity"
             tools:ignore="MissingClass" />

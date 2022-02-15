@@ -1,0 +1,108 @@
+package com.brain.service
+
+import android.content.Context
+import android.util.Log
+import android.view.View
+import com.brain.holders.MultimediaViewHolder
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.MediaSourceFactory
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+
+/**
+ * @Author FLE
+ * @Company Brain Inc.
+ * @Email hfredi35@gmail.com
+ */
+class VideoPlayService {
+    companion object {
+        private var positionVideo: Int = 0
+
+        // for hold all players generated
+        private var playersMap: MutableMap<Int, ExoPlayer> = mutableMapOf()
+
+        // for hold current player
+        private var currentPlayingVideo: Pair<Int, ExoPlayer>? = null
+
+        private lateinit var exoPlayer: ExoPlayer
+        private lateinit var dataSourceFactory: DataSource.Factory
+        private lateinit var mediaSource: MediaSource
+        private lateinit var mediaSourceFactory: MediaSourceFactory
+
+        fun releaseAllPlayers() {
+            playersMap.map { it.value.release() }
+        }
+
+        // call when item recycled to improve performance
+        fun releaseRecycledPlayers(index: Int) {
+            playersMap[index]?.release()
+        }
+
+        // call when scroll to pause any playing player
+        private fun pauseCurrentPlayingVideo() {
+            if (currentPlayingVideo != null) {
+                currentPlayingVideo?.second?.playWhenReady = false
+            }
+        }
+
+        fun playIndexThenPausePreviousPlayer(index: Int) {
+            if (playersMap.size == 1) {
+                if (playersMap[index]?.isPlaying == false) {
+                    playersMap[index]?.playWhenReady = true
+                } else if (playersMap[index]?.isPlaying == null) {
+                    playersMap[positionVideo]?.playWhenReady = false
+                }
+            }
+        }
+
+        fun initPlayer(context: Context, url: String, itemIndex: Int? = null, autoPlay: Boolean = false, holder: MultimediaViewHolder) {
+            dataSourceFactory = DefaultHttpDataSource.Factory()
+            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
+            mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+
+            exoPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).build()
+            exoPlayer.addMediaSource(mediaSource)
+            exoPlayer.playWhenReady = autoPlay
+            exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
+            exoPlayer.prepare()
+
+            // When changing track, retain the latest frame instead of showing a black screen
+            holder.videoPost.setKeepContentOnPlayerReset(true)
+            // We'll show the controller, change to true if want controllers as pause and start
+            holder.videoPost.useController = false
+            holder.videoPost.requestFocus()
+            // Bind the player to the view.
+            holder.videoPost.player = exoPlayer
+
+            // add player with its index to map
+            if (playersMap.containsKey(itemIndex)) {
+                playersMap.remove(itemIndex)
+            }
+            if (itemIndex != null) {
+                playersMap[itemIndex] = exoPlayer
+                positionVideo = itemIndex
+            }
+
+            exoPlayer.addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    super.onPlaybackStateChanged(playbackState)
+                    when (playbackState) {
+                        Player.STATE_BUFFERING -> holder.progressBar.visibility = View.VISIBLE
+                        Player.STATE_ENDED -> {
+                            Log.e("STATE_ENDED:: ", "onPlaybackStateChanged: Video ended.")
+                            exoPlayer.seekTo(0)
+                        }
+                        Player.STATE_IDLE -> Log.e("STATE_IDLE:: ", "onPlaybackStateChanged: Video idle.")
+                        Player.STATE_READY -> holder.progressBar.visibility = View.GONE
+                        else -> Log.e("PLAY_STATE:: ", "NOT_FOUND")
+                    }
+                }
+            })
+        }
+    }
+}

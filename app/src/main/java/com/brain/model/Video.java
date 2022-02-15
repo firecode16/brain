@@ -4,17 +4,15 @@ import java.io.Serializable;
 
 public class Video implements Serializable {
     private Long id;
-    private int videoPath;
-    private int imagePlay;
+    private String urlVideo;
     private String userName;
     private String email;
     private String descriptionFooter;
     private int visits;
 
-    public Video(Long id, int videoPath, int imagePlay, String userName, String email, String descriptionFooter, int visits) {
+    public Video(Long id, String urlVideo, String userName, String email, String descriptionFooter, int visits) {
         this.id = id;
-        this.videoPath = videoPath;
-        this.imagePlay = imagePlay;
+        this.urlVideo = urlVideo;
         this.userName = userName;
         this.email = email;
         this.descriptionFooter = descriptionFooter;
@@ -29,20 +27,12 @@ public class Video implements Serializable {
         this.id = id;
     }
 
-    public int getVideoPath() {
-        return videoPath;
+    public String getUrlVideo() {
+        return urlVideo;
     }
 
-    public void setVideoPath(int videoPath) {
-        this.videoPath = videoPath;
-    }
-
-    public int getImagePlay() {
-        return imagePlay;
-    }
-
-    public void setImagePlay(int imagePlay) {
-        this.imagePlay = imagePlay;
+    public void setUrlVideo(String urlVideo) {
+        this.urlVideo = urlVideo;
     }
 
     public String getUserName() {

@@ -1,6 +1,7 @@
 package com.brain.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class GenericFragment extends Fragment {
     protected RecyclerView recycler;
-    protected RecyclerView.LayoutManager recyclerManager;
+    protected RecyclerView.LayoutManager layoutManager;
 
     private static final String SECTION_FRAGMENT_NUMBER = "section_fragment_number";
 
@@ -53,8 +54,8 @@ public class GenericFragment extends Fragment {
 
         switch (sectionFragmentNumber) {
             case 1:
-                recyclerManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(recyclerManager);
+                layoutManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(layoutManager);
 
                 ArrayList<Poster> singleImage1 = new ArrayList<>();
                 singleImage1.add(new Poster(15243L, "Jorge Sanchez", "jorge@brain.com", R.drawable.civil_war, "Civil War 2021", 2060));
@@ -76,7 +77,7 @@ public class GenericFragment extends Fragment {
                 singleImage4.add(new Poster(54421L, "Eliza Cardenas", "eliza@brain.com", R.drawable.omero, "Meme Omero", 7020));
 
                 ArrayList<Video> singleVideo1 = new ArrayList<>();
-                singleVideo1.add(new Video(18372L, R.raw.alan_walker_darkside, R.drawable.placeholder_play, "Eithan Hdz", "eithan@brain.com", "Alan Walker - Darkside", 1234));
+                singleVideo1.add(new Video(18372L, "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", "Eithan Hdz", "eithan@brain.com", "Alan Walker - Darkside", 1234));
 
                 final ArrayList<Object> objectMatrix = new ArrayList<>();
                 objectMatrix.add(singleImage1);
@@ -86,15 +87,15 @@ public class GenericFragment extends Fragment {
                 objectMatrix.add(singleImage4);
                 objectMatrix.add(singleVideo1);
 
-                RecyclerView.Adapter<MultimediaViewHolder> animeViewHolderAdapter = new MultimediaAdapter(getContext(), objectMatrix);
+                RecyclerView.Adapter<MultimediaViewHolder> animeViewHolderAdapter = new MultimediaAdapter(getContext(), objectMatrix, recyclerView);
 
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(animeViewHolderAdapter);
                 break;
             case 2:
-                recyclerManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(recyclerManager);
+                layoutManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(layoutManager);
 
                 List<User> userItems = new ArrayList<>();
                 userItems.add(new User("Fredi Hdz", "codefire@github.com"));
@@ -107,4 +108,22 @@ public class GenericFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //VideoPlayerMethodService.releaseAllPlayers();
+        Log.d("onPause()::: ", "pause...: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("onResume()::: ", "Reanudar...: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("onDestroy()::: ", "destroy...: ");
+    }
 }
