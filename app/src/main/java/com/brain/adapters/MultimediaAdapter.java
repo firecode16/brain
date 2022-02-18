@@ -103,6 +103,8 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
                         }
                     }
                 });
+
+                holder.volumeControl.setOnClickListener(v -> VideoPlayService.Companion.getToggleVolume(context, holder));
             }
         }
     }

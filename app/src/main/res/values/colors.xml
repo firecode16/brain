@@ -10,7 +10,7 @@
     <color name="loginBkColor">#E8EAEA</color>
 
     <!-- colors for card -->
-    <color name="whiteCardColor">#F3F1F1</color>
+    <color name="whiteCardColor">#EFEEEE</color>
     <color name="black">#FF000000</color>
 
     <!-- pager color background -->

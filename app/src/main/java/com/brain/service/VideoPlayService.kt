@@ -3,7 +3,10 @@ package com.brain.service
 import android.content.Context
 import android.util.Log
 import android.view.View
+import com.brain.R
 import com.brain.holders.MultimediaViewHolder
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
@@ -21,7 +24,11 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
  */
 class VideoPlayService {
     companion object {
-        private var positionVideo: Int = 0
+        private var currentPositionVideo: Int = 0
+
+        enum class VolumeState {ON, OFF}
+        // controlling playback state
+        private lateinit var volumeState: VolumeState
 
         // for hold all players generated
         private var playersMap: MutableMap<Int, ExoPlayer> = mutableMapOf()
@@ -52,10 +59,16 @@ class VideoPlayService {
 
         fun playIndexThenPausePreviousPlayer(index: Int) {
             if (playersMap.size == 1) {
-                if (playersMap[index]?.isPlaying == false) {
-                    playersMap[index]?.playWhenReady = true
-                } else if (playersMap[index]?.isPlaying == null) {
-                    playersMap[positionVideo]?.playWhenReady = false
+                if (index == currentPositionVideo) {
+                    if (playersMap[index]?.isPlaying == false) {
+                        playersMap[index]?.playWhenReady = true
+                    } else if (playersMap[index]?.isPlaying == true) {
+                        return;
+                    }
+                } else {
+                    if (playersMap[currentPositionVideo]?.isPlaying == true) {
+                        playersMap[currentPositionVideo]?.playWhenReady = false
+                    }
                 }
             }
         }
@@ -76,6 +89,7 @@ class VideoPlayService {
             // We'll show the controller, change to true if want controllers as pause and start
             holder.videoPost.useController = false
             holder.videoPost.requestFocus()
+            setVolumeControl(context, VolumeState.OFF, holder)
             // Bind the player to the view.
             holder.videoPost.player = exoPlayer
 
@@ -85,7 +99,7 @@ class VideoPlayService {
             }
             if (itemIndex != null) {
                 playersMap[itemIndex] = exoPlayer
-                positionVideo = itemIndex
+                currentPositionVideo = itemIndex
             }
 
             exoPlayer.addListener(object : Player.Listener {
@@ -103,6 +117,36 @@ class VideoPlayService {
                     }
                 }
             })
+        }
+
+        private fun getAnimateVolumeControl(context: Context, holder: MultimediaViewHolder) {
+            if (holder.volumeControl != null) {
+                holder.volumeControl.bringToFront();
+                if (volumeState == VolumeState.OFF) {
+                    Glide.with(context).load(R.drawable.ic_volume_off).into(holder.volumeControl)
+                } else if (volumeState == VolumeState.ON) {
+                    Glide.with(context).load(R.drawable.ic_volume_up).into(holder.volumeControl)
+                }
+            }
+        }
+
+        private fun setVolumeControl(context: Context, state: VolumeState, holder: MultimediaViewHolder) {
+            volumeState = state;
+            if (state == VolumeState.OFF) {
+                exoPlayer.volume = 0F
+                getAnimateVolumeControl(context, holder)
+            } else if (state == VolumeState.ON) {
+                exoPlayer.volume = 1F
+                getAnimateVolumeControl(context, holder)
+            }
+        }
+
+        fun getToggleVolume(context: Context, holder: MultimediaViewHolder) {
+            if (volumeState == VolumeState.OFF) {
+                setVolumeControl(context, VolumeState.ON, holder)
+            } else if(volumeState == VolumeState.ON) {
+                setVolumeControl(context, VolumeState.OFF, holder)
+            }
         }
     }
 }
