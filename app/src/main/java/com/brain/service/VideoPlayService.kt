@@ -57,19 +57,33 @@ class VideoPlayService {
             }
         }
 
-        fun playIndexThenPausePreviousPlayer(index: Int) {
-            if (playersMap.size == 1) {
-                if (index == currentPositionVideo) {
-                    if (playersMap[index]?.isPlaying == false) {
-                        playersMap[index]?.playWhenReady = true
-                    } else if (playersMap[index]?.isPlaying == true) {
-                        return;
-                    }
-                } else {
-                    if (playersMap[currentPositionVideo]?.isPlaying == true) {
-                        playersMap[currentPositionVideo]?.playWhenReady = false
-                    }
+        private fun getOneVideo(index: Int) {
+            if (index == currentPositionVideo) {
+                if (playersMap[index]?.isPlaying == false) {
+                    playersMap[index]?.playWhenReady = true
+                } else if (playersMap[index]?.isPlaying == true) {
+                    return;
                 }
+            } else {
+                if (playersMap[currentPositionVideo]?.isPlaying == true) {
+                    playersMap[currentPositionVideo]?.playWhenReady = false
+                }
+            }
+        }
+
+        private fun getMultiVideo(index: Int) {
+            if (playersMap[index]?.isPlaying == false) {
+                pauseCurrentPlayingVideo()
+                playersMap[index]?.playWhenReady = true
+                currentPlayingVideo = Pair(index, playersMap[index]!!)
+            }
+        }
+
+        fun getThePlayIndexAndPausePreviousPlayer(index: Int) {
+            if (playersMap.size == 1) {
+                getOneVideo(index)
+            } else if (playersMap.size > 1) {
+                getMultiVideo(index)
             }
         }
 
@@ -89,7 +103,7 @@ class VideoPlayService {
             // We'll show the controller, change to true if want controllers as pause and start
             holder.videoPost.useController = false
             holder.videoPost.requestFocus()
-            setVolumeControl(context, VolumeState.OFF, holder)
+            setVolumeControl(VolumeState.OFF, holder)
             // Bind the player to the view.
             holder.videoPost.player = exoPlayer
 
@@ -119,33 +133,33 @@ class VideoPlayService {
             })
         }
 
-        private fun getAnimateVolumeControl(context: Context, holder: MultimediaViewHolder) {
+        private fun getAnimateVolumeControl(holder: MultimediaViewHolder) {
             if (holder.volumeControl != null) {
                 holder.volumeControl.bringToFront();
                 if (volumeState == VolumeState.OFF) {
-                    Glide.with(context).load(R.drawable.ic_volume_off).into(holder.volumeControl)
+                    holder.volumeControl.setImageResource(R.drawable.ic_volume_off)
                 } else if (volumeState == VolumeState.ON) {
-                    Glide.with(context).load(R.drawable.ic_volume_up).into(holder.volumeControl)
+                    holder.volumeControl.setImageResource(R.drawable.ic_volume_up)
                 }
             }
         }
 
-        private fun setVolumeControl(context: Context, state: VolumeState, holder: MultimediaViewHolder) {
+        private fun setVolumeControl(state: VolumeState, holder: MultimediaViewHolder) {
             volumeState = state;
             if (state == VolumeState.OFF) {
                 exoPlayer.volume = 0F
-                getAnimateVolumeControl(context, holder)
+                getAnimateVolumeControl(holder)
             } else if (state == VolumeState.ON) {
                 exoPlayer.volume = 1F
-                getAnimateVolumeControl(context, holder)
+                getAnimateVolumeControl(holder)
             }
         }
 
-        fun getToggleVolume(context: Context, holder: MultimediaViewHolder) {
+        private fun getToggleVolume(holder: MultimediaViewHolder) {
             if (volumeState == VolumeState.OFF) {
-                setVolumeControl(context, VolumeState.ON, holder)
+                setVolumeControl(VolumeState.ON, holder)
             } else if(volumeState == VolumeState.ON) {
-                setVolumeControl(context, VolumeState.OFF, holder)
+                setVolumeControl(VolumeState.OFF, holder)
             }
         }
     }

@@ -99,12 +99,10 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
 
                         // play just visible item
                         if (index != -1) {
-                            VideoPlayService.Companion.playIndexThenPausePreviousPlayer(index);
+                            VideoPlayService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
                         }
                     }
                 });
-
-                holder.volumeControl.setOnClickListener(v -> VideoPlayService.Companion.getToggleVolume(context, holder));
             }
         }
     }
@@ -115,8 +113,16 @@ public class MultimediaAdapter extends RecyclerView.Adapter<MultimediaViewHolder
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public void onViewRecycled(@NonNull MultimediaViewHolder holder) {
         super.onViewRecycled(holder);
-        Log.e("onViewRecycled >> ", "recycled...");
+        //int position = holder.getBindingAdapterPosition();
+        //VideoPlayService.Companion.releaseRecycledPlayers(position);
+        //Log.e("onViewRecycled >> ", "getBindingAdapterPosition(): " + position);
     }
+
 }

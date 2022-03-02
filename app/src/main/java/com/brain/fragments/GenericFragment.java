@@ -76,19 +76,23 @@ public class GenericFragment extends Fragment {
                 ArrayList<Poster> singleImage4 = new ArrayList<>();
                 singleImage4.add(new Poster(54421L, "Eliza Cardenas", "eliza@brain.com", R.drawable.omero, "Meme Omero", 7020));
 
+                // https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
                 ArrayList<Video> singleVideo1 = new ArrayList<>();
-                singleVideo1.add(new Video(18372L, "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", "Eithan Hdz", "eithan@brain.com", "Alan Walker - Darkside", 1234));
+                singleVideo1.add(new Video(18372L, "https://videos.pond5.com/clip-03mp4-footage-007745736_main_xxl.mp4", "Eithan Hdz", "eithan@brain.com", "demo 1", 1234));
+
+                ArrayList<Video> singleVideo2 = new ArrayList<>();
+                singleVideo2.add(new Video(29945L, "https://static.klliq.com/videos/QMWR5PxqxnnAILvO8iGB5ygvV47wxoDK_hd.mp4", "Jose Torres", "jose@brain.com", "demo 2", 1245));
 
                 final ArrayList<Object> objectMatrix = new ArrayList<>();
+                objectMatrix.add(singleVideo1);
+                objectMatrix.add(singleVideo2);
                 objectMatrix.add(singleImage1);
                 objectMatrix.add(singleImage2);
                 objectMatrix.add(singleImage3);
                 objectMatrix.add(multiImages);
                 objectMatrix.add(singleImage4);
-                objectMatrix.add(singleVideo1);
 
                 RecyclerView.Adapter<MultimediaViewHolder> animeViewHolderAdapter = new MultimediaAdapter(getContext(), objectMatrix, recyclerView);
-
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(animeViewHolderAdapter);
