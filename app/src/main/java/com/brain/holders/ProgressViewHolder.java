@@ -26,7 +26,7 @@ public class ProgressViewHolder extends RecyclerView.ViewHolder implements View.
     public ProgressViewHolder(@NonNull View itemView) {
         super(itemView);
         progressBar = itemView.findViewById(R.id.loadMoreProgress);
-        retryBtn = itemView.findViewById(R.id.loadmore_retry);
+        retryBtn = itemView.findViewById(R.id.load_more_retry);
         errorTxt = itemView.findViewById(R.id.loadmore_errortxt);
         errorLayout = itemView.findViewById(R.id.loadmore_errorlayout);
 
@@ -38,7 +38,7 @@ public class ProgressViewHolder extends RecyclerView.ViewHolder implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.loadmore_retry:
+            case R.id.load_more_retry:
             case R.id.loadmore_errorlayout:
         }
     }

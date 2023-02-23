@@ -26,7 +26,8 @@
         tools:visibility="visible">
 
         <ImageButton
-            android:id="@+id/loadmore_retry"
+            android:id="@+id/load_more_retry"
+            android:contentDescription="load_more_retry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
