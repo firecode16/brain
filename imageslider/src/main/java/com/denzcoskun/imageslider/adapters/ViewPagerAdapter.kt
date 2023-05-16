@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
+import com.bumptech.glide.Glide
 import com.denzcoskun.imageslider.R
 import com.denzcoskun.imageslider.constants.ActionTypes
 import com.denzcoskun.imageslider.constants.ScaleTypes
@@ -22,7 +23,7 @@ import com.squareup.picasso.Picasso
  * denzcoskun@hotmail.com
  * İstanbul
  */
-class ViewPagerAdapter(context: Context?,
+class ViewPagerAdapter(var context: Context?,
                        imageList: List<SlideModel>,
                        private var radius: Int,
                        private var errorImage: Int,
@@ -48,7 +49,7 @@ class ViewPagerAdapter(context: Context?,
         return imageList!!.size
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "CheckResult")
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val itemView = layoutInflater!!.inflate(R.layout.pager_row, container, false)
 
@@ -67,24 +68,26 @@ class ViewPagerAdapter(context: Context?,
 
         // Image from url or local path check.
         val loader = if (imageList!![position].imageUrl == null) {
-            Picasso.get().load(imageList!![position].imagePath!!)
+            context?.let { Glide.with(it).load(imageList!![position].imageBytePath) }
         } else {
-            Picasso.get().load(imageList!![position].imageUrl!!)
+            context?.let { Glide.with(it).load(imageList!![position].imageUrl!!) }
         }
 
         // set Picasso options.
         if ((scaleType != null && scaleType == ScaleTypes.CENTER_CROP) || imageList!![position].scaleType == ScaleTypes.CENTER_CROP) {
-            loader.fit().centerCrop()
+            loader?.centerCrop()
         } else if ((scaleType != null && scaleType == ScaleTypes.CENTER_INSIDE) || imageList!![position].scaleType == ScaleTypes.CENTER_INSIDE) {
-            loader.fit().centerInside()
+            loader?.centerInside()
         } else if ((scaleType != null && scaleType == ScaleTypes.FIT) || imageList!![position].scaleType == ScaleTypes.FIT) {
-            loader.fit()
+            loader?.fitCenter()
         }
 
-        loader.transform(RoundedTransformation(radius, 0))
-                .placeholder(placeholder)
-                .error(errorImage)
-                .into(imageView)
+        /*loader?.transform(RoundedTransformation(radius, 0))
+            ?.placeholder(placeholder)
+            ?.error(errorImage)
+            ?.into(imageView)*/
+
+        loader?.placeholder(placeholder)?.error(errorImage)?.into(imageView)
 
         container.addView(itemView)
 

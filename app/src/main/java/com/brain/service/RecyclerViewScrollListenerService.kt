@@ -13,7 +13,7 @@ import com.brain.R
  * @Company Brain Inc.
  * @Email hfredi35@gmail.com
  */
-class RecyclerViewScrollListenerService : NestedScrollView.OnScrollChangeListener {
+/**class RecyclerViewScrollListenerService : NestedScrollView.OnScrollChangeListener {
     private lateinit var linearLayout: LinearLayout
     private lateinit var recyclerView: RecyclerView
     private var page: Int = 0
@@ -30,6 +30,7 @@ class RecyclerViewScrollListenerService : NestedScrollView.OnScrollChangeListene
             if (scrollY == position) {
                 Log.e("position() ", "$position")
             }
+*/
 
             /*linearLayout = scrollView.getChildAt(scrollView.childCount - 1) as LinearLayout
             recyclerView = linearLayout.getChildAt(linearLayout.childCount - 2) as RecyclerView
@@ -51,8 +52,8 @@ class RecyclerViewScrollListenerService : NestedScrollView.OnScrollChangeListene
                 page ++;
                 loader.visibility = View.VISIBLE
             }*/
-        }
-    }
+    //    }
+    //}
 
 /**
     companion object {
@@ -107,4 +108,4 @@ class RecyclerViewScrollListenerService : NestedScrollView.OnScrollChangeListene
             }
         }
     }*/
-}
+//}

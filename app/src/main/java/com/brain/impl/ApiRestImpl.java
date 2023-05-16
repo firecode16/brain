@@ -1,6 +1,6 @@
 package com.brain.impl;
 
-import com.brain.model.TopRatedMovies;
+import com.brain.model.MediaApiResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,10 +13,6 @@ import retrofit2.http.Query;
  */
 public interface ApiRestImpl {
 
-    @GET("movie/top_rated")
-    Call<TopRatedMovies> getTopRatedMovies(
-            @Query("api_key") String apiKey,
-            @Query("language") String language,
-            @Query("page") int pageIndex
-    );
+    @GET("multimediaAll")
+    Call<MediaApiResponse> getTopRatedMultimedia(@Query("page") int page, @Query("size") int size);
 }

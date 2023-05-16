@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.brain.model.Poster;
+import com.brain.model.MediaDetail;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -18,12 +18,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 public class SharedData {
-    private Context context;
-    private SharedPreferences preferences;
+    private final Context context;
+    private final SharedPreferences preferences;
     private String DEFAULT_APP_IMAGEDATA_DIRECTORY;
     private String lastImagePath = "";
 
@@ -315,17 +316,17 @@ public class SharedData {
         return newList;
     }
 
-    public ArrayList<Poster> getListPoster(String key, Class<?> mClass) {
+    public List<MediaDetail> getMediaDetailList(String key, Class<?> mClass) {
         Gson gson = new Gson();
 
         ArrayList<String> objStrings = getListString(key);
-        ArrayList<Poster> posters = new ArrayList<>();
+        List<MediaDetail> mediaDetailList = new ArrayList<>();
 
         for (String jObjString : objStrings) {
             Object value = gson.fromJson(jObjString, mClass);
-            posters.add((Poster) value);
+            mediaDetailList.add((MediaDetail) value);
         }
-        return posters;
+        return mediaDetailList;
     }
 
     public <T> T getObject(String key, Class<T> classOfT) {
@@ -483,11 +484,11 @@ public class SharedData {
         putString(key, gson.toJson(obj));
     }
 
-    public void putListPoster(String key, ArrayList<Poster> posterArray) {
+    public void putMediaDetailList(String key, List<MediaDetail> mediaDetailList) {
         checkForNullKey(key);
         Gson gson = new Gson();
         ArrayList<String> objStrings = new ArrayList<>();
-        for (Poster obj : posterArray) {
+        for (MediaDetail obj : mediaDetailList) {
             objStrings.add(gson.toJson(obj));
         }
         putListString(key, objStrings);

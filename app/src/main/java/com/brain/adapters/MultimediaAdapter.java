@@ -1,21 +1,27 @@
 package com.brain.adapters;
 
+import static com.brain.util.Util.getDecoded;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
 import com.brain.holders.MultimediaViewHolder;
 import com.brain.holders.ProgressViewHolder;
-import com.brain.model.Poster;
+import com.brain.model.MediaDetail;
 import com.brain.model.Result;
 import com.brain.model.Video;
+import com.brain.service.OnImageSliderClickListener;
+import com.brain.service.OnImageViewClickListenerService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
@@ -23,46 +29,46 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_ITEM = 1;
-    private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w200";
 
+    private static final AtomicLong autID = new AtomicLong();
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
     private String errorMsg;
 
     protected Context context;
     protected ArrayList<SlideModel> slideModelList;
-    protected ArrayList<Object> objectMatrix;
-    protected ArrayList<Poster> postersList;
     protected ArrayList<Video> videoList;
-    protected List<Result> movieResults;
+    protected List<Result> arrMultimediaResult;
 
-    protected Poster modelPoster;
     protected Video modelVideo;
 
     public MultimediaAdapter(Context context) {
         this.context = context;
-        this.movieResults = new ArrayList<>();
+        this.arrMultimediaResult = new ArrayList<>();
     }
 
-    public List<Result> getMovies() {
-        return this.movieResults;
+    public List<Result> getMultimediaResult() {
+        return this.arrMultimediaResult;
     }
 
-    public void setMovies(List<Result> movieResults) {
-        this.movieResults = movieResults;
+    public void setMultimediaResult(List<Result> arrMultimediaResult) {
+        this.arrMultimediaResult = arrMultimediaResult;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        slideModelList = new ArrayList<>();
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
@@ -80,18 +86,33 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final Result result = getMovies().get(position);
+        final Result result = getMultimediaResult().get(position);
 
         switch (getItemViewType(position)) {
             case VIEW_TYPE_ITEM:
                 final MultimediaViewHolder multimediaViewHolder = (MultimediaViewHolder) holder;
-                multimediaViewHolder.userName.setText(result.getTitle());
-                multimediaViewHolder.visits.setText(String.valueOf(result.getVoteCount()));
+                multimediaViewHolder.userName.setText(result.getUserName());
+                multimediaViewHolder.visits.setText(String.valueOf(23));
                 multimediaViewHolder.description.setText(result.getOverview());
 
-                loadImage(result.getPosterPath()).into(multimediaViewHolder.imagePost);
+                List<MediaDetail> arrMediaDetail = result.getPosterPath();
+                if (arrMediaDetail.size() == 1) {
+                    String data = arrMediaDetail.stream().map(model -> model.getBinaryContent().getData()).findFirst().orElse("Image not found");
+                    loadImage(getDecoded(data)).into(multimediaViewHolder.imagePost);
+
+                    multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(arrMediaDetail, position));
+                } else {
+                    arrMediaDetail.forEach(mediaDetail -> {
+                        String data = mediaDetail.getBinaryContent().getData();
+                        slideModelList.add(new SlideModel(autID.incrementAndGet(), getDecoded(data), mediaDetail.getImageName(), ScaleTypes.CENTER_CROP));
+
+                        multimediaViewHolder.imageSlider.setImageList(slideModelList);
+                        multimediaViewHolder.imageSlider.setItemClickListener(new OnImageSliderClickListener(context, slideModelList));
+                    });
+                }
                 break;
             case VIEW_TYPE_LOADING:
                 final ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
@@ -106,58 +127,21 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
                 break;
         }
-
-        /*if (objectMatrix.size() > 0) {
-            final ArrayList<Object> objectList = (ArrayList<Object>) objectMatrix.get(position);
-
-            if (containsInstance(objectList, Poster.class)) {
-                if (objectList.size() == 1) {
-                    modelPoster = (Poster) objectList.get(0);
-                    Glide.with(context).load(modelPoster.getImage()).thumbnail(0.5f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imagePost);
-                    holder.userName.setText(modelPoster.getUserName());
-                    holder.visits.setText(String.valueOf(modelPoster.getVisits()));
-
-                    postersList = new ArrayList(objectList);
-                    holder.imagePost.setOnClickListener(new OnImageViewClickListenerService(postersList, position));
-                } else {
-                    for (int index = 0; index < objectList.size(); ++index) {
-                        modelPoster = (Poster) objectList.get(index);
-                        holder.userName.setText(modelPoster.getUserName());
-                        holder.visits.setText(String.valueOf(modelPoster.getVisits()));
-
-                        slideModelList.add(new SlideModel(modelPoster.getId(), modelPoster.getImage(), modelPoster.getDescriptionFooter(), ScaleTypes.CENTER_CROP));
-                        holder.imageSlider.setImageList(slideModelList);
-                        holder.imageSlider.setItemClickListener(new OnImageSliderClickListener(context, slideModelList));
-                    }
-                }
-            } else if (containsInstance(objectList, Video.class)) {
-                modelVideo = (Video) objectList.get(0);
-                holder.userName.setText(modelVideo.getUserName());
-                holder.visits.setText(String.valueOf(modelVideo.getVisits()));
-
-                holder.progressBar.setVisibility(View.VISIBLE);
-                holder.volumeControl.setVisibility(View.VISIBLE);
-                holder.videoPost.setVisibility(View.VISIBLE);
-                int itemIndex = holder.getBindingAdapterPosition();
-
-                VideoPlayService.Companion.initPlayer(context, modelVideo.getUrlVideo(), itemIndex, false, holder);
-            }
-        }*/
     }
 
     @Override
     public int getItemCount() {
-        return movieResults == null ? 0 : movieResults.size();
+        return arrMultimediaResult == null ? 0 : arrMultimediaResult.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == movieResults.size() - 1 && isLoadingAdded) ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return (position == arrMultimediaResult.size() - 1 && isLoadingAdded) ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void add(Result result) {
-        movieResults.add(result);
-        notifyItemInserted(movieResults.size() - 1);
+        arrMultimediaResult.add(result);
+        notifyItemInserted(arrMultimediaResult.size() - 1);
     }
 
     public void addAll(List<Result> moveResults) {
@@ -167,9 +151,9 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void remove(Result result) {
-        int position = movieResults.indexOf(result);
+        int position = arrMultimediaResult.indexOf(result);
         if (position > -1) {
-            movieResults.remove(position);
+            arrMultimediaResult.remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -193,17 +177,17 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = movieResults.size() - 1;
+        int position = arrMultimediaResult.size() - 1;
         Result result = getItem(position);
 
         if (result != null) {
-            movieResults.remove(position);
+            arrMultimediaResult.remove(position);
             notifyItemRemoved(position);
         }
     }
 
     public Result getItem(int position) {
-        return movieResults.get(position);
+        return arrMultimediaResult.get(position);
     }
 
     /**
@@ -213,12 +197,12 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
-        notifyItemChanged(movieResults.size() - 1);
+        notifyItemChanged(arrMultimediaResult.size() - 1);
         if (errorMsg != null) this.errorMsg = errorMsg;
     }
 
-    private RequestBuilder<Drawable> loadImage(@NonNull String posterPath) {
-        return Glide.with(context).load(BASE_URL_IMG + posterPath).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<Drawable>() {
+    private RequestBuilder<Drawable> loadImage(@NonNull byte[] posterPath) {
+        return Glide.with(context).load(posterPath).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;

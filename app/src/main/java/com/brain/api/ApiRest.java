@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiRest {
     private static Retrofit retrofit = null;
     private static final long CACHE_SIZE = 10 * 1024 * 1024; // 10MB Cache size
-    private static final String URL = "https://api.themoviedb.org/3/";
+    private static final String URL = "http://000.000.0.00:0000/api/";
 
     private static OkHttpClient buildClient(Context context) {
         final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = chain -> {

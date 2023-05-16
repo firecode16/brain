@@ -12,71 +12,58 @@ import java.util.List;
  * @Email hfredi35@gmail.com
  */
 public class Result {
-    @SerializedName("poster_path")
+    @SerializedName("posterId")
     @Expose
-    private String posterPath;
-    @SerializedName("adult")
+    private Long posterId;
+    @SerializedName("fullName")
     @Expose
-    private Boolean adult;
+    private String fullName;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("releaseDate")
+    @Expose
+    private String releaseDate;
     @SerializedName("overview")
     @Expose
     private String overview;
-    @SerializedName("release_date")
+    @SerializedName("posterPath")
     @Expose
-    private String releaseDate;
-    @SerializedName("genre_ids")
-    @Expose
-    private List<Integer> genreIds = new ArrayList<Integer>();
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("original_title")
-    @Expose
-    private String originalTitle;
-    @SerializedName("original_language")
-    @Expose
-    private String originalLanguage;
-    @SerializedName("title")
-    @Expose
-    private String title;
-    @SerializedName("backdrop_path")
-    @Expose
-    private String backdropPath;
-    @SerializedName("popularity")
-    @Expose
-    private Double popularity;
-    @SerializedName("vote_count")
-    @Expose
-    private Integer voteCount;
-    @SerializedName("video")
-    @Expose
-    private Boolean video;
-    @SerializedName("vote_average")
-    @Expose
-    private Double voteAverage;
+    private List<MediaDetail> posterPath = new ArrayList<>();
 
-    public String getPosterPath() {
-        return posterPath;
+    public Long getPosterId() {
+        return posterId;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+    public void setPosterId(Long posterId) {
+        this.posterId = posterId;
     }
 
-    public Boolean getAdult() {
-        return adult;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setAdult(Boolean adult) {
-        this.adult = adult;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getOverview() {
-        return overview;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getReleaseDate() {
@@ -87,83 +74,19 @@ public class Result {
         this.releaseDate = releaseDate;
     }
 
-    public List<Integer> getGenreIds() {
-        return genreIds;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public Integer getId() {
-        return id;
+    public List<MediaDetail> getPosterPath() {
+        return posterPath;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public Double getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(Double popularity) {
-        this.popularity = popularity;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public Boolean getVideo() {
-        return video;
-    }
-
-    public void setVideo(Boolean video) {
-        this.video = video;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
+    public void setPosterPath(List<MediaDetail> posterPath) {
+        this.posterPath = posterPath;
     }
 }
