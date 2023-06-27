@@ -9,16 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
-import com.brain.model.User;
 import com.brain.holders.UserViewHolder;
+import com.brain.model.Profile;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
     final Context context;
-    private final List<User> items;
+    private final List<Profile> items;
 
-    public UserAdapter(Context context, List<User> items) {
+    public UserAdapter(Context context, List<Profile> items) {
         this.context = context;
         this.items = items;
     }
@@ -32,7 +32,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        holder.name.setText(items.get(position).getName());
+        holder.name.setText(items.get(position).getUserName());
         holder.email.setText(items.get(position).getEmail());
     }
 

@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.brain.model.MediaDetail;
+import com.brain.model.Poster;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -31,6 +31,25 @@ public class SharedData {
     public SharedData(Context appContext) {
         preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
         context = appContext;
+    }
+
+    /**
+     * Check if external storage is writable or not
+     *
+     * @return true if writable, false otherwise
+     */
+    public static boolean isExternalStorageWritable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    /**
+     * Check if external storage is readable or not
+     *
+     * @return true if readable, false otherwise
+     */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     /**
@@ -316,17 +335,17 @@ public class SharedData {
         return newList;
     }
 
-    public List<MediaDetail> getMediaDetailList(String key, Class<?> mClass) {
+    public List<Poster> getPosterList(String key, Class<?> mClass) {
         Gson gson = new Gson();
 
         ArrayList<String> objStrings = getListString(key);
-        List<MediaDetail> mediaDetailList = new ArrayList<>();
+        List<Poster> mediaList = new ArrayList<>();
 
         for (String jObjString : objStrings) {
             Object value = gson.fromJson(jObjString, mClass);
-            mediaDetailList.add((MediaDetail) value);
+            mediaList.add((Poster) value);
         }
-        return mediaDetailList;
+        return mediaList;
     }
 
     public <T> T getObject(String key, Class<T> classOfT) {
@@ -484,11 +503,11 @@ public class SharedData {
         putString(key, gson.toJson(obj));
     }
 
-    public void putMediaDetailList(String key, List<MediaDetail> mediaDetailList) {
+    public void putPosterList(String key, List<Poster> posterList) {
         checkForNullKey(key);
         Gson gson = new Gson();
         ArrayList<String> objStrings = new ArrayList<>();
-        for (MediaDetail obj : mediaDetailList) {
+        for (Poster obj : posterList) {
             objStrings.add(gson.toJson(obj));
         }
         putListString(key, objStrings);
@@ -513,7 +532,6 @@ public class SharedData {
         return new File(path).delete();
     }
 
-
     /**
      * Clear SharedPreferences (remove everything)
      */
@@ -529,7 +547,6 @@ public class SharedData {
     public Map<String, ?> getAll() {
         return preferences.getAll();
     }
-
 
     /**
      * Register SharedPreferences change listener
@@ -547,26 +564,6 @@ public class SharedData {
      */
     public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
-    }
-
-
-    /**
-     * Check if external storage is writable or not
-     *
-     * @return true if writable, false otherwise
-     */
-    public static boolean isExternalStorageWritable() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-    }
-
-    /**
-     * Check if external storage is readable or not
-     *
-     * @return true if readable, false otherwise
-     */
-    public static boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     /**

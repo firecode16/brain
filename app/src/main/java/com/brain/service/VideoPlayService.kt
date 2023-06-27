@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.View
 import com.brain.R
 import com.brain.holders.MultimediaViewHolder
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
@@ -26,7 +24,8 @@ class VideoPlayService {
     companion object {
         private var currentPositionVideo: Int = 0
 
-        enum class VolumeState {ON, OFF}
+        enum class VolumeState { ON, OFF }
+
         // controlling playback state
         private lateinit var volumeState: VolumeState
 
@@ -57,33 +56,11 @@ class VideoPlayService {
             }
         }
 
-        private fun getOneVideo(index: Int) {
-            if (index == currentPositionVideo) {
-                if (playersMap[index]?.isPlaying == false) {
-                    playersMap[index]?.playWhenReady = true
-                } else if (playersMap[index]?.isPlaying == true) {
-                    return;
-                }
-            } else {
-                if (playersMap[currentPositionVideo]?.isPlaying == true) {
-                    playersMap[currentPositionVideo]?.playWhenReady = false
-                }
-            }
-        }
-
-        private fun getMultiVideo(index: Int) {
-            if (playersMap[index]?.isPlaying == false) {
-                pauseCurrentPlayingVideo()
-                playersMap[index]?.playWhenReady = true
-                currentPlayingVideo = Pair(index, playersMap[index]!!)
-            }
-        }
-
         fun getThePlayIndexAndPausePreviousPlayer(index: Int) {
-            if (playersMap.size == 1) {
-                getOneVideo(index)
-            } else if (playersMap.size > 1) {
-                getMultiVideo(index)
+            if (playersMap.get(index)?.playWhenReady == false) {
+                pauseCurrentPlayingVideo()
+                playersMap.get(index)?.playWhenReady = true
+                currentPlayingVideo = Pair(index, playersMap.get(index)!!)
             }
         }
 
@@ -103,7 +80,7 @@ class VideoPlayService {
             // We'll show the controller, change to true if want controllers as pause and start
             holder.videoPost.useController = false
             holder.videoPost.requestFocus()
-            setVolumeControl(VolumeState.OFF, holder)
+            setVolumeControl(VolumeState.ON, holder)
             // Bind the player to the view.
             holder.videoPost.player = exoPlayer
 
@@ -113,7 +90,6 @@ class VideoPlayService {
             }
             if (itemIndex != null) {
                 playersMap[itemIndex] = exoPlayer
-                currentPositionVideo = itemIndex
             }
 
             exoPlayer.addListener(object : Player.Listener {
@@ -158,7 +134,7 @@ class VideoPlayService {
         private fun getToggleVolume(holder: MultimediaViewHolder) {
             if (volumeState == VolumeState.OFF) {
                 setVolumeControl(VolumeState.ON, holder)
-            } else if(volumeState == VolumeState.ON) {
+            } else if (volumeState == VolumeState.ON) {
                 setVolumeControl(VolumeState.OFF, holder)
             }
         }

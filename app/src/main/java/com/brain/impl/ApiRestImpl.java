@@ -13,6 +13,6 @@ import retrofit2.http.Query;
  */
 public interface ApiRestImpl {
 
-    @GET("multimediaAll")
-    Call<MediaApiResponse> getTopRatedMultimedia(@Query("page") int page, @Query("size") int size);
+    @GET("allPost")
+    Call<MediaApiResponse> getTopRatedMultimedia(@Query("userId") Long userId, @Query("page") int page, @Query("size") int size);
 }

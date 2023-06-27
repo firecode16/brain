@@ -15,28 +15,46 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.interfaces.TouchListener
 import com.denzcoskun.imageslider.models.SlideModel
-import com.denzcoskun.imageslider.transformation.RoundedTransformation
-import com.squareup.picasso.Picasso
 
 /**
  * Created by Deniz Coşkun on 6/23/2020.
  * denzcoskun@hotmail.com
  * İstanbul
  */
-class ViewPagerAdapter(var context: Context?,
-                       imageList: List<SlideModel>,
-                       private var radius: Int,
-                       private var errorImage: Int,
-                       private var placeholder: Int,
-                       private var titleBackground: Int,
-                       private var scaleType: ScaleTypes?,
-                       private var textAlign: String) : PagerAdapter() {
+class ViewPagerAdapter(
+    var context: Context?,
+    imageList: List<SlideModel>,
+    private var radius: Int,
+    private var errorImage: Int,
+    private var placeholder: Int,
+    private var titleBackground: Int,
+    private var scaleType: ScaleTypes?,
+    private var textAlign: String
+) : PagerAdapter() {
 
-    constructor(context: Context, imageList: List<SlideModel>, radius: Int, errorImage: Int, placeholder: Int, titleBackground: Int, textAlign: String) :
-            this(context, imageList, radius, errorImage, placeholder, titleBackground, null, textAlign)
+    constructor(
+        context: Context,
+        imageList: List<SlideModel>,
+        radius: Int,
+        errorImage: Int,
+        placeholder: Int,
+        titleBackground: Int,
+        textAlign: String
+    ) :
+            this(
+                context,
+                imageList,
+                radius,
+                errorImage,
+                placeholder,
+                titleBackground,
+                null,
+                textAlign
+            )
 
     private var imageList: List<SlideModel>? = imageList
-    private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+    private var layoutInflater: LayoutInflater? =
+        context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     private var itemClickListener: ItemClickListener? = null
     private var touchListener: TouchListener? = null
@@ -68,7 +86,7 @@ class ViewPagerAdapter(var context: Context?,
 
         // Image from url or local path check.
         val loader = if (imageList!![position].imageUrl == null) {
-            context?.let { Glide.with(it).load(imageList!![position].imageBytePath) }
+            context?.let { Glide.with(it).load(imageList!![position].imagePath) }
         } else {
             context?.let { Glide.with(it).load(imageList!![position].imageUrl!!) }
         }
@@ -81,11 +99,6 @@ class ViewPagerAdapter(var context: Context?,
         } else if ((scaleType != null && scaleType == ScaleTypes.FIT) || imageList!![position].scaleType == ScaleTypes.FIT) {
             loader?.fitCenter()
         }
-
-        /*loader?.transform(RoundedTransformation(radius, 0))
-            ?.placeholder(placeholder)
-            ?.error(errorImage)
-            ?.into(imageView)*/
 
         loader?.placeholder(placeholder)?.error(errorImage)?.into(imageView)
 

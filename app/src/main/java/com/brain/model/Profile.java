@@ -1,55 +1,34 @@
 package com.brain.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * @Author FLE
- * @Company Brain Inc.
- * @Email hfredi35@gmail.com
- */
-public class Result implements Serializable {
-    @SerializedName("userId")
-    @Expose
-    private Long userId;
-
-    @SerializedName("userName")
-    @Expose
+public class Profile implements Serializable {
+    private long userId;
     private String userName;
-
-    @SerializedName("fullName")
-    @Expose
     private String fullName;
-
-    @SerializedName("email")
-    @Expose
     private String email;
-
-    @SerializedName("backdropImage")
-    @Expose
     private ImageBinary backdropImage;
-
-    @SerializedName("countContacts")
-    @Expose
     private Integer countContacts;
-
-    @SerializedName("post")
-    @Expose
-    private List<MediaDetail> post = new ArrayList<>();
-
-    @SerializedName("auth")
-    @Expose
     private boolean auth;
 
-    public Long getUserId() {
+    public Profile() {
+    }
+
+    public Profile(long userId, String userName, String fullName, String email, ImageBinary backdropImage, Integer countContacts, boolean auth) {
+        this.userId = userId;
+        this.userName = userName;
+        this.fullName = fullName;
+        this.email = email;
+        this.backdropImage = backdropImage;
+        this.countContacts = countContacts;
+        this.auth = auth;
+    }
+
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -91,14 +70,6 @@ public class Result implements Serializable {
 
     public void setCountContacts(Integer countContacts) {
         this.countContacts = countContacts;
-    }
-
-    public List<MediaDetail> getPost() {
-        return post;
-    }
-
-    public void setPost(List<MediaDetail> post) {
-        this.post = post;
     }
 
     public boolean isAuth() {

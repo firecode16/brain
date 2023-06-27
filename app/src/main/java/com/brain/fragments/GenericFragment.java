@@ -25,9 +25,11 @@ import com.brain.holders.UserViewHolder;
 import com.brain.impl.ApiRestImpl;
 import com.brain.impl.PaginationAdapterCallbackImpl;
 import com.brain.model.MediaApiResponse;
+import com.brain.model.MediaDetail;
+import com.brain.model.Profile;
 import com.brain.model.Result;
-import com.brain.model.User;
 import com.brain.service.PaginationListenerService;
+import com.brain.service.VideoPlayService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final int PAGE_START = 0;
     private static final int TOTAL_PAGES = 5;
     private int currentPage = PAGE_START;
-    private static final int ITEMS_SIZE = 4; // items by pagination
+    private static final int ITEMS_SIZE = 10; // items by pagination
     private boolean isLastPage = false;
     private boolean isLoading = false;
 
@@ -98,6 +100,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 recyclerView.addOnScrollListener(new PaginationListenerService(layoutManager) {
                     @Override
+                    public void onItemIsFirstVisibleItem(int index) {
+                        if (index != -1) {
+                            VideoPlayService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
+                        }
+                    }
+
+                    @Override
                     protected void loadMoreItems() {
                         isLoading = true;
                         currentPage += 1;
@@ -131,8 +140,8 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 layoutManager = new LinearLayoutManager(getActivity());
                 recyclerView.setLayoutManager(layoutManager);
 
-                List<User> userItems = new ArrayList<>();
-                userItems.add(new User("Fredi Hdz", "codefire@github.com"));
+                List<Profile> userItems = new ArrayList<>();
+                userItems.add(new Profile(111101L, "fredi303", "Fredi Hdz", "fredi303@brain.com", null, 15, true));
 
                 RecyclerView.Adapter<UserViewHolder> userViewHolderAdapter = new UserAdapter(getActivity(), userItems);
                 recyclerView.setAdapter(userViewHolderAdapter);
@@ -151,7 +160,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         // check if data is stale.
         // execute network request if cache is expired; otherwise do not update data.
-        multimediaAdapter.getMultimediaResult().clear();
+        multimediaAdapter.getMediaDetailList().clear();
         multimediaAdapter.notifyDataSetChanged();
         loadFirstPage();
         swipeRefresh.setRefreshing(false);
@@ -165,14 +174,14 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         loadFirstPage();
     }
 
-    private List<Result> fetchResults(Response<MediaApiResponse> response) {
+    private Result fetchResults(Response<MediaApiResponse> response) {
         MediaApiResponse topRatedMedia = response.body();
         assert topRatedMedia != null;
         return topRatedMedia.getData();
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(202202L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {
@@ -195,6 +204,12 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         loadNextPage();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        VideoPlayService.Companion.releaseAllPlayers();
+    }
+
     private void loadFirstPage() {
         // To ensure list is visible when retry button in error view is clicked
         hideErrorView();
@@ -206,9 +221,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 hideErrorView();
 
                 // Got data. Send it to adapter
-                List<Result> results = fetchResults(response);
+                final Result result = fetchResults(response);
+                final Profile profile = new Profile(result.getUserId(), result.getUserName(), result.getFullName(), result.getEmail(), null, result.getCountContacts(), result.isAuth());
+                List<MediaDetail> mediaDetailList = result.getPost();
+
                 progressBar.setVisibility(View.GONE);
-                multimediaAdapter.addAll(results);
+                multimediaAdapter.addProfile(profile);
+                multimediaAdapter.addAll(mediaDetailList);
 
                 if (currentPage <= TOTAL_PAGES) {
                     multimediaAdapter.addLoadingFooter();
@@ -232,8 +251,10 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 multimediaAdapter.removeLoadingFooter();
                 isLoading = false;
 
-                List<Result> results = fetchResults(response);
-                multimediaAdapter.addAll(results);
+                // Got data. Send it to adapter
+                final Result result = fetchResults(response);
+                List<MediaDetail> mediaDetailList = result.getPost();
+                multimediaAdapter.addAll(mediaDetailList);
 
                 if (currentPage != TOTAL_PAGES) {
                     multimediaAdapter.addLoadingFooter();

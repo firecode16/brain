@@ -1,6 +1,7 @@
 package com.brain.views;
 
-import static com.brain.util.Util.getDecoded;
+import static com.brain.util.Util.URL;
+import static com.brain.util.Util.URL_PART;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.brain.R;
-import com.brain.model.MediaDetail;
+import com.brain.model.Poster;
 import com.brain.util.SharedData;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,19 +30,19 @@ import java.util.List;
 
 @SuppressLint("ViewConstructor")
 public class PosterOverlayView extends ConstraintLayout {
-    List<MediaDetail> mediaDetailList;
+    List<Poster> posterList;
     int selectedPosition = 0;
     boolean isSingle;
-    MediaDetail model;
+    Poster model;
     TextView txtView;
     Toolbar toolbar;
     ImageView imageVerticalDots;
     SharedData extras;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, List<MediaDetail> mediaDetailList, SharedData extras) {
+    public PosterOverlayView(@NonNull Context context, AttributeSet attrs, List<Poster> posterList, SharedData extras) {
         super(context, attrs);
-        this.mediaDetailList = mediaDetailList;
+        this.posterList = posterList;
         this.extras = extras;
         init(context);
     }
@@ -54,25 +55,25 @@ public class PosterOverlayView extends ConstraintLayout {
         toolbar = view.findViewById(R.id.toolbarForImageFullScreen);
         txtView = view.findViewById(R.id.footer);
 
-        mediaDetailList = extras.getMediaDetailList("mediaDetailList", MediaDetail.class);
+        posterList = extras.getPosterList("posterList", Poster.class);
         selectedPosition = extras.getInt("position");
         isSingle = extras.getBoolean("isSingle");
 
-        StfalconImageViewer.Builder<MediaDetail> builder = new StfalconImageViewer.Builder<>(context, mediaDetailList, (imageView, image) -> {
-            Glide.with(context).load(getDecoded(image.getBinaryContent().getData())).thumbnail(0.5F).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        StfalconImageViewer.Builder<Poster> builder = new StfalconImageViewer.Builder<>(context, posterList, (imageView, image) -> {
+            Glide.with(context).load(URL + URL_PART + image.getId()).thumbnail(0.5F).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
         });
 
         if (isSingle) {
-            model = mediaDetailList.get(0);
-            txtView.setText(model.getBackdropPath());
+            model = posterList.get(0);
+            txtView.setText(model.getUserName());
         } else {
-            model = mediaDetailList.get(selectedPosition);
-            txtView.setText(model.getBackdropPath());
+            model = posterList.get(selectedPosition);
+            txtView.setText(model.getUserName());
 
             builder.withStartPosition(selectedPosition);
             builder.withImageChangeListener(position -> {
-                model = mediaDetailList.get(position);
-                txtView.setText(model.getBackdropPath());
+                model = posterList.get(position);
+                txtView.setText(model.getUserName());
             });
         }
 

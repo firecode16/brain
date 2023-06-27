@@ -14,18 +14,18 @@ import com.brain.model.Poster;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ViewImageSliderPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
-    ArrayList<Poster> posterArrayList;
+    List<Poster> posterList;
     Context context;
     ImageView imageViewPreview;
     boolean isSingle;
     Poster model;
 
-    public ViewImageSliderPagerAdapter(ArrayList<Poster> posterArrayList, Context context, boolean isSingle) {
-        this.posterArrayList = posterArrayList;
+    public ViewImageSliderPagerAdapter(List<Poster> posterList, Context context, boolean isSingle) {
+        this.posterList = posterList;
         this.context = context;
         this.isSingle = isSingle;
     }
@@ -37,18 +37,18 @@ public class ViewImageSliderPagerAdapter extends PagerAdapter {
 
         imageViewPreview = view.findViewById(R.id.imagePreview);
         if (isSingle) {
-            model = posterArrayList.get(0);
+            model = posterList.get(0);
         } else {
-            model = posterArrayList.get(position);
+            model = posterList.get(position);
         }
-        Glide.with(context).load(model.getImage()).thumbnail(0.5f).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(imageViewPreview);
+        Glide.with(context).load(model.getId()).thumbnail(0.5f).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(imageViewPreview);
         container.addView(view);
         return view;
     }
 
     @Override
     public int getCount() {
-        return posterArrayList.size();
+        return posterList.size();
     }
 
     @Override

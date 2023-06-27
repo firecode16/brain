@@ -17,6 +17,10 @@ public class Util {
 
     private final Context context;
 
+    public static final String URL = "http://000.000.0.00:8081/api/";
+    public static final String URL_PART = "multimedia/";
+    public static final String VIDEO_MP4 = "video/mp4";
+
     public static int[] getTabIcon = {
             R.drawable.ic_home_public,
             R.drawable.ic_chat,

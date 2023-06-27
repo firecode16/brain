@@ -3,63 +3,73 @@ package com.brain.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author FLE
  * @Company Brain Inc.
  * @Email hfredi35@gmail.com
  */
-public class MediaDetail {
-    private Long id;
-    @SerializedName("backdropPath")
+public class MediaDetail implements Serializable {
+    @SerializedName("collectionId")
     @Expose
-    private String backdropPath;
-    @SerializedName("like")
+    private Long collectionId;
+
+    @SerializedName("postDate")
     @Expose
-    private Long like;
-    @SerializedName("imageName")
+    private String postDate;
+
+    @SerializedName("overview")
     @Expose
-    private String imageName;
-    @SerializedName("binaryContent")
+    private String overview;
+
+    @SerializedName("array")
     @Expose
-    private ImageBinary binaryContent;
+    private Integer array;
 
-    public Long getId() {
-        return id;
+    @SerializedName("content")
+    @Expose
+    private List<MediaContent> content = new ArrayList<>();
+
+    public Long getCollectionId() {
+        return collectionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCollectionId(Long collectionId) {
+        this.collectionId = collectionId;
     }
 
-    public String getBackdropPath() {
-        return backdropPath;
+    public String getPostDate() {
+        return postDate;
     }
 
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
     }
 
-    public Long getLike() {
-        return like;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setLike(Long like) {
-        this.like = like;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public String getImageName() {
-        return imageName;
+    public Integer getArray() {
+        return array;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setArray(Integer array) {
+        this.array = array;
     }
 
-    public ImageBinary getBinaryContent() {
-        return binaryContent;
+    public List<MediaContent> getContent() {
+        return content;
     }
 
-    public void setBinaryContent(ImageBinary binaryContent) {
-        this.binaryContent = binaryContent;
+    public void setContent(List<MediaContent> content) {
+        this.content = content;
     }
 }

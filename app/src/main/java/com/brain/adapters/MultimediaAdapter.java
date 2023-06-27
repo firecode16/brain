@@ -1,6 +1,8 @@
 package com.brain.adapters;
 
-import static com.brain.util.Util.getDecoded;
+import static com.brain.util.Util.URL;
+import static com.brain.util.Util.URL_PART;
+import static com.brain.util.Util.VIDEO_MP4;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -17,11 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brain.R;
 import com.brain.holders.MultimediaViewHolder;
 import com.brain.holders.ProgressViewHolder;
+import com.brain.model.MediaContent;
 import com.brain.model.MediaDetail;
-import com.brain.model.Result;
+import com.brain.model.Profile;
 import com.brain.model.Video;
 import com.brain.service.OnImageSliderClickListener;
 import com.brain.service.OnImageViewClickListenerService;
+import com.brain.service.VideoPlayService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
@@ -48,21 +52,27 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     protected Context context;
     protected ArrayList<SlideModel> slideModelList;
     protected ArrayList<Video> videoList;
-    protected List<Result> arrMultimediaResult;
+    protected List<MediaDetail> mediaDetailList;
 
+    protected Profile profile;
     protected Video modelVideo;
 
     public MultimediaAdapter(Context context) {
         this.context = context;
-        this.arrMultimediaResult = new ArrayList<>();
+        this.mediaDetailList = new ArrayList<>();
+        this.profile = new Profile();
     }
 
-    public List<Result> getMultimediaResult() {
-        return this.arrMultimediaResult;
+    public List<MediaDetail> getMediaDetailList() {
+        return mediaDetailList;
     }
 
-    public void setMultimediaResult(List<Result> arrMultimediaResult) {
-        this.arrMultimediaResult = arrMultimediaResult;
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     @NonNull
@@ -89,26 +99,34 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final Result result = getMultimediaResult().get(position);
+        final MediaDetail mediaDetail = getMediaDetailList().get(position);
 
         switch (getItemViewType(position)) {
             case VIEW_TYPE_ITEM:
                 final MultimediaViewHolder multimediaViewHolder = (MultimediaViewHolder) holder;
-                multimediaViewHolder.userName.setText(result.getUserName());
+                multimediaViewHolder.userName.setText(getProfile().getUserName());
                 multimediaViewHolder.visits.setText(String.valueOf(23));
-                multimediaViewHolder.description.setText(result.getOverview());
+                multimediaViewHolder.description.setText(mediaDetail.getOverview());
 
-                List<MediaDetail> arrMediaDetail = result.getPosterPath();
-                if (arrMediaDetail.size() == 1) {
-                    String data = arrMediaDetail.stream().map(model -> model.getBinaryContent().getData()).findFirst().orElse("Image not found");
-                    loadImage(getDecoded(data)).into(multimediaViewHolder.imagePost);
+                List<MediaContent> contentList = mediaDetail.getContent();
+                if (contentList.size() == 1) {
+                    String contentType = mediaDetail.getContent().stream().findFirst().get().getContentType();
+                    String id = mediaDetail.getContent().stream().findFirst().get().get_id();
 
-                    multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(arrMediaDetail, position));
+                    if (contentType.equals(VIDEO_MP4)) {
+                        multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.videoPost.setVisibility(View.VISIBLE);
+                        int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
+
+                        VideoPlayService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
+                    } else {
+                        loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
+                        multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));
+                    }
                 } else {
-                    arrMediaDetail.forEach(mediaDetail -> {
-                        String data = mediaDetail.getBinaryContent().getData();
-                        slideModelList.add(new SlideModel(autID.incrementAndGet(), getDecoded(data), mediaDetail.getImageName(), ScaleTypes.CENTER_CROP));
-
+                    mediaDetail.getContent().forEach(post -> {
+                        slideModelList.add(new SlideModel(post.get_id(), URL + URL_PART + post.get_id(), mediaDetail.getOverview(), ScaleTypes.CENTER_CROP));
                         multimediaViewHolder.imageSlider.setImageList(slideModelList);
                         multimediaViewHolder.imageSlider.setItemClickListener(new OnImageSliderClickListener(context, slideModelList));
                     });
@@ -131,29 +149,33 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return arrMultimediaResult == null ? 0 : arrMultimediaResult.size();
+        return (mediaDetailList == null || mediaDetailList.isEmpty()) ? 0 : mediaDetailList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == arrMultimediaResult.size() - 1 && isLoadingAdded) ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return (position == mediaDetailList.size() - 1 && isLoadingAdded) ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
-    public void add(Result result) {
-        arrMultimediaResult.add(result);
-        notifyItemInserted(arrMultimediaResult.size() - 1);
+    private void add(final MediaDetail mediaDetail) {
+        mediaDetailList.add(mediaDetail);
+        notifyItemInserted(mediaDetailList.size() - 1);
     }
 
-    public void addAll(List<Result> moveResults) {
-        for (Result result : moveResults) {
-            add(result);
+    public void addAll(List<MediaDetail> mediaDetail) {
+        for (MediaDetail post : mediaDetail) {
+            add(post);
         }
     }
 
-    public void remove(Result result) {
-        int position = arrMultimediaResult.indexOf(result);
+    public void addProfile(Profile objProfile) {
+        setProfile(objProfile);
+    }
+
+    public void remove(MediaDetail mediaDetail) {
+        int position = mediaDetailList.indexOf(mediaDetail);
         if (position > -1) {
-            arrMultimediaResult.remove(position);
+            mediaDetailList.remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -171,23 +193,23 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new Result());
+        add(new MediaDetail());
     }
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = arrMultimediaResult.size() - 1;
-        Result result = getItem(position);
+        int position = mediaDetailList.size() - 1;
+        MediaDetail post = getItem(position);
 
-        if (result != null) {
-            arrMultimediaResult.remove(position);
+        if (post != null) {
+            mediaDetailList.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    public Result getItem(int position) {
-        return arrMultimediaResult.get(position);
+    public MediaDetail getItem(int position) {
+        return mediaDetailList.get(position);
     }
 
     /**
@@ -197,12 +219,12 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
-        notifyItemChanged(arrMultimediaResult.size() - 1);
+        notifyItemChanged(mediaDetailList.size() - 1);
         if (errorMsg != null) this.errorMsg = errorMsg;
     }
 
-    private RequestBuilder<Drawable> loadImage(@NonNull byte[] posterPath) {
-        return Glide.with(context).load(posterPath).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
+    private RequestBuilder<Drawable> loadImage(@NonNull String url) {
+        return Glide.with(context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;

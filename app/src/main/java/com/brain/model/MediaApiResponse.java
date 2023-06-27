@@ -3,21 +3,21 @@ package com.brain.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * @Author FLE
  * @Company Brain Inc.
  * @Email hfredi35@gmail.com
  */
-public class MediaApiResponse {
+public class MediaApiResponse implements Serializable {
     @SerializedName("result")
     @Expose
     private String result;
+
     @SerializedName("data")
     @Expose
-    private List<Result> data = new ArrayList<>();
+    private Result data;
 
     public String getResult() {
         return result;
@@ -27,11 +27,11 @@ public class MediaApiResponse {
         this.result = result;
     }
 
-    public List<Result> getData() {
+    public Result getData() {
         return data;
     }
 
-    public void setData(List<Result> data) {
+    public void setData(Result data) {
         this.data = data;
     }
 }
