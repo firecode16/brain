@@ -100,7 +100,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 recyclerView.addOnScrollListener(new PaginationListenerService(layoutManager) {
                     @Override
-                    public void onItemIsFirstVisibleItem(int index) {
+                    public void isLastVisibleItemPosition(int index) {
                         if (index != -1) {
                             VideoPlayService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
                         }
@@ -181,7 +181,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(202202L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(111101L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {
@@ -222,7 +222,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 // Got data. Send it to adapter
                 final Result result = fetchResults(response);
-                final Profile profile = new Profile(result.getUserId(), result.getUserName(), result.getFullName(), result.getEmail(), null, result.getCountContacts(), result.isAuth());
+                final Profile profile = new Profile(result.getUserId(), result.getUserName(), result.getFullName(), result.getEmail(), result.getBackdropName(), result.getCountContacts(), result.isAuth());
                 List<MediaDetail> mediaDetailList = result.getPost();
 
                 progressBar.setVisibility(View.GONE);

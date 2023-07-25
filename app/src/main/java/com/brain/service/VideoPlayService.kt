@@ -22,8 +22,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
  */
 class VideoPlayService {
     companion object {
-        private var currentPositionVideo: Int = 0
-
         enum class VolumeState { ON, OFF }
 
         // controlling playback state
@@ -57,10 +55,12 @@ class VideoPlayService {
         }
 
         fun getThePlayIndexAndPausePreviousPlayer(index: Int) {
-            if (playersMap.get(index)?.playWhenReady == false) {
+            if (playersMap[index]?.playWhenReady == false || playersMap[index]?.playWhenReady == null) {
                 pauseCurrentPlayingVideo()
-                playersMap.get(index)?.playWhenReady = true
-                currentPlayingVideo = Pair(index, playersMap.get(index)!!)
+                if (playersMap[index]?.playWhenReady != null) {
+                    playersMap[index]?.playWhenReady = true
+                    currentPlayingVideo = Pair(index, playersMap[index]!!)
+                }
             }
         }
 
@@ -71,6 +71,7 @@ class VideoPlayService {
 
             exoPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).build()
             exoPlayer.addMediaSource(mediaSource)
+            exoPlayer.seekTo(0)
             exoPlayer.playWhenReady = autoPlay
             exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
             exoPlayer.prepare()

@@ -29,9 +29,9 @@ public class Result implements Serializable {
     @Expose
     private String email;
 
-    @SerializedName("backdropImage")
+    @SerializedName("backdropName")
     @Expose
-    private ImageBinary backdropImage;
+    private String backdropName;
 
     @SerializedName("countContacts")
     @Expose
@@ -77,12 +77,12 @@ public class Result implements Serializable {
         this.email = email;
     }
 
-    public ImageBinary getBackdropImage() {
-        return backdropImage;
+    public String getBackdropName() {
+        return backdropName;
     }
 
-    public void setBackdropImage(ImageBinary backdropImage) {
-        this.backdropImage = backdropImage;
+    public void setBackdropName(String backdropName) {
+        this.backdropName = backdropName;
     }
 
     public Integer getCountContacts() {

@@ -3,12 +3,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.brain"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.0'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.code.gson:gson:2.8.9'

@@ -9,15 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
  * @Email hfredi35@gmail.com
  */
 abstract class PaginationListenerService(var linearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
-    @Volatile
-    private var enabled = true
-
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
         val visibleItemCount = linearLayoutManager.childCount
         val totalItemCount = linearLayoutManager.itemCount
-        var firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+        val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+        val lastVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition()
 
         if (!isLoading() && !isLastPage()) {
             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
@@ -25,15 +23,10 @@ abstract class PaginationListenerService(var linearLayoutManager: LinearLayoutMa
             }
         }
 
-        if (enabled) {
-            val manager = recyclerView.layoutManager
-            require(manager is LinearLayoutManager) { "Expected recyclerview to have linear layout manager" }
-            firstVisibleItemPosition = manager.findFirstCompletelyVisibleItemPosition()
-            onItemIsFirstVisibleItem(firstVisibleItemPosition)
-        }
+        isLastVisibleItemPosition(lastVisibleItemPosition)
     }
 
-    abstract fun onItemIsFirstVisibleItem(index: Int)
+    abstract fun isLastVisibleItemPosition(index: Int)
     protected abstract fun loadMoreItems()
     abstract fun getTotalPageCount(): Int
     abstract fun isLastPage(): Boolean
