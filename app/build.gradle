@@ -27,8 +27,9 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
+    namespace 'com.brain'
 }
 
 dependencies {
@@ -39,7 +40,7 @@ dependencies {
     implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation "androidx.cardview:cardview:1.0.0"

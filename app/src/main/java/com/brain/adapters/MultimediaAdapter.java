@@ -82,16 +82,17 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
-        switch (viewType) {
-            case VIEW_TYPE_ITEM:
+        viewHolder = switch (viewType) {
+            case VIEW_TYPE_ITEM -> {
                 View viewItem = inflater.inflate(R.layout.container_cards, viewGroup, false);
-                viewHolder = new MultimediaViewHolder(viewItem);
-                break;
-            case VIEW_TYPE_LOADING:
+                yield new MultimediaViewHolder(viewItem);
+            }
+            case VIEW_TYPE_LOADING -> {
                 View viewLoading = inflater.inflate(R.layout.footer_loading, viewGroup, false);
-                viewHolder = new ProgressViewHolder(viewLoading);
-                break;
-        }
+                yield new ProgressViewHolder(viewLoading);
+            }
+            default -> viewHolder;
+        };
         assert viewHolder != null;
         return viewHolder;
     }
