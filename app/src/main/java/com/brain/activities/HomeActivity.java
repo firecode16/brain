@@ -111,27 +111,22 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_search:
-                SearchView search = (SearchView) item.getActionView();
-                search.setSubmitButtonEnabled(false);
-                search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
+        if (id == R.id.action_search) {
+            SearchView search = (SearchView) item.getActionView();
+            assert search != null;
+            search.setSubmitButtonEnabled(false);
+            search.setQueryHint("Project, author...");
+            search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        return false;
-                    }
-                });
-                break;
-            case R.id.action_play_music:
-                Toast.makeText(getApplication(), "Play Music >>", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
         }
         return super.onOptionsItemSelected(item);
     }

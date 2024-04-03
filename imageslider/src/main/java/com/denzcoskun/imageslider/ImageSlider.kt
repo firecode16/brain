@@ -27,12 +27,7 @@ import java.util.*
  * İstanbul
  */
 @SuppressLint("ClickableViewAccessibility")
-class ImageSlider @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-):RelativeLayout(context, attrs, defStyleAttr) {
-
+class ImageSlider @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0): RelativeLayout(context, attrs, defStyleAttr) {
     private var viewPager: ViewPager? = null
     private var pagerDots: LinearLayout? = null
     private var viewPagerAdapter: ViewPagerAdapter? = null
@@ -64,12 +59,7 @@ class ImageSlider @JvmOverloads constructor(
         viewPager = findViewById(R.id.view_pager)
         pagerDots = findViewById(R.id.pager_dots)
 
-        val typedArray = context.theme.obtainStyledAttributes(
-                attrs,
-                R.styleable.ImageSlider,
-                defStyleAttr,
-                defStyleAttr
-        )
+        val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageSlider, defStyleAttr, defStyleAttr)
 
         cornerRadius = typedArray.getInt(R.styleable.ImageSlider_iss_corner_radius, 1)
         period = typedArray.getInt(R.styleable.ImageSlider_iss_period, 1000).toLong()
@@ -111,6 +101,7 @@ class ImageSlider @JvmOverloads constructor(
         viewPagerAdapter = ViewPagerAdapter(context, imageList, cornerRadius, errorImage, placeholder, titleBackground, textAlign)
         viewPager!!.adapter = viewPagerAdapter
         imageCount = imageList.size
+
         if (imageList.isNotEmpty()) {
             setupDots(imageList.size)
             if (autoCycle) {
@@ -130,6 +121,7 @@ class ImageSlider @JvmOverloads constructor(
         viewPagerAdapter = ViewPagerAdapter(context, imageList, cornerRadius, errorImage, placeholder, titleBackground, scaleType, textAlign)
         viewPager!!.adapter = viewPagerAdapter
         imageCount = imageList.size
+
         if (imageList.isNotEmpty()) {
             setupDots(imageList.size)
             if (autoCycle) {
@@ -147,34 +139,34 @@ class ImageSlider @JvmOverloads constructor(
         for (i in 0 until size) {
             dots!![i] = ImageView(context)
             dots!![i]!!.setImageDrawable(ContextCompat.getDrawable(context, unselectedDot))
-            val params = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
             params.setMargins(8, 0, 8, 0)
             pagerDots!!.addView(dots!![i], params)
         }
+
         dots!![0]!!.setImageDrawable(ContextCompat.getDrawable(context, selectedDot))
 
         viewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-            ) {}
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
                 currentPage = position
+
                 for (dot in dots!!) {
                     dot!!.setImageDrawable(ContextCompat.getDrawable(context, unselectedDot))
                 }
+
                 dots!![position]!!.setImageDrawable(ContextCompat.getDrawable(context, selectedDot))
-                if (itemChangeListener != null) itemChangeListener!!.onItemChanged(position)
+
+                if (itemChangeListener != null) {
+                    itemChangeListener!!.onItemChanged(position)
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-
     }
 
     /**
@@ -259,5 +251,4 @@ class ImageSlider @JvmOverloads constructor(
             }
         }
     }
-
 }

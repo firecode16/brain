@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -40,8 +39,8 @@
                     style="?attr/actionButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
                     android:layout_gravity="center_vertical"
+                    android:padding="10dp"
                     android:src="@drawable/ic_avatar"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
@@ -52,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            app:tabIndicatorHeight="@dimen/selected_tab_indicator_height"
-            app:tabIndicatorColor="@color/selectedTabIndicatorColor" />
+            app:tabIndicatorColor="@color/selectedTabIndicatorColor"
+            app:tabIndicatorHeight="@dimen/selected_tab_indicator_height" />
 
         <include layout="@layout/layout_fab" />
     </com.google.android.material.appbar.AppBarLayout>

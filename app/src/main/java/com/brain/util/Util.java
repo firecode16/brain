@@ -17,14 +17,14 @@ public class Util {
 
     private final Context context;
 
-    public static final String URL = "http://000.000.0.000:8081/api/";
+    public static final String URL = "http://000.000.0.000:8080/api/";
     public static final String URL_PART = "multimedia/";
     public static final String VIDEO_MP4 = "video/mp4";
 
     public static int[] getTabIcon = {
             R.drawable.ic_home_public,
             R.drawable.ic_chat,
-            R.drawable.ic_profile
+            R.drawable.ic_setting_50
     };
 
     public Util(Context context) {

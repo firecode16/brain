@@ -14,7 +14,7 @@
     <color name="black">#FF000000</color>
 
     <!-- pager color background -->
-    <color name="pagerSilver">#DDDBDB</color>
+    <color name="pagerSilver">#DAD7D7</color>
 
     <!-- tab indicator color -->
     <color name="selectedTabIndicatorColor">#00BCD4</color>

@@ -23,7 +23,8 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:focusable="true">
 
         <ImageButton
             android:id="@+id/load_more_retry"
@@ -32,21 +33,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
             android:background="@drawable/rety_selector"
             android:padding="8dp"
             android:src="@drawable/ic_refresh_black_24dp"
             android:tintMode="src_in"
-            app:tint="#AAADC4"
-            tools:targetApi="lollipop" />
+            app:tint="#AAADC4" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 

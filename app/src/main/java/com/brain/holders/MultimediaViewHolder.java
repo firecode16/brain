@@ -6,14 +6,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
 import com.denzcoskun.imageslider.ImageSlider;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
 
 public class MultimediaViewHolder extends RecyclerView.ViewHolder {
-    public StyledPlayerView videoPost;
+    public PlayerView videoPost;
     public ProgressBar progressBar;
     public ImageView volumeControl;
 
@@ -21,8 +21,6 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     public ImageSlider imageSlider;
 
     public TextView userName;
-    public TextView description;
-    public TextView visits;
 
     public MultimediaViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -34,7 +32,5 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
         imageSlider = itemView.findViewById(R.id.imageSlider);
 
         userName = itemView.findViewById(R.id.userName);
-        description = itemView.findViewById(R.id.descriptionPost);
-        visits = itemView.findViewById(R.id.visits);
     }
 }

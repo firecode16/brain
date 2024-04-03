@@ -2,7 +2,11 @@ package com.denzcoskun.imageslider.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -53,8 +57,7 @@ class ViewPagerAdapter(
             )
 
     private var imageList: List<SlideModel>? = imageList
-    private var layoutInflater: LayoutInflater? =
-        context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+    private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     private var itemClickListener: ItemClickListener? = null
     private var touchListener: TouchListener? = null
@@ -91,7 +94,7 @@ class ViewPagerAdapter(
             context?.let { Glide.with(it).load(imageList!![position].imageUrl!!) }
         }
 
-        // set Picasso options.
+        // set Glide options.
         if ((scaleType != null && scaleType == ScaleTypes.CENTER_CROP) || imageList!![position].scaleType == ScaleTypes.CENTER_CROP) {
             loader?.centerCrop()
         } else if ((scaleType != null && scaleType == ScaleTypes.CENTER_INSIDE) || imageList!![position].scaleType == ScaleTypes.CENTER_INSIDE) {
@@ -101,9 +104,7 @@ class ViewPagerAdapter(
         }
 
         loader?.placeholder(placeholder)?.error(errorImage)?.into(imageView)
-
         container.addView(itemView)
-
         imageView.setOnClickListener { itemClickListener?.onItemSelected(position) }
 
         if (touchListener != null) {

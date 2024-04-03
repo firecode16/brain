@@ -27,7 +27,8 @@
                 style="@style/modifiedEditText"
                 android:inputType="text"
                 android:maxLines="1"
-                android:hint="Name" />
+                android:hint="Name"
+                android:autofillHints="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -37,7 +38,8 @@
                 style="@style/modifiedEditText"
                 android:inputType="text"
                 android:maxLines="1"
-                android:hint="Mobile Number" />
+                android:hint="Mobile Number"
+                android:autofillHints="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -47,7 +49,8 @@
                 style="@style/modifiedEditText"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:hint="@string/login_email_hint" />
+                android:hint="@string/login_email_hint"
+                android:autofillHints="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -57,7 +60,8 @@
                 style="@style/modifiedEditText"
                 android:hint="@string/login_password_hint"
                 android:maxLines="1"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:autofillHints="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

@@ -1,85 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrapperRelativeLayout"
-    android:layout_centerVertical="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
     android:background="@color/whiteCardColor"
-    tools:ignore="UselessParent">
-
-    <LinearLayout
-        android:id="@+id/idCardTopBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp">
-
-        <!-- circle image for displaying the user image -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/idProfileImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/ic_my_profile" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <!--text view for displaying user name-->
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:padding="3dp"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
-            <!--textview for displaying post publish time-->
-            <TextView
-                android:id="@+id/visits"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginBottom="3dp"
-                android:padding="3dp"
-                android:textColor="@color/black"
-                android:textSize="11sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- text view for displaying post description -->
-    <TextView
-        android:id="@+id/descriptionPost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/idCardTopBar"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:padding="5dp"
-        android:text="Description del posting"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
+    android:elevation="4dp">
 
     <!-- video post -->
-    <com.google.android.exoplayer2.ui.StyledPlayerView
+    <androidx.media3.ui.PlayerView
         android:id="@+id/videoPost"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@id/descriptionPost"
+        android:layout_height="400dp"
         android:visibility="gone"
         app:resize_mode="fixed_height"
         app:show_shuffle_button="false"
@@ -107,154 +41,100 @@
             android:scaleType="centerCrop"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
-    </com.google.android.exoplayer2.ui.StyledPlayerView>
+    </androidx.media3.ui.PlayerView>
 
     <!-- image post -->
     <ImageView
         android:id="@+id/imagePost"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@id/descriptionPost"
+        android:layout_height="400dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         tools:ignore="ContentDescription" />
 
     <com.denzcoskun.imageslider.ImageSlider
         android:id="@+id/imageSlider"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@id/descriptionPost"
+        android:layout_height="400dp"
         app:iss_corner_radius="5"
         app:iss_error_image="@drawable/error"
         app:iss_selected_dot="@drawable/default_selected_dot"
         app:iss_text_align="CENTER"
         app:iss_unselected_dot="@drawable/default_unselected_dot" />
 
-    <!-- linear layout for displaying actions control -->
-    <LinearLayout
-        android:id="@+id/layoutFather"
+    <TextView
+        android:id="@+id/descrProject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imagePost"
+        android:layout_below="@+id/imagePost"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:text="Proyecto e-commerce, buscamos competir vs mercado libre, shoppe y themu."
+        android:textColor="@color/black"
+        android:textSize="19sp"
+        android:textStyle="normal" />
+
+    <LinearLayout
+        android:id="@+id/controllers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/descrProject"
         android:orientation="horizontal"
-        android:padding="0dp"
-        android:weightSum="3">
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:weightSum="0">
+
+        <!-- circle image for displaying the user image -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/idProfileImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_profile_50" />
 
         <LinearLayout
-            android:id="@+id/layoutShare"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/background_drawable"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/ic_share"
-                tools:ignore="ContentDescription" />
-
+            <!--text view for displaying user name-->
             <TextView
-                android:id="@+id/share"
-                android:layout_width="0dp"
+                android:id="@+id/userName"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/background_drawable"
-                android:drawablePadding="3dp"
-                android:padding="5dp"
-                android:text="Share"
+                android:padding="3dp"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="17sp"
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutComments"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:id="@+id/share"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
             android:background="@drawable/background_drawable"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/ic_comment"
+                android:src="@drawable/ic_share_52"
                 tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/comments"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:drawablePadding="3dp"
-                android:padding="5dp"
-                android:text="12"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutLikes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/background_drawable"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/ic_like"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/likes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/background_drawable"
-                android:drawablePadding="3dp"
-                android:padding="5dp"
-                android:text="Likes"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
+
     <View
-        android:id="@+id/dividerDown"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_below="@id/layoutFather"
-        android:background="#D3D1D1" />
+        android:layout_height="12dp"
+        android:background="#DAD7D7" />
 </RelativeLayout>

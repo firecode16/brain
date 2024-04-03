@@ -3,17 +3,16 @@ package com.brain.service
 import android.content.Context
 import android.util.Log
 import android.view.View
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.brain.R
 import com.brain.holders.MultimediaViewHolder
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 
 /**
  * @Author FLE
@@ -36,7 +35,7 @@ class VideoPlayService {
         private lateinit var exoPlayer: ExoPlayer
         private lateinit var dataSourceFactory: DataSource.Factory
         private lateinit var mediaSource: MediaSource
-        private lateinit var mediaSourceFactory: MediaSourceFactory
+        private lateinit var mediaSourceFactory: MediaSource.Factory
 
         fun releaseAllPlayers() {
             playersMap.map { it.value.release() }
@@ -64,6 +63,7 @@ class VideoPlayService {
             }
         }
 
+        @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
         fun initPlayer(context: Context, url: String, itemIndex: Int? = null, autoPlay: Boolean = false, holder: MultimediaViewHolder) {
             dataSourceFactory = DefaultHttpDataSource.Factory()
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
@@ -112,7 +112,7 @@ class VideoPlayService {
 
         private fun getAnimateVolumeControl(holder: MultimediaViewHolder) {
             if (holder.volumeControl != null) {
-                holder.volumeControl.bringToFront();
+                holder.volumeControl.bringToFront()
                 if (volumeState == VolumeState.OFF) {
                     holder.volumeControl.setImageResource(R.drawable.ic_volume_off)
                 } else if (volumeState == VolumeState.ON) {
@@ -122,7 +122,7 @@ class VideoPlayService {
         }
 
         private fun setVolumeControl(state: VolumeState, holder: MultimediaViewHolder) {
-            volumeState = state;
+            volumeState = state
             if (state == VolumeState.OFF) {
                 exoPlayer.volume = 0F
                 getAnimateVolumeControl(holder)
