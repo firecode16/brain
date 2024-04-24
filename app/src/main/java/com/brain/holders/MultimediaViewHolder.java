@@ -10,26 +10,26 @@ import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
-import com.denzcoskun.imageslider.ImageSlider;
+import com.brain.multimediaslider.MultimediaSlider;
 
 public class MultimediaViewHolder extends RecyclerView.ViewHolder {
-    public PlayerView videoPost;
+    public PlayerView postMedia;
     public ProgressBar progressBar;
     public ImageView volumeControl;
 
     public ImageView imagePost;
-    public ImageSlider imageSlider;
+    public MultimediaSlider multimediaSlider;
 
     public TextView userName;
 
     public MultimediaViewHolder(@NonNull View itemView) {
         super(itemView);
-        videoPost = itemView.findViewById(R.id.videoPost);
+        postMedia = itemView.findViewById(R.id.postMedia);
         progressBar = itemView.findViewById(R.id.progressBar);
         volumeControl = itemView.findViewById(R.id.volumeControl);
 
         imagePost = itemView.findViewById(R.id.imagePost);
-        imageSlider = itemView.findViewById(R.id.imageSlider);
+        multimediaSlider = itemView.findViewById(R.id.multimediaSlider);
 
         userName = itemView.findViewById(R.id.userName);
     }

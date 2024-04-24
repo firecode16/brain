@@ -77,13 +77,13 @@ class VideoPlayService {
             exoPlayer.prepare()
 
             // When changing track, retain the latest frame instead of showing a black screen
-            holder.videoPost.setKeepContentOnPlayerReset(true)
+            holder.postMedia.setKeepContentOnPlayerReset(true)
             // We'll show the controller, change to true if want controllers as pause and start
-            holder.videoPost.useController = false
-            holder.videoPost.requestFocus()
+            holder.postMedia.useController = false
+            holder.postMedia.requestFocus()
             setVolumeControl(VolumeState.ON, holder)
             // Bind the player to the view.
-            holder.videoPost.player = exoPlayer
+            holder.postMedia.player = exoPlayer
 
             // add player with its index to map
             if (playersMap.containsKey(itemIndex)) {

@@ -9,9 +9,9 @@
     android:background="@color/whiteCardColor"
     android:elevation="4dp">
 
-    <!-- video post -->
+    <!-- video post for 1 item -->
     <androidx.media3.ui.PlayerView
-        android:id="@+id/videoPost"
+        android:id="@+id/postMedia"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:visibility="gone"
@@ -43,7 +43,7 @@
             tools:ignore="ContentDescription" />
     </androidx.media3.ui.PlayerView>
 
-    <!-- image post -->
+    <!-- image post for 1 item -->
     <ImageView
         android:id="@+id/imagePost"
         android:layout_width="match_parent"
@@ -52,15 +52,16 @@
         android:scaleType="fitXY"
         tools:ignore="ContentDescription" />
 
-    <com.denzcoskun.imageslider.ImageSlider
-        android:id="@+id/imageSlider"
+    <!-- container for multiple items -->
+    <com.brain.multimediaslider.MultimediaSlider
+        android:id="@+id/multimediaSlider"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         app:iss_corner_radius="5"
-        app:iss_error_image="@drawable/error"
-        app:iss_selected_dot="@drawable/default_selected_dot"
+        app:iss_error_image="@drawable/error_image_loading"
+        app:iss_selected_dot="@drawable/selected_dot"
         app:iss_text_align="CENTER"
-        app:iss_unselected_dot="@drawable/default_unselected_dot" />
+        app:iss_unselected_dot="@drawable/unselected_dot" />
 
     <TextView
         android:id="@+id/descrProject"

@@ -3,6 +3,7 @@ package com.brain.adapters;
 import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
+import static com.brain.util.Util.AUDIO_MP3;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import com.brain.model.MediaContent;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Video;
+import com.brain.multimediaslider.model.Multimedia;
 import com.brain.service.OnImageSliderClickListener;
 import com.brain.service.OnImageViewClickListenerService;
 import com.brain.service.VideoPlayService;
@@ -33,11 +35,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -50,7 +51,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private String errorMsg;
 
     protected Context context;
-    protected ArrayList<SlideModel> slideModelList;
+    protected ArrayList<Multimedia> multimediaList;
     protected ArrayList<Video> videoList;
     protected List<MediaDetail> mediaDetailList;
 
@@ -78,7 +79,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        slideModelList = new ArrayList<>();
+        multimediaList = new ArrayList<>();
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
@@ -108,14 +109,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 multimediaViewHolder.userName.setText(getProfile().getUserName());
 
                 List<MediaContent> contentList = mediaDetail.getContent();
-                if (contentList.size() == 1) {
-                    String contentType = mediaDetail.getContent().stream().findFirst().get().getContentType();
-                    String id = mediaDetail.getContent().stream().findFirst().get().get_id();
 
-                    if (contentType.equals(VIDEO_MP4)) {
+                if (contentList.size() == 1) {
+                    String contentType = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).getContentType();
+                    String id = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).get_id();
+
+                    if (contentType.equals(VIDEO_MP4) || contentType.equals(AUDIO_MP3)) {
                         multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
                         multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
-                        multimediaViewHolder.videoPost.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
                         int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
 
                         VideoPlayService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
@@ -125,9 +127,9 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 } else {
                     mediaDetail.getContent().forEach(post -> {
-                        slideModelList.add(new SlideModel(post.get_id(), URL + URL_PART + post.get_id(), mediaDetail.getOverview(), ScaleTypes.CENTER_CROP));
-                        multimediaViewHolder.imageSlider.setImageList(slideModelList);
-                        multimediaViewHolder.imageSlider.setItemClickListener(new OnImageSliderClickListener(context, slideModelList));
+                        multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview()));
+                        multimediaViewHolder.multimediaSlider.setMediaList(multimediaList);
+                        multimediaViewHolder.multimediaSlider.setItemClickListener(new OnImageSliderClickListener(context, multimediaList));
                     });
                 }
                 break;

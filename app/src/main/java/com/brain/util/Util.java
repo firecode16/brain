@@ -20,6 +20,8 @@ public class Util {
     public static final String URL = "http://000.000.0.000:8080/api/";
     public static final String URL_PART = "multimedia/";
     public static final String VIDEO_MP4 = "video/mp4";
+    public static final String AUDIO_MP3 = "audio/mp3";
+    public static final String IMG_JPG = "image/jpg";
 
     public static int[] getTabIcon = {
             R.drawable.ic_home_public,

@@ -6,23 +6,23 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.brain.model.Poster;
+import com.brain.multimediaslider.impl.ItemClickListenerImpl;
+import com.brain.multimediaslider.model.Multimedia;
 import com.brain.util.SharedData;
 import com.brain.views.PosterOverlayView;
-import com.denzcoskun.imageslider.interfaces.ItemClickListener;
-import com.denzcoskun.imageslider.models.SlideModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnImageSliderClickListener implements ItemClickListener {
+public class OnImageSliderClickListener implements ItemClickListenerImpl {
     Context context;
-    private final ArrayList<SlideModel> slideModelList;
+    private final ArrayList<Multimedia> multimediaList;
     List<Poster> posterList;
     Poster model;
 
-    public OnImageSliderClickListener(Context context, ArrayList<SlideModel> slideModelList) {
+    public OnImageSliderClickListener(Context context, ArrayList<Multimedia> multimediaList) {
         this.context = context;
-        this.slideModelList = slideModelList;
+        this.multimediaList = multimediaList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -31,10 +31,10 @@ public class OnImageSliderClickListener implements ItemClickListener {
         SharedData extras = new SharedData(context);
         posterList = new ArrayList<>();
 
-        for (int index = 0; index < slideModelList.size(); ++index) {
+        for (int index = 0; index < multimediaList.size(); ++index) {
             model = new Poster();
-            model.setId(slideModelList.get(index).getId());
-            model.setUserName(slideModelList.get(index).getTitle());
+            model.setId(multimediaList.get(index).getId());
+            model.setUserName(multimediaList.get(index).getTitle());
             posterList.add(model);
         }
 
