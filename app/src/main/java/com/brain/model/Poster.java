@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Poster implements Serializable {
     private String id;
+    private String contentType;
     private String userName;
     private String email;
     private String descriptionFooter;
@@ -12,20 +13,20 @@ public class Poster implements Serializable {
     public Poster() {
     }
 
-    public Poster(String id, String userName, String email, String descriptionFooter, int visits) {
-        this.id = id;
-        this.userName = userName;
-        this.email = email;
-        this.descriptionFooter = descriptionFooter;
-        this.visits = visits;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getUserName() {

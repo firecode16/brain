@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MediaViewerDialog" parent="android:Theme.Translucent.NoTitleBar" />
+
+    <style name="MediaViewerDialog_NoStatusBar" parent="android:Theme.Translucent.NoTitleBar.Fullscreen" />
+
+    <style name="MediaViewerDialog.Default" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>

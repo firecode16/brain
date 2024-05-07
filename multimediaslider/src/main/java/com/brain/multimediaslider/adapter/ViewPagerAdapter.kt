@@ -2,6 +2,7 @@ package com.brain.multimediaslider.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -77,6 +78,7 @@ class ViewPagerAdapter(
 
         container.addView(itemView)
         imageView.setOnClickListener { itemClickListener?.onItemSelected(position) }
+        postMediaView.setOnClickListener { Log.d("== Pager Adapter ===","OnClick is called") }
 
         if (touchListener != null) {
             imageView!!.setOnTouchListener { v, event ->

@@ -1,9 +1,9 @@
 package com.brain.adapters;
 
+import static com.brain.util.Util.AUDIO_MP3;
 import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
-import static com.brain.util.Util.AUDIO_MP3;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -25,8 +25,8 @@ import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Video;
 import com.brain.multimediaslider.model.Multimedia;
-import com.brain.service.OnImageSliderClickListener;
 import com.brain.service.OnImageViewClickListenerService;
+import com.brain.service.OnMultimediaSliderClickListener;
 import com.brain.service.VideoPlayService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -129,7 +129,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mediaDetail.getContent().forEach(post -> {
                         multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview()));
                         multimediaViewHolder.multimediaSlider.setMediaList(multimediaList);
-                        multimediaViewHolder.multimediaSlider.setItemClickListener(new OnImageSliderClickListener(context, multimediaList));
+                        multimediaViewHolder.multimediaSlider.setItemClickListener(new OnMultimediaSliderClickListener(context, multimediaList));
                     });
                 }
                 break;

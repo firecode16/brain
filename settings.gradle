@@ -1,1 +1,2 @@
 include ':app', ':multimediaslider'
+include ':app', ':multimediapuzzlesviewer'
