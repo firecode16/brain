@@ -32,13 +32,13 @@ public class OnMultimediaSliderClickListener implements ItemClickListenerImpl {
     public void onItemSelected(int position) {
         posterList = new ArrayList<>();
 
-        for (int index = 0; index < multimediaList.size(); ++index) {
+        multimediaList.forEach(x -> {
             model = new Poster();
-            model.setId(multimediaList.get(index).getId());
-            model.setContentType(multimediaList.get(index).getContentType());
-            model.setUserName(multimediaList.get(index).getTitle());
+            model.setId(x.getId());
+            model.setContentType(x.getContentType());
+            model.setUserName(x.getTitle());
             posterList.add(model);
-        }
+        });
 
         new MultimediaPuzzlesViewer.Builder<>(context, posterList, URL + URL_PART).show();
     }

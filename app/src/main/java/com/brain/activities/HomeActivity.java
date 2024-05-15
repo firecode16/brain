@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
         fabTextPosting = findViewById(R.id.fabTextPosting);
         fabUploadVideoClip = findViewById(R.id.fabUploadVideoClip);
         imageView = findViewById(R.id.imagePost);
@@ -154,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
                         tabLayout.setLayoutParams(layoutParams);
                         break;
                     case 1:
-                        fabOptionMenuTouch = (FloatingActionButton) findViewById(R.id.fabOptionMenu);
+                        fabOptionMenuTouch = findViewById(R.id.fabOptionMenu);
                         fabOptionMenuTouch.setVisibility(View.INVISIBLE);
 
                         coordinatorLayoutForFAB = findViewById(R.id.coordinatorForFAB);

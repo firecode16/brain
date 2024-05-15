@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/pagerSilver"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:contentDescription="Todo" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -52,7 +53,8 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             app:tabIndicatorColor="@color/selectedTabIndicatorColor"
-            app:tabIndicatorHeight="@dimen/selected_tab_indicator_height" />
+            app:tabIndicatorHeight="@dimen/selected_tab_indicator_height"
+            android:contentDescription="Todo" />
 
         <include layout="@layout/layout_fab" />
     </com.google.android.material.appbar.AppBarLayout>

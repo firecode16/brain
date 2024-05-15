@@ -32,7 +32,7 @@ internal class MediaViewerDialog<T>(
             overlayView = builderData.overlayView
 
             setBackgroundColor(builderData.backgroundColor)
-            setMultimedia(builderData.mediaList, builderData.startPosition)
+            setMultimedia(builderData.mediaList, builderData.startPosition, url)
             onDismiss = { dialog.dismiss() }
         }
     }
