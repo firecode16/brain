@@ -5,6 +5,7 @@ import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -14,7 +15,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
@@ -25,9 +29,9 @@ import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Video;
 import com.brain.multimediaslider.model.Multimedia;
+import com.brain.service.MediaPlayerService;
 import com.brain.service.OnImageViewClickListenerService;
 import com.brain.service.OnMultimediaSliderClickListener;
-import com.brain.service.VideoPlayService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
@@ -98,6 +102,8 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return viewHolder;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @OptIn(markerClass = UnstableApi.class)
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -114,13 +120,22 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String contentType = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).getContentType();
                     String id = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).get_id();
 
-                    if (contentType.equals(VIDEO_MP4) || contentType.equals(AUDIO_MP3)) {
+                    if (contentType.equals(VIDEO_MP4)) {
                         multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
                         multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
                         multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
                         int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
 
-                        VideoPlayService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
+                    } else if (contentType.equals(AUDIO_MP3)) {
+                        multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
+                        multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
+                        multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
+                        int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
+
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
                     } else {
                         loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
                         multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));

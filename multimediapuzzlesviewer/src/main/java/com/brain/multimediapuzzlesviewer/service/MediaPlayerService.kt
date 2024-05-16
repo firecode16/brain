@@ -29,10 +29,13 @@ internal class MediaPlayerService {
 
             exoPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).build()
             exoPlayer.addMediaSource(mediaSource)
+            exoPlayer.prepare()
             exoPlayer.playWhenReady = autoPlay
             exoPlayer.seekTo(0, 0)
 
             playerView.visibility = View.VISIBLE
+            playerView.setShowNextButton(false)
+            playerView.setShowPreviousButton(false)
             // We'll show the controller, change to true if want controllers as pause and start
             playerView.useController = true
             // When changing track, retain the latest frame instead of showing a black screen

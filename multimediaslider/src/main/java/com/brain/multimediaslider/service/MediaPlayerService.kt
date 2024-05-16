@@ -14,7 +14,7 @@ import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 
-class VideoPlayService {
+class MediaPlayerService {
     companion object {
         private lateinit var exoPlayer: ExoPlayer
         private lateinit var dataSourceFactory: DataSource.Factory
@@ -39,6 +39,7 @@ class VideoPlayService {
             playerView.setKeepContentOnPlayerReset(true)
             playerView.player = exoPlayer
 
+            exoPlayer.prepare()
             exoPlayer.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     super.onPlaybackStateChanged(playbackState)

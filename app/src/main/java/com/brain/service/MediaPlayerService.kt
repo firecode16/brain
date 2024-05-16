@@ -19,7 +19,7 @@ import com.brain.holders.MultimediaViewHolder
  * @Company Brain Inc.
  * @Email hfredi35@gmail.com
  */
-class VideoPlayService {
+class MediaPlayerService {
     companion object {
         enum class VolumeState { ON, OFF }
 

@@ -19,7 +19,7 @@ import com.brain.multimediaslider.R
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
-import com.brain.multimediaslider.service.VideoPlayService
+import com.brain.multimediaslider.service.MediaPlayerService
 import com.brain.multimediaslider.util.ActionTypes
 import com.bumptech.glide.Glide
 
@@ -72,7 +72,7 @@ class ViewPagerAdapter(
                     Glide.with(it).load(url).centerCrop().into(imageView)
                 }
             } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
-                context?.let { VideoPlayService.initPlayer(it, url!!, position, false, postMediaView, progressBar) }
+                context?.let { MediaPlayerService.initPlayer(it, url!!, position, false, postMediaView, progressBar) }
             }
         }
 

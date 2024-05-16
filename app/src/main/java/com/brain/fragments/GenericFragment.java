@@ -28,8 +28,8 @@ import com.brain.model.MediaApiResponse;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Result;
+import com.brain.service.MediaPlayerService;
 import com.brain.service.PaginationListenerService;
-import com.brain.service.VideoPlayService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     @Override
                     public void isLastVisibleItemPosition(int index) {
                         if (index != -1) {
-                            VideoPlayService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
+                            MediaPlayerService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
                         }
                     }
 
@@ -207,7 +207,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onPause() {
         super.onPause();
-        VideoPlayService.Companion.releaseAllPlayers();
+        MediaPlayerService.Companion.releaseAllPlayers();
     }
 
     private void loadFirstPage() {

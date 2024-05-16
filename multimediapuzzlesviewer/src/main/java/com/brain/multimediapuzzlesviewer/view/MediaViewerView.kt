@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +15,7 @@ import com.brain.multimediapuzzlesviewer.adapter.MediaPagerAdapter
 import com.brain.multimediapuzzlesviewer.adapter.ViewFragmentPagerAdapter
 import com.brain.multimediapuzzlesviewer.fragment.ActionsFragment
 import com.brain.multimediapuzzlesviewer.model.Poster
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 
 internal class MediaViewerView<T> @JvmOverloads constructor(
@@ -33,6 +35,7 @@ internal class MediaViewerView<T> @JvmOverloads constructor(
     private var mediaViewPager: ViewPager
     //private var actionViewPager: ViewPager
     private var tabLayout: TabLayout
+    private var imageView: ImageView
     private var mediaPagerAdapter: MediaPagerAdapter? = null
 
     private var objList: List<Poster> = listOf()
@@ -45,6 +48,7 @@ internal class MediaViewerView<T> @JvmOverloads constructor(
         toolbar = findViewById(R.id.toolbarPuzzles)
         mediaViewPager = findViewById(R.id.mediaViewPager)
         tabLayout = findViewById(R.id.tabLayout)
+        imageView = findViewById(R.id.imageView)
         //actionViewPager = findViewById(R.id.actionViewPager)
 
         (context as AppCompatActivity).setSupportActionBar(toolbar)
@@ -116,5 +120,9 @@ internal class MediaViewerView<T> @JvmOverloads constructor(
         //tabLayout.setupWithViewPager(actionViewPager)
     }
 
-    internal fun open(url: String) {}
+    internal fun open(url: String) {
+        context?.let {
+            Glide.with(it).load(url + objList[startPosition].id).into(this.imageView)
+        }
+    }
 }
