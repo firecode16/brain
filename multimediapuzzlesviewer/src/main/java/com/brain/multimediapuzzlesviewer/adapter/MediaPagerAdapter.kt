@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.core.widget.NestedScrollView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
 import com.brain.multimediapuzzlesviewer.R
@@ -54,7 +54,7 @@ internal class MediaPagerAdapter(
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as NestedScrollView)
+        container.removeView(`object` as CoordinatorLayout)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

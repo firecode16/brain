@@ -16,12 +16,12 @@ class ViewFragmentPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(
         return fragmentList[position]
     }
 
-    internal fun getTabTitle(position: Int): String {
-        return fragmentTitleList[position]
+    override fun getPageTitle(position: Int): CharSequence? {
+        return null
     }
 
-    internal fun addFragment(fragment: Fragment, title: String) {
-        fragmentList.add(fragment)
-        fragmentTitleList.add(title)
+    fun addFragment(fragment: Fragment?, title: String?) {
+        fragmentList.add(fragment!!)
+        fragmentTitleList.add(title!!)
     }
 }

@@ -17,7 +17,7 @@ public class Util {
 
     private final Context context;
 
-    public static final String URL = "http://000.000.0.000:8080/api/";
+    public static final String URL = "http://192.168.1.121:8081/api/";
     public static final String URL_PART = "multimedia/";
     public static final String VIDEO_MP4 = "video/mp4";
     public static final String AUDIO_MP3 = "audio/mp3";

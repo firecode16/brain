@@ -29,8 +29,6 @@ internal class MediaViewerDialog<T>(
 
     private fun setupViewerView() {
         mediaViewer.apply {
-            overlayView = builderData.overlayView
-
             setBackgroundColor(builderData.backgroundColor)
             setMultimedia(builderData.mediaList, builderData.startPosition, url)
             onDismiss = { dialog.dismiss() }

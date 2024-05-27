@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nestedScrollView"
+    android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="Todo"
-    android:fillViewport="true"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+    android:orientation="vertical">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/rootContainer"
+    <include layout="@layout/toolbar_layout" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:contentDescription="sroll view"
+        android:scrollbars="none">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <LinearLayout
+            android:id="@+id/linearMediaSlider"
             android:layout_width="match_parent"
-            android:layout_height="730dp"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/wrapMedia"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:contentScrim="@color/black"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_height="wrap_content">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/mediaViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="720dp"
+                    android:contentDescription="slider media view pager" />
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="720dp"
                     android:contentDescription="TODO"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:visibility="visible" />
 
                 <androidx.media3.ui.PlayerView
                     android:id="@+id/playerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="720dp"
                     android:fitsSystemWindows="true"
                     android:keepScreenOn="true"
                     android:visibility="gone"
@@ -67,37 +74,68 @@
                         android:visibility="visible"
                         tools:ignore="ContentDescription" />
                 </androidx.media3.ui.PlayerView>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/mediaViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="slider media view pager" />
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbarPuzzles"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include layout="@layout/actions_tabs_layout" />
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/actionViewPager"
+            <LinearLayout
+                android:id="@+id/containerActionsEvent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="slider media view pager"
-                android:fitsSystemWindows="true"
-                tools:ignore="MissingConstraints" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.core.widget.NestedScrollView>
+                android:layout_height="match_parent"
+                android:background="#E0E0E0"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <include
+                    android:id="@+id/tabLayout"
+                    layout="@layout/actions_tabs_layout" />
+
+                <!-- This TextView indicates new fragment is open -->
+                <TextView
+                    android:id="@+id/fragmentComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Comments Fragment. Sala de Comentarios"
+                    android:textColor="#0F9D58"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <!-- This TextView indicates new fragment is open -->
+                <TextView
+                    android:id="@+id/fragmentSource"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Source Fragment. Sala de Fuentes"
+                    android:textColor="#0F9D58"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- This TextView indicates new fragment is open -->
+                <TextView
+                    android:id="@+id/fragmentFinancing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Financing Fragment. Sala de Financiacion"
+                    android:textColor="#0F9D58"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- This TextView indicates new fragment is open -->
+                <TextView
+                    android:id="@+id/fragmentJoin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Financing Fragment. Sala de Participacion o interes en el proyecto"
+                    android:textColor="#0F9D58"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
