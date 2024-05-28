@@ -88,31 +88,15 @@
                     android:id="@+id/tabLayout"
                     layout="@layout/actions_tabs_layout" />
 
-                <!-- This TextView indicates new fragment is open -->
-                <TextView
+                <!-- All section is temporary, replace all by RecyclerView  -->
+                <include
                     android:id="@+id/fragmentComments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Comments Fragment. Sala de Comentarios"
-                    android:textColor="#0F9D58"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:visibility="visible" />
+                    layout="@layout/comments_layout" />
 
-                <!-- This TextView indicates new fragment is open -->
-                <TextView
+                <include
                     android:id="@+id/fragmentSource"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Source Fragment. Sala de Fuentes"
-                    android:textColor="#0F9D58"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                    layout="@layout/source_layout" />
 
-                <!-- This TextView indicates new fragment is open -->
                 <TextView
                     android:id="@+id/fragmentFinancing"
                     android:layout_width="match_parent"
@@ -120,11 +104,10 @@
                     android:gravity="center"
                     android:text="Financing Fragment. Sala de Financiacion"
                     android:textColor="#0F9D58"
-                    android:textSize="25sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <!-- This TextView indicates new fragment is open -->
                 <TextView
                     android:id="@+id/fragmentJoin"
                     android:layout_width="match_parent"
@@ -132,9 +115,10 @@
                     android:gravity="center"
                     android:text="Financing Fragment. Sala de Participacion o interes en el proyecto"
                     android:textColor="#0F9D58"
-                    android:textSize="25sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
+                <!-- =====================================================  -->
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
