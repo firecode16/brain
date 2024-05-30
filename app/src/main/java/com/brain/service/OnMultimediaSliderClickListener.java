@@ -40,6 +40,6 @@ public class OnMultimediaSliderClickListener implements ItemClickListenerImpl {
             posterList.add(model);
         });
 
-        new MultimediaPuzzlesViewer.Builder<>(context, posterList, URL + URL_PART).show();
+        new MultimediaPuzzlesViewer.Builder<>(context, posterList, position,URL + URL_PART).show();
     }
 }

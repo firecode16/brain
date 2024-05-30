@@ -10,6 +10,7 @@ import com.brain.multimediapuzzlesviewer.view.MediaViewerView
 internal class MediaViewerDialog<T>(
     context: Context,
     private val builderData: BuilderData<Poster>,
+    private val currentPosition: Int,
     private val url: String
 ) {
     private val dialog: AlertDialog
@@ -30,7 +31,7 @@ internal class MediaViewerDialog<T>(
     private fun setupViewerView() {
         mediaViewer.apply {
             setBackgroundColor(builderData.backgroundColor)
-            setMultimedia(builderData.mediaList, builderData.startPosition, url)
+            setMultimedia(builderData.mediaList, currentPosition, url)
             onDismiss = { dialog.dismiss() }
         }
     }

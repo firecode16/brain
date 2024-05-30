@@ -34,7 +34,7 @@ internal class MediaViewerView<T>(
     private var mediaPagerAdapter: MediaPagerAdapter? = null
 
     private var objList: List<Poster> = listOf()
-    private var startPosition: Int = 0
+    private var currentPosition: Int = 0
 
     init {
         View.inflate(context, R.layout.multimedia_puzzles_viewer, this)
@@ -117,11 +117,12 @@ internal class MediaViewerView<T>(
         })
     }
 
-    internal fun setMultimedia(objList: List<Poster>, startPosition: Int, url: String) {
+    internal fun setMultimedia(objList: List<Poster>, currentPosition: Int, url: String) {
         this.objList = objList
-        this.startPosition = startPosition
+        this.currentPosition = currentPosition
         this.mediaPagerAdapter = MediaPagerAdapter(context, objList, url)
         this.mediaViewPager.adapter = mediaPagerAdapter
+        this.mediaViewPager.setCurrentItem(currentPosition)
     }
 
     internal fun open(url: String) {}

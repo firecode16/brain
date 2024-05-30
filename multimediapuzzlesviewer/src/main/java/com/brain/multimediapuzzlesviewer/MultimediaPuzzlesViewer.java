@@ -14,10 +14,10 @@ public class MultimediaPuzzlesViewer<T> {
     private final BuilderData<Poster> builderData;
     private final MediaViewerDialog<T> dialog;
 
-    protected MultimediaPuzzlesViewer(Context context, BuilderData<Poster> builderData, String url) {
+    protected MultimediaPuzzlesViewer(Context context, BuilderData<Poster> builderData, Integer currentPosition, String url) {
         this.context = context;
         this.builderData = builderData;
-        this.dialog = new MediaViewerDialog<>(context, builderData, url);
+        this.dialog = new MediaViewerDialog<>(context, builderData, currentPosition, url);
     }
 
     public void show() {
@@ -32,15 +32,17 @@ public class MultimediaPuzzlesViewer<T> {
         private final Context context;
         private final BuilderData<Poster> data;
         private final String url;
+        private final Integer currentPosition;
 
-        public Builder(Context context, List<Poster> dataList, String url) {
+        public Builder(Context context, List<Poster> dataList, Integer currentPosition, String url) {
             this.context = context;
             this.data = new BuilderData<>(dataList);
+            this.currentPosition = currentPosition;
             this.url = url;
         }
 
         public MultimediaPuzzlesViewer<T> build() {
-            return new MultimediaPuzzlesViewer<>(context, data, url);
+            return new MultimediaPuzzlesViewer<>(context, data, currentPosition, url);
         }
 
         public void show() {

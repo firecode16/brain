@@ -7,4 +7,4 @@ class Poster(
     var email: String? = "",
     var descriptionFooter: String? = "",
     var visits: Int? = 0
-) {}
+)
