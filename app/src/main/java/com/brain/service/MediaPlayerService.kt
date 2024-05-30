@@ -53,10 +53,11 @@ class MediaPlayerService {
             }
         }
 
-        fun getThePlayIndexAndPausePreviousPlayer(index: Int) {
+        fun playIndexAndPausePreviousPlayer(index: Int) {
             if (playersMap[index]?.playWhenReady == false || playersMap[index]?.playWhenReady == null) {
                 pauseCurrentPlayingVideo()
                 if (playersMap[index]?.playWhenReady != null) {
+                    playersMap[index]?.prepare()
                     playersMap[index]?.playWhenReady = true
                     currentPlayingVideo = Pair(index, playersMap[index]!!)
                 }

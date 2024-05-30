@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.adapter.MediaPagerAdapter
 import com.brain.multimediapuzzlesviewer.model.Poster
+import com.brain.multimediapuzzlesviewer.service.MediaPlayerService
 import com.google.android.material.tabs.TabLayout
 
 
@@ -52,6 +53,7 @@ internal class MediaViewerView<T>(
         context.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toolbar.setNavigationOnClickListener {
+            MediaPlayerService.releaseAllPlayers()
             onDismiss?.invoke()
         }
 
@@ -98,6 +100,20 @@ internal class MediaViewerView<T>(
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
+        setupViewPager(mediaViewPager)
+    }
+
+    private fun setupViewPager(viewPager: ViewPager?) {
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                MediaPlayerService.playIndexAndPausePreviousPlayer(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {}
         })
     }
 

@@ -16,8 +16,8 @@ import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
+import com.brain.multimediaslider.service.MediaPlayerService
 import com.brain.multimediaslider.util.ActionTypes
-import java.util.Timer
 
 @SuppressLint("ClickableViewAccessibility")
 class MultimediaSlider @JvmOverloads constructor(
@@ -30,9 +30,6 @@ class MultimediaSlider @JvmOverloads constructor(
     private var viewPagerAdapter: ViewPagerAdapter? = null
 
     private var dots: Array<ImageView?>? = null
-
-    private var currentPage = 0
-    private var mediaCount = 0
 
     private var cornerRadius: Int = 0
     private var period: Long = 0
@@ -84,13 +81,13 @@ class MultimediaSlider @JvmOverloads constructor(
                 false
             }
         }
+
+        setupViewPager(viewPager)
     }
 
     fun setMediaList(mediaList: List<Multimedia>) {
         viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign)
-
         viewPager!!.adapter = viewPagerAdapter
-        mediaCount = mediaList.size
 
         if (mediaList.isNotEmpty()) {
             setupDots(mediaList.size)
@@ -113,13 +110,13 @@ class MultimediaSlider @JvmOverloads constructor(
         }
 
         dots!![0]!!.setImageDrawable(ContextCompat.getDrawable(context, selectedDot))
+    }
 
-        viewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+    private fun setupViewPager(viewPager: ViewPager?) {
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                currentPage = position
-
                 for (dot in dots!!) {
                     dot!!.setImageDrawable(ContextCompat.getDrawable(context, unselectedDot))
                 }
@@ -129,6 +126,8 @@ class MultimediaSlider @JvmOverloads constructor(
                 if (itemChangeListener != null) {
                     itemChangeListener!!.onItemChanged(position)
                 }
+
+                MediaPlayerService.playIndexAndPausePreviousPlayer(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

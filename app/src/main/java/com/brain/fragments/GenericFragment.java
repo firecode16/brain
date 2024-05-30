@@ -102,7 +102,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     @Override
                     public void isLastVisibleItemPosition(int index) {
                         if (index != -1) {
-                            MediaPlayerService.Companion.getThePlayIndexAndPausePreviousPlayer(index);
+                            MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(index);
                         }
                     }
 

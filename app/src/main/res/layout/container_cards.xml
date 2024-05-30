@@ -72,7 +72,7 @@
         android:layout_marginEnd="5dp"
         android:text="Proyecto e-commerce, buscamos competir vs mercado libre, shoppe y themu."
         android:textColor="@color/black"
-        android:textSize="19sp"
+        android:textSize="17sp"
         android:textStyle="normal" />
 
     <LinearLayout

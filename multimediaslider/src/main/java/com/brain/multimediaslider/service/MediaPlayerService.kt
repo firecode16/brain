@@ -21,6 +21,32 @@ class MediaPlayerService {
         private lateinit var mediaSource: MediaSource
         private lateinit var mediaSourceFactory: MediaSource.Factory
 
+        // for hold all players generated
+        private var playersMap: MutableMap<Int, ExoPlayer> = mutableMapOf()
+        // for hold current player
+        private var currentPlayingVideo: Pair<Int, ExoPlayer>? = null
+
+        fun releaseAllPlayers() {
+            playersMap.map { it.value.release() }
+        }
+
+        private fun pauseCurrentPlayingVideo() {
+            if (currentPlayingVideo != null) {
+                currentPlayingVideo?.second?.playWhenReady = false
+            }
+        }
+
+        fun playIndexAndPausePreviousPlayer(index: Int) {
+            if (playersMap[index]?.playWhenReady == false || playersMap[index]?.playWhenReady == null) {
+                pauseCurrentPlayingVideo()
+                if (playersMap[index]?.playWhenReady != null) {
+                    playersMap[index]?.prepare()
+                    playersMap[index]?.playWhenReady = true
+                    currentPlayingVideo = Pair(index, playersMap[index]!!)
+                }
+            }
+        }
+
         @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
         fun initPlayer(context: Context, url: String, position: Int? = null, autoPlay: Boolean = false, playerView: PlayerView, progressBar: ProgressBar) {
             dataSourceFactory = DefaultHttpDataSource.Factory()
@@ -38,6 +64,13 @@ class MediaPlayerService {
             // When changing track, retain the latest frame instead of showing a black screen
             playerView.setKeepContentOnPlayerReset(true)
             playerView.player = exoPlayer
+
+            // first remove if the map contains the specified key
+            if (playersMap.containsKey(position)) {
+                playersMap.remove(position)
+            }
+            // after, associates the specified value with the specified key in the map.
+            playersMap[position!!] = exoPlayer
 
             exoPlayer.prepare()
             exoPlayer.addListener(object : Player.Listener {
