@@ -11,12 +11,13 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.brain.multimediaplayer.service.MediaPlayerService
+import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediaslider.adapter.ViewPagerAdapter
 import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
-import com.brain.multimediaslider.service.MediaPlayerService
 import com.brain.multimediaslider.util.ActionTypes
 
 @SuppressLint("ClickableViewAccessibility")
@@ -127,7 +128,7 @@ class MultimediaSlider @JvmOverloads constructor(
                     itemChangeListener!!.onItemChanged(position)
                 }
 
-                MediaPlayerService.playIndexAndPausePreviousPlayer(position)
+                MediaPlayerService.playIndexAndPausePreviousPlayer(position, PlayerFlag.SLIDER)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

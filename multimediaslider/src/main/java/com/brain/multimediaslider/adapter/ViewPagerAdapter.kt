@@ -14,11 +14,12 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
+import com.brain.multimediaplayer.service.MediaPlayerService
+import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediaslider.R
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
-import com.brain.multimediaslider.service.MediaPlayerService
 import com.brain.multimediaslider.util.ActionTypes
 import com.bumptech.glide.Glide
 
@@ -65,13 +66,12 @@ class ViewPagerAdapter(
 
         if (mediaList!![position].url !== null) {
             url = mediaList!![position].url!!
-
-            if (mediaList!![position].contentType.equals("image/jpg")) {
-                context?.let {
-                    Glide.with(it).load(url).centerCrop().into(imageView)
-                }
-            } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
-                context?.let { MediaPlayerService.initPlayer(it, url!!, position, false, postMediaView, progressBar) }
+            context.let {
+                if (mediaList!![position].contentType.equals("image/jpg")) {
+                    Glide.with(it!!).load(url).centerCrop().into(imageView)
+                } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
+                    MediaPlayerService.initPlayer(it!!, url!!, position, false, postMediaView, progressBar, PlayerFlag.SLIDER)
+                } else {}
             }
         }
 

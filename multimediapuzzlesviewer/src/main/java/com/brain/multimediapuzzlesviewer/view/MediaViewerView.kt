@@ -9,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.ViewPager
+import com.brain.multimediaplayer.service.MediaPlayerService
+import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.adapter.MediaPagerAdapter
 import com.brain.multimediapuzzlesviewer.model.Poster
-import com.brain.multimediapuzzlesviewer.service.MediaPlayerService
 import com.google.android.material.tabs.TabLayout
 
 
@@ -35,6 +36,7 @@ internal class MediaViewerView<T>(
 
     private var objList: List<Poster> = listOf()
     private var currentPosition: Int = 0
+    private var positionRelease: Int = 0
 
     init {
         View.inflate(context, R.layout.multimedia_puzzles_viewer, this)
@@ -53,7 +55,7 @@ internal class MediaViewerView<T>(
         context.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toolbar.setNavigationOnClickListener {
-            MediaPlayerService.releaseAllPlayers()
+            MediaPlayerService.releaseAllPlayers(PlayerFlag.DIALOG, positionRelease)
             onDismiss?.invoke()
         }
 
@@ -110,7 +112,8 @@ internal class MediaViewerView<T>(
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                MediaPlayerService.playIndexAndPausePreviousPlayer(position)
+                positionRelease = position
+                MediaPlayerService.playIndexAndPausePreviousPlayer(position, PlayerFlag.DIALOG)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
