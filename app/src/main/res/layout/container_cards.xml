@@ -70,7 +70,6 @@
         android:layout_below="@+id/imagePost"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:text="Proyecto e-commerce, buscamos competir vs mercado libre, shoppe y themu."
         android:textColor="@color/black"
         android:textSize="17sp"
         android:textStyle="normal" />

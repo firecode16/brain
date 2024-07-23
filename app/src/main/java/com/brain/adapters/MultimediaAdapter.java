@@ -113,6 +113,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case VIEW_TYPE_ITEM:
                 final MultimediaViewHolder multimediaViewHolder = (MultimediaViewHolder) holder;
                 multimediaViewHolder.userName.setText(getProfile().getUserName());
+                multimediaViewHolder.descrProject.setText(mediaDetail.getOverview());
 
                 List<MediaContent> contentList = mediaDetail.getContent();
 

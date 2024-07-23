@@ -21,6 +21,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     public MultimediaSlider multimediaSlider;
 
     public TextView userName;
+    public TextView descrProject;
 
     public MultimediaViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -32,5 +33,6 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
         multimediaSlider = itemView.findViewById(R.id.multimediaSlider);
 
         userName = itemView.findViewById(R.id.userName);
+        descrProject = itemView.findViewById(R.id.descrProject);
     }
 }

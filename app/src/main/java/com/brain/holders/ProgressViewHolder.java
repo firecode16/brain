@@ -37,9 +37,11 @@ public class ProgressViewHolder extends RecyclerView.ViewHolder implements View.
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.load_more_retry:
-            case R.id.loadmore_errorlayout:
+        int id = v.getId();
+        if (id == R.id.load_more_retry) {
+            // logic
+        } else if (id == R.id.loadmore_errorlayout) {
+            // logic
         }
     }
 }
