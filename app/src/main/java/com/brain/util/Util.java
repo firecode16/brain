@@ -24,7 +24,7 @@ public class Util {
     public static final String IMG_JPG = "image/jpg";
 
     public static int[] getTabIcon = {
-            R.drawable.ic_home_public,
+            R.drawable.ic_home_rocket_50,
             R.drawable.ic_chat,
             R.drawable.ic_setting_50
     };

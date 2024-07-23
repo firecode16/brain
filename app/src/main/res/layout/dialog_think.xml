@@ -17,8 +17,8 @@
         android:background="@android:color/white"
         android:minHeight="?attr/actionBarSize"
         android:padding="1dp"
-        app:logo="@drawable/ic_chrome"
-        app:title="Crear Publicación"
+        app:logo="@drawable/ic_plane_24"
+        app:title="Publicar proyecto"
         app:titleTextColor="@color/colorPrimaryDark" />
 
     <TextView
