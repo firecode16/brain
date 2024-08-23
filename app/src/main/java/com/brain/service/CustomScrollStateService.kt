@@ -22,19 +22,19 @@ abstract class CustomScrollStateService(
             val visibleItemCount = linearLayoutManager.childCount
             val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
 
-            val screenCenter: Int = recyclerView.context.resources.displayMetrics.heightPixels / 2
-            var minCenterOffset = Int.MAX_VALUE
+            val displayMetricsOfHeightInPixels: Int = recyclerView.context.resources.displayMetrics.heightPixels / 2
+            var maxCenterOffset = Int.MAX_VALUE
             var middleItemIndex = 0
 
             for (index in 0 until visibleItemCount) {
                 val itemChild = linearLayoutManager.getChildAt(index) ?: return
 
-                val topOffset = itemChild.top
-                val bottomOffset = itemChild.bottom
-                val centerOffset = abs(topOffset - screenCenter) + abs(bottomOffset - screenCenter)
+                val topView = itemChild.top
+                val bottomView = itemChild.bottom
+                val calculateCenterViewChild = abs(topView - displayMetricsOfHeightInPixels) + abs(bottomView - displayMetricsOfHeightInPixels)
 
-                if (minCenterOffset > centerOffset) {
-                    minCenterOffset = centerOffset
+                if (maxCenterOffset > calculateCenterViewChild) {
+                    maxCenterOffset = calculateCenterViewChild
                     middleItemIndex = index + firstVisibleItemPosition
                 }
             }
