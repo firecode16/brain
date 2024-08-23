@@ -28,8 +28,8 @@ import com.brain.model.MediaApiResponse;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Result;
+import com.brain.service.CustomScrollStateService;
 import com.brain.service.MediaPlayerService;
-import com.brain.service.PaginationListenerService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
@@ -98,34 +98,17 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(multimediaAdapter);
 
-                recyclerView.addOnScrollListener(new PaginationListenerService(layoutManager) {
+                recyclerView.addOnScrollListener(new CustomScrollStateService(layoutManager) {
                     @Override
-                    public void isLastVisibleItemPosition(int index) {
+                    public void visibleItemCenterPosition(int index) {
                         if (index != -1) {
                             MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(index);
                         }
                     }
 
                     @Override
-                    protected void loadMoreItems() {
-                        isLoading = true;
-                        currentPage += 1;
-                        loadNextPage();
-                    }
-
-                    @Override
                     public int getTotalPageCount() {
                         return TOTAL_PAGES;
-                    }
-
-                    @Override
-                    public boolean isLastPage() {
-                        return isLastPage;
-                    }
-
-                    @Override
-                    public boolean isLoading() {
-                        return isLoading;
                     }
                 });
 
