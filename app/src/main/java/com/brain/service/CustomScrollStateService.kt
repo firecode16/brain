@@ -1,4 +1,4 @@
-package com.brain.service;
+package com.brain.service
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +22,7 @@ abstract class CustomScrollStateService(
             val visibleItemCount = linearLayoutManager.childCount
             val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
 
-            val screenCenter: Int = recyclerView.context.resources.displayMetrics.widthPixels / 2
+            val screenCenter: Int = recyclerView.context.resources.displayMetrics.heightPixels / 2
             var minCenterOffset = Int.MAX_VALUE
             var middleItemIndex = 0
 
