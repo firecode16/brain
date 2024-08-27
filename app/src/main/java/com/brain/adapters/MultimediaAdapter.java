@@ -7,7 +7,6 @@ import static com.brain.util.Util.VIDEO_MP4;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,18 +26,11 @@ import com.brain.holders.ProgressViewHolder;
 import com.brain.model.MediaContent;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
-import com.brain.model.Video;
 import com.brain.multimediaslider.model.Multimedia;
 import com.brain.service.MediaPlayerService;
 import com.brain.service.OnImageViewClickListenerService;
 import com.brain.service.OnMultimediaSliderClickListener;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.brain.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +48,10 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     protected Context context;
     protected ArrayList<Multimedia> multimediaList;
-    protected ArrayList<Video> videoList;
     protected List<MediaDetail> mediaDetailList;
 
     protected Profile profile;
-    protected Video modelVideo;
+    Util util;
 
     public MultimediaAdapter(Context context) {
         this.context = context;
@@ -138,10 +129,12 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                         MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
                     } else {
-                        loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
+                        util = new Util(context);
+                        util.loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
                         multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));
                     }
                 } else {
+                    multimediaList.clear();
                     mediaDetail.getContent().forEach(post -> {
                         multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview()));
                         multimediaViewHolder.multimediaSlider.setMediaList(multimediaList);
@@ -238,19 +231,5 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         retryPageLoad = show;
         notifyItemChanged(mediaDetailList.size() - 1);
         if (errorMsg != null) this.errorMsg = errorMsg;
-    }
-
-    private RequestBuilder<Drawable> loadImage(@NonNull String url) {
-        return Glide.with(context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                return false;
-            }
-        });
     }
 }

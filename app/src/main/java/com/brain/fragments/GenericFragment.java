@@ -23,7 +23,6 @@ import com.brain.adapters.UserAdapter;
 import com.brain.api.ApiRest;
 import com.brain.holders.UserViewHolder;
 import com.brain.impl.ApiRestImpl;
-import com.brain.impl.PaginationAdapterCallbackImpl;
 import com.brain.model.MediaApiResponse;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
@@ -39,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, PaginationAdapterCallbackImpl {
+public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected RecyclerView recycler;
     protected SwipeRefreshLayout swipeRefresh;
     protected LinearLayoutManager layoutManager;
@@ -55,13 +54,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final int TOTAL_PAGES = 5;
     private int currentPage = PAGE_START;
     private static final int ITEMS_SIZE = 10; // items by pagination
-    private boolean isLastPage = false;
     private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private int resumePlayerIndexCurrent = -1;
 
     private ApiRestImpl apiRestImpl;
 
-    public GenericFragment() {
-    }
+    public GenericFragment() { }
 
     public static GenericFragment newInstance(int sectionNumber) {
         GenericFragment fragment = new GenericFragment();
@@ -103,12 +102,30 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     public void visibleItemCenterPosition(int index) {
                         if (index != -1) {
                             MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(index);
+                            resumePlayerIndexCurrent = index;
                         }
                     }
 
                     @Override
                     public int getTotalPageCount() {
                         return TOTAL_PAGES;
+                    }
+
+                    @Override
+                    protected void loadMoreItems() {
+                        isLoading = true;
+                        currentPage += 1;
+                        loadNextPage();
+                    }
+
+                    @Override
+                    public boolean isLoading() {
+                        return isLoading;
+                    }
+
+                    @Override
+                    public boolean isLastPage() {
+                        return isLastPage;
                     }
                 });
 
@@ -146,15 +163,9 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         multimediaAdapter.getMediaDetailList().clear();
         multimediaAdapter.notifyDataSetChanged();
         loadFirstPage();
-        swipeRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void onRefresh() {
-        currentPage = PAGE_START;
         isLastPage = false;
-        multimediaAdapter.clear();
-        loadFirstPage();
+        MediaPlayerService.Companion.releaseAllPlayers();
+        swipeRefresh.setRefreshing(false);
     }
 
     private Result fetchResults(Response<MediaApiResponse> response) {
@@ -180,17 +191,6 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
             errorLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void retryPageLoad() {
-        loadNextPage();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MediaPlayerService.Companion.releaseAllPlayers();
     }
 
     private void loadFirstPage() {
@@ -252,5 +252,32 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 multimediaAdapter.showRetry(true, util.fetchErrorMessage(t));
             }
         });
+    }
+
+    @Override
+    public void onRefresh() { }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MediaPlayerService.Companion.pauseAllPlayers();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MediaPlayerService.Companion.resumePlayerIndexCurrent(resumePlayerIndexCurrent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MediaPlayerService.Companion.prepareAllPlayers();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MediaPlayerService.Companion.releaseAllPlayers();
     }
 }

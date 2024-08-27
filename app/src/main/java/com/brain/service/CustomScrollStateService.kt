@@ -42,6 +42,22 @@ abstract class CustomScrollStateService(
         }
     }
 
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+        val visibleItemCount: Int = linearLayoutManager.childCount
+        val totalItemCount: Int = linearLayoutManager.itemCount
+        val firstVisibleItemPosition: Int = linearLayoutManager.findFirstVisibleItemPosition()
+
+        if (!isLoading() && !isLastPage()) {
+            if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                loadMoreItems()
+            }
+        }
+    }
+
     abstract fun visibleItemCenterPosition(index: Int)
     abstract fun getTotalPageCount(): Int
+    protected abstract fun loadMoreItems()
+    abstract fun isLoading(): Boolean
+    abstract fun isLastPage(): Boolean
 }

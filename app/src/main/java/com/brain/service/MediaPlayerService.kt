@@ -37,6 +37,24 @@ class MediaPlayerService {
         private lateinit var mediaSource: MediaSource
         private lateinit var mediaSourceFactory: MediaSource.Factory
 
+        fun pauseAllPlayers() {
+            playersMap.map {
+                it.value.playWhenReady = false
+                it.value.playbackState
+            }
+        }
+
+        fun resumePlayerIndexCurrent(index: Int) {
+            if (playersMap[index]?.playWhenReady != null) {
+                playersMap[index]?.playWhenReady = true
+                playersMap[index]?.playbackState
+            }
+        }
+
+        fun prepareAllPlayers() {
+            playersMap.map { it.value.prepare() }
+        }
+
         fun releaseAllPlayers() {
             playersMap.map { it.value.release() }
         }
