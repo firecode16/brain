@@ -27,8 +27,8 @@ import com.brain.model.MediaApiResponse;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Result;
+import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.service.CustomScrollStateService;
-import com.brain.service.MediaPlayerService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     @Override
                     public void visibleItemCenterPosition(int index) {
                         if (index != -1) {
-                            MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(index);
+                            MediaPlayerService.Companion.playIndexAndPausePreviousPlayer("DEFAULT", index);
                             resumePlayerIndexCurrent = index;
                         }
                     }
@@ -175,7 +175,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(190881L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(444004L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {

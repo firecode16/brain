@@ -10,7 +10,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/sliderImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
@@ -18,7 +18,7 @@
         tools:ignore="ContentDescription" />
 
     <androidx.media3.ui.PlayerView
-        android:id="@+id/postMediaView"
+        android:id="@+id/sliderPlayerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

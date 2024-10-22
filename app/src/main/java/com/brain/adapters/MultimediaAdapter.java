@@ -26,8 +26,8 @@ import com.brain.holders.ProgressViewHolder;
 import com.brain.model.MediaContent;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
+import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.multimediaslider.model.Multimedia;
-import com.brain.service.MediaPlayerService;
 import com.brain.service.OnImageViewClickListenerService;
 import com.brain.service.OnMultimediaSliderClickListener;
 import com.brain.util.Util;
@@ -113,21 +113,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String id = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).get_id();
 
                     if (contentType.equals(VIDEO_MP4)) {
-                        multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
-                        multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
-                        multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
                         int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, "DEFAULT", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else if (contentType.equals(AUDIO_MP3)) {
-                        multimediaViewHolder.progressBar.setVisibility(View.VISIBLE);
-                        multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
-                        multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
                         multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
                         multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
                         int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, "DEFAULT", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else {
                         util = new Util(context);
                         util.loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);

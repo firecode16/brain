@@ -2,6 +2,7 @@ package com.brain.service
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.brain.adapters.MultimediaAdapter
 import kotlin.math.abs
 
 
@@ -14,6 +15,7 @@ abstract class CustomScrollStateService(
     private var linearLayoutManager: LinearLayoutManager
 ) : RecyclerView.OnScrollListener() {
     private val controlState: Int = RecyclerView.SCROLL_STATE_IDLE
+    private var multimediaAdapter: MultimediaAdapter? = null
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -36,6 +38,15 @@ abstract class CustomScrollStateService(
                 if (maxCenterOffset > calculateCenterViewChild) {
                     maxCenterOffset = calculateCenterViewChild
                     middleItemIndex = index + firstVisibleItemPosition
+
+                    val view = linearLayoutManager.getChildAt(index)
+                    val viewHolder = view?.let { recyclerView.getChildViewHolder(view) }
+                    val mediaAdapter = viewHolder?.bindingAdapter
+                    multimediaAdapter = mediaAdapter as MultimediaAdapter?
+                    val mediaDetailList = multimediaAdapter?.mediaDetailList
+                    val mediaDetail = mediaDetailList?.get(middleItemIndex)
+
+                    println(mediaDetail)
                 }
             }
             visibleItemCenterPosition(middleItemIndex)

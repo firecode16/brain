@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.ViewPager
-import com.brain.multimediaplayer.service.MediaPlayerService
-import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.adapter.MediaPagerAdapter
 import com.brain.multimediapuzzlesviewer.model.Poster
@@ -55,7 +53,7 @@ internal class MediaViewerView<T>(
         context.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toolbar.setNavigationOnClickListener {
-            MediaPlayerService.releaseAllPlayers(PlayerFlag.DIALOG, positionRelease)
+            //MediaPlayerService.releaseAllPlayers()
             onDismiss?.invoke()
         }
 
@@ -113,7 +111,7 @@ internal class MediaViewerView<T>(
 
             override fun onPageSelected(position: Int) {
                 positionRelease = position
-                MediaPlayerService.playIndexAndPausePreviousPlayer(position, PlayerFlag.DIALOG)
+                //MediaPlayerService.playIndexAndPausePreviousPlayer(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

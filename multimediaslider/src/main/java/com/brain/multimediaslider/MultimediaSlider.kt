@@ -5,20 +5,17 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.brain.multimediaplayer.service.MediaPlayerService
-import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediaslider.adapter.ViewPagerAdapter
 import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
-import com.brain.multimediaslider.util.ActionTypes
 
 @SuppressLint("ClickableViewAccessibility")
 class MultimediaSlider @JvmOverloads constructor(
@@ -72,16 +69,13 @@ class MultimediaSlider @JvmOverloads constructor(
             indicatorAlign = typedArray.getString(R.styleable.MultimediaSlider_iss_indicator_align)!!
         }
 
-        if (touchListener != null) {
-            viewPager!!.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_MOVE -> touchListener!!.onTouched(ActionTypes.MOVE)
-                    MotionEvent.ACTION_DOWN -> touchListener!!.onTouched(ActionTypes.DOWN)
-                    MotionEvent.ACTION_UP -> touchListener!!.onTouched(ActionTypes.UP)
-                }
-                false
+        /*viewPager!!.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> Log.i("ACTION_DOWN:: ", "onStop video")
+                MotionEvent.ACTION_UP -> Log.i("ACTION_UP:: ", "onStop video")
             }
-        }
+            false
+        }*/
 
         setupViewPager(viewPager)
     }
@@ -128,7 +122,7 @@ class MultimediaSlider @JvmOverloads constructor(
                     itemChangeListener!!.onItemChanged(position)
                 }
 
-                MediaPlayerService.playIndexAndPausePreviousPlayer(position, PlayerFlag.SLIDER)
+                MediaPlayerService.playIndexAndPausePreviousPlayer("SLIDER", position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

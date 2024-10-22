@@ -1,8 +1,9 @@
-package com.brain.service
+package com.brain.multimediaslider.service
 
 import android.content.Context
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
@@ -11,15 +12,14 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import com.brain.R
-import com.brain.holders.MultimediaViewHolder
+import androidx.media3.ui.PlayerView
 
 /**
  * @Author FLE
  * @Company Brain Inc.
  * @Email hfredi35@gmail.com
  */
-/*class MediaPlayerService {
+/*class SliderMediaPlayerService {
     companion object {
         enum class VolumeState { ON, OFF }
 
@@ -82,77 +82,47 @@ import com.brain.holders.MultimediaViewHolder
         }
 
         @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-        fun initPlayer(context: Context, url: String, itemIndex: Int? = null, autoPlay: Boolean = false, holder: MultimediaViewHolder) {
-            dataSourceFactory = DefaultHttpDataSource.Factory()
-            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
+        fun initPlayer(context: Context, url: String, itemIndex: Int? = null, autoPlay: Boolean = false, sliderPlayerView: PlayerView, progressBar: ProgressBar) {
+            // first remove if the map contains the specified key
+            if (!playersMap.containsKey(itemIndex)) {
+                dataSourceFactory = DefaultHttpDataSource.Factory()
+                mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
 
-            exoPlayer = ExoPlayer.Builder(context).build()
-            exoPlayer.setMediaSource(mediaSource)
-            exoPlayer.prepare()
-            exoPlayer.playWhenReady = autoPlay
-
-            // When changing track, retain the latest frame instead of showing a black screen
-            holder.postMedia.setKeepContentOnPlayerReset(true)
-            // We'll show the controller, change to true if want controllers as pause and start
-            holder.postMedia.useController = false
-            holder.postMedia.requestFocus()
-            setVolumeControl(VolumeState.ON, holder)
-            // Bind the player to the view.
-            holder.postMedia.player = exoPlayer
-
-            // add player with its index to map
-            if (playersMap.containsKey(itemIndex)) {
+                exoPlayer = ExoPlayer.Builder(context).build()
+                exoPlayer.setMediaSource(mediaSource)
+                exoPlayer.prepare()
+                exoPlayer.playWhenReady = autoPlay
                 playersMap.remove(itemIndex)
             }
-            if (itemIndex != null) {
-                playersMap[itemIndex] = exoPlayer
-            }
+
+            sliderPlayerView.visibility = View.VISIBLE
+            // When changing track, retain the latest frame instead of showing a black screen
+            sliderPlayerView.setKeepContentOnPlayerReset(true)
+            // We'll show the controller, change to true if want controllers as pause and start
+            sliderPlayerView.useController = true
+            sliderPlayerView.requestFocus()
+            // Bind the player to the view.
+            sliderPlayerView.player = exoPlayer
+            // after, associates the specified value with the specified key in the map.
+            playersMap[itemIndex!!] = exoPlayer
 
             exoPlayer.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     super.onPlaybackStateChanged(playbackState)
                     when (playbackState) {
-                        Player.STATE_BUFFERING -> holder.progressBar.visibility = View.VISIBLE
+                        Player.STATE_BUFFERING -> progressBar.visibility = View.VISIBLE
                         Player.STATE_ENDED -> {
                             Log.e("STATE_ENDED:: ", "onPlaybackStateChanged: Video ended.")
                             exoPlayer.seekTo(0)
                         }
+
                         Player.STATE_IDLE -> Log.e("STATE_IDLE:: ", "onPlaybackStateChanged: Video idle.")
-                        Player.STATE_READY -> holder.progressBar.visibility = View.GONE
+
+                        Player.STATE_READY -> progressBar.visibility = View.GONE
                         else -> Log.e("PLAY_STATE:: ", "NOT_FOUND")
                     }
                 }
             })
-        }
-
-        private fun getAnimateVolumeControl(holder: MultimediaViewHolder) {
-            if (holder.volumeControl != null) {
-                holder.volumeControl.bringToFront()
-                if (volumeState == VolumeState.OFF) {
-                    holder.volumeControl.setImageResource(R.drawable.ic_volume_off)
-                } else if (volumeState == VolumeState.ON) {
-                    holder.volumeControl.setImageResource(R.drawable.ic_volume_up)
-                }
-            }
-        }
-
-        private fun setVolumeControl(state: VolumeState, holder: MultimediaViewHolder) {
-            volumeState = state
-            if (state == VolumeState.OFF) {
-                exoPlayer.volume = 0F
-                getAnimateVolumeControl(holder)
-            } else if (state == VolumeState.ON) {
-                exoPlayer.volume = 1F
-                getAnimateVolumeControl(holder)
-            }
-        }
-
-        private fun getToggleVolume(holder: MultimediaViewHolder) {
-            if (volumeState == VolumeState.OFF) {
-                setVolumeControl(VolumeState.ON, holder)
-            } else if (volumeState == VolumeState.ON) {
-                setVolumeControl(VolumeState.OFF, holder)
-            }
         }
     }
 }*/

@@ -10,8 +10,6 @@ import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
-import com.brain.multimediaplayer.service.MediaPlayerService
-import com.brain.multimediaplayer.util.PlayerFlag
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.model.Poster
 import com.bumptech.glide.Glide
@@ -44,7 +42,7 @@ internal class MediaPagerAdapter(
                 if (objList[position].contentType.equals("image/jpg")) {
                     Glide.with(it).load(url + objList[position].id).into(imageView)
                 } else if (objList[position].contentType.equals("video/mp4") || objList[position].contentType.equals("audio/mp3")) {
-                    MediaPlayerService.initPlayer(it, url + objList[position].id, position, false, playerView, progressBar, PlayerFlag.DIALOG)
+                    //MediaPlayerService.initPlayer(it, url + objList[position].id, position, false, playerView)
                 } else {
                 }
             }
