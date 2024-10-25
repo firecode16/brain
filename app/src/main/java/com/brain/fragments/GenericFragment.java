@@ -57,6 +57,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private int resumePlayerIndexCurrent = -1;
+    private String sourceType = "";
 
     private ApiRestImpl apiRestImpl;
 
@@ -99,11 +100,10 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 recyclerView.addOnScrollListener(new CustomScrollStateService(layoutManager) {
                     @Override
-                    public void visibleItemCenterPosition(int index) {
-                        if (index != -1) {
-                            MediaPlayerService.Companion.playIndexAndPausePreviousPlayer("DEFAULT", index);
-                            resumePlayerIndexCurrent = index;
-                        }
+                    public void visibleItemCenterPosition(@NonNull String source, @NonNull String contentType, int index) {
+                        MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(source, contentType, index);
+                        resumePlayerIndexCurrent = index;
+                        sourceType = source;
                     }
 
                     @Override
@@ -164,7 +164,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         multimediaAdapter.notifyDataSetChanged();
         loadFirstPage();
         isLastPage = false;
-        MediaPlayerService.Companion.releaseAllPlayers();
+        MediaPlayerService.Companion.releaseAllPlayers(sourceType, resumePlayerIndexCurrent);
         swipeRefresh.setRefreshing(false);
     }
 
@@ -266,18 +266,18 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onResume() {
         super.onResume();
-        MediaPlayerService.Companion.resumePlayerIndexCurrent(resumePlayerIndexCurrent);
+        MediaPlayerService.Companion.resumePlayerIndexCurrent(sourceType, resumePlayerIndexCurrent);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        MediaPlayerService.Companion.prepareAllPlayers();
+        MediaPlayerService.Companion.prepareAllPlayers(sourceType, resumePlayerIndexCurrent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MediaPlayerService.Companion.releaseAllPlayers();
+        MediaPlayerService.Companion.releaseAllPlayers(sourceType, resumePlayerIndexCurrent);
     }
 }

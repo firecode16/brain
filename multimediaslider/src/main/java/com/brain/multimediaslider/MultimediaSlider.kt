@@ -44,6 +44,8 @@ class MultimediaSlider @JvmOverloads constructor(
 
     private var itemChangeListener: ItemChangeListenerImpl? = null
     private var touchListener: TouchListenerImpl? = null
+    private lateinit var multimedia: List<Multimedia>
+    private var contentType = ""
 
     init {
         LayoutInflater.from(getContext()).inflate(R.layout.slider_viewpager, this, true)
@@ -69,20 +71,13 @@ class MultimediaSlider @JvmOverloads constructor(
             indicatorAlign = typedArray.getString(R.styleable.MultimediaSlider_iss_indicator_align)!!
         }
 
-        /*viewPager!!.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> Log.i("ACTION_DOWN:: ", "onStop video")
-                MotionEvent.ACTION_UP -> Log.i("ACTION_UP:: ", "onStop video")
-            }
-            false
-        }*/
-
         setupViewPager(viewPager)
     }
 
     fun setMediaList(mediaList: List<Multimedia>) {
         viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign)
         viewPager!!.adapter = viewPagerAdapter
+        multimedia = mediaList
 
         if (mediaList.isNotEmpty()) {
             setupDots(mediaList.size)
@@ -122,7 +117,12 @@ class MultimediaSlider @JvmOverloads constructor(
                     itemChangeListener!!.onItemChanged(position)
                 }
 
-                MediaPlayerService.playIndexAndPausePreviousPlayer("SLIDER", position)
+                if (multimedia[position].contentType == "video/mp4" || multimedia[position].contentType == "audio/mp3") {
+                    contentType = "video/audio"
+                } else if (multimedia[position].contentType == "image/jpg") {
+                    contentType = "image"
+                }
+                MediaPlayerService.playIndexAndPausePreviousPlayer("SLIDER", contentType, position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

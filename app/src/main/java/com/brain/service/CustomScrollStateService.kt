@@ -27,6 +27,8 @@ abstract class CustomScrollStateService(
             val displayMetricsOfHeightInPixels: Int = recyclerView.context.resources.displayMetrics.heightPixels / 2
             var maxCenterOffset = Int.MAX_VALUE
             var middleItemIndex = 0
+            var source = ""
+            var contentType = ""
 
             for (index in 0 until visibleItemCount) {
                 val itemChild = linearLayoutManager.getChildAt(index) ?: return
@@ -45,11 +47,22 @@ abstract class CustomScrollStateService(
                     multimediaAdapter = mediaAdapter as MultimediaAdapter?
                     val mediaDetailList = multimediaAdapter?.mediaDetailList
                     val mediaDetail = mediaDetailList?.get(middleItemIndex)
+                    val mediaContent = mediaDetail?.content
 
-                    println(mediaDetail)
+                    if (mediaDetail?.content?.size != 0 && mediaDetail?.array!! > 1) {
+                        source = "SLIDER"
+                        contentType = "multiple"
+                    } else if (mediaDetail.content.size != 0 && mediaDetail.array == 1) {
+                        source = "SINGLE"
+                        if (mediaContent?.get(0)?.contentType == "video/mp4" || mediaContent?.get(0)?.contentType == "audio/mp3") {
+                            contentType = "video/audio"
+                        } else if (mediaContent?.get(0)?.contentType == "image/jpg") {
+                            contentType = "image"
+                        }
+                    }
                 }
             }
-            visibleItemCenterPosition(middleItemIndex)
+            visibleItemCenterPosition(source, contentType, middleItemIndex)
         }
     }
 
@@ -66,7 +79,7 @@ abstract class CustomScrollStateService(
         }
     }
 
-    abstract fun visibleItemCenterPosition(index: Int)
+    abstract fun visibleItemCenterPosition(source: String, contentType: String, index: Int)
     abstract fun getTotalPageCount(): Int
     protected abstract fun loadMoreItems()
     abstract fun isLoading(): Boolean
