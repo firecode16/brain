@@ -102,6 +102,10 @@ class MediaPlayerService {
                             if (pairCurrentPlayerSlider?.second?.playWhenReady == true) {
                                 pairCurrentPlayerSlider!!.second.playWhenReady = false
                             }
+                        } else {
+                            if (pairCurrentPlayerSlider?.second?.playWhenReady == true) {
+                                pairCurrentPlayerSlider!!.second.playWhenReady = false
+                            }
                         }
                     }
                 }
@@ -136,13 +140,36 @@ class MediaPlayerService {
                                 }
                             }
                         }
+                    } else {
+                        // Scroll item position != 0 then loop playersMap["SLIDER"]
+                        if (index > 0) {
+                            if (playersMap["SLIDER"]?.get(0)?.playWhenReady == false || playersMap["SLIDER"]?.get(0)?.playWhenReady == null) {
+                                if (currentPlayingVideo?.first.equals("SLIDER")) {
+                                    currentPlayingVideo?.second?.second?.playWhenReady = false
+                                }
+
+                                if (playersMap["SLIDER"]?.get(0)?.playWhenReady != null) {
+                                    playersMap["SLIDER"]?.get(0)?.playWhenReady = true
+                                    pairCurrentPlayerSlider = Pair(0, playersMap["SLIDER"]?.get(0)!!)
+                                    currentPlayingVideo = Pair("SLIDER", pairCurrentPlayerSlider!!)
+
+                                    if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
+                                        pairCurrentPlayerSingle!!.second.playWhenReady = false
+                                    }
+                                } else {
+                                    if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
+                                        pairCurrentPlayerSingle!!.second.playWhenReady = false
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
         @SuppressLint("UnsafeOptInUsageError")
-        fun initPlayer(context: Context, url: String, itemIndex: Int? = null, source: String, autoPlay: Boolean = false, playerView: PlayerView?, progressBar: ProgressBar?) {
+        fun initPlayer(context: Context, url: String, position: Int? = null, itemPosition: Int? = null, source: String, autoPlay: Boolean = false, playerView: PlayerView?, progressBar: ProgressBar?) {
             dataSourceFactory = DefaultHttpDataSource.Factory()
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
 
@@ -163,30 +190,30 @@ class MediaPlayerService {
             // add player with its index to map
             when (source) {
                 "SINGLE" -> {
-                    if (playerTrackMapSingle.containsKey(itemIndex)) {
-                        playerTrackMapSingle.remove(itemIndex)
+                    if (playerTrackMapSingle.containsKey(position)) {
+                        playerTrackMapSingle.remove(position)
                     }
-                    playerTrackMapSingle[itemIndex!!] = exoPlayer
+                    playerTrackMapSingle[position!!] = exoPlayer
                     playersMap[source] = playerTrackMapSingle
 
-                    if (itemIndex == 0 && currentPlayingVideo == null) {
-                        playersMap["SINGLE"]?.get(itemIndex)?.playWhenReady = true
-                        pairCurrentPlayerSingle = Pair(itemIndex, playersMap["SINGLE"]?.get(itemIndex)!!)
+                    if (position == 0 && currentPlayingVideo == null) {
+                        playersMap["SINGLE"]?.get(position)?.playWhenReady = true
+                        pairCurrentPlayerSingle = Pair(position, playersMap["SINGLE"]?.get(position)!!)
                         currentPlayingVideo = Pair("SINGLE", pairCurrentPlayerSingle!!)
                     }
                 }
                 "SLIDER" -> {
-                    if (playerTrackMapSlider.containsKey(itemIndex)) {
-                        playerTrackMapSlider.remove(itemIndex)
+                    if (playerTrackMapSlider.containsKey(position)) {
+                        playerTrackMapSlider.remove(position)
                     }
-                    playerTrackMapSlider[itemIndex!!] = exoPlayer
+                    playerTrackMapSlider[position!!] = exoPlayer
                     playersMap[source] = playerTrackMapSlider
 
-                    if (itemIndex == 0 && currentPlayingVideo == null) {
-                        playersMap["SLIDER"]?.get(itemIndex)?.playWhenReady = true
-                        pairCurrentPlayerSlider = Pair(itemIndex, playersMap["SLIDER"]?.get(itemIndex)!!)
+                    if (itemPosition == 0 && currentPlayingVideo == null) {
+                        playersMap["SLIDER"]?.get(position)?.playWhenReady = true
+                        pairCurrentPlayerSlider = Pair(position, playersMap["SLIDER"]?.get(position)!!)
                         currentPlayingVideo = Pair("SLIDER", pairCurrentPlayerSlider!!)
-                        pairIndexMedia = Pair(itemIndex, "video/audio")
+                        pairIndexMedia = Pair(position, "video/audio")
                     }
                 }
             }

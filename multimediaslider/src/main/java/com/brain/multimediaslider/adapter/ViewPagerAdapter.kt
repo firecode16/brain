@@ -24,7 +24,8 @@ class ViewPagerAdapter(
     mediaList: List<Multimedia>,
     private var placeholder: Int,
     private var titleBackground: Int,
-    private var textAlign: String
+    private var textAlign: String,
+    private var itemPosition: Int
 ) : PagerAdapter() {
     private var mediaList: List<Multimedia>? = mediaList
     private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
@@ -65,7 +66,7 @@ class ViewPagerAdapter(
                 if (mediaList!![position].contentType.equals("image/jpg")) {
                     Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
                 } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
-                    MediaPlayerService.initPlayer(it!!, url!!, position, "SLIDER", false, sliderPlayerView, progressBar)
+                    MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, "SLIDER", false, sliderPlayerView, progressBar)
                 } else {}
             }
         }

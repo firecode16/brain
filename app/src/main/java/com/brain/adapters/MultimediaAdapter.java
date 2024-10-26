@@ -113,15 +113,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String id = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).get_id();
 
                     if (contentType.equals(VIDEO_MP4)) {
-                        int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
+                        int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, null, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else if (contentType.equals(AUDIO_MP3)) {
                         multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
                         multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
-                        int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
+                        int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, null, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else {
                         util = new Util(context);
                         util.loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
@@ -131,9 +131,11 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     multimediaList.clear();
                     mediaDetail.getContent().forEach(post -> {
                         multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview()));
-                        multimediaViewHolder.multimediaSlider.setMediaList(multimediaList);
-                        multimediaViewHolder.multimediaSlider.setItemClickListener(new OnMultimediaSliderClickListener(context, multimediaList));
                     });
+
+                    int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
+                    multimediaViewHolder.multimediaSlider.setMediaList(multimediaList, itemPosition);
+                    multimediaViewHolder.multimediaSlider.setItemClickListener(new OnMultimediaSliderClickListener(context, multimediaList));
                 }
                 break;
             case VIEW_TYPE_LOADING:

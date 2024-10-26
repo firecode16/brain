@@ -74,8 +74,8 @@ class MultimediaSlider @JvmOverloads constructor(
         setupViewPager(viewPager)
     }
 
-    fun setMediaList(mediaList: List<Multimedia>) {
-        viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign)
+    fun setMediaList(mediaList: List<Multimedia>, itemPosition: Int) {
+        viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign, itemPosition)
         viewPager!!.adapter = viewPagerAdapter
         multimedia = mediaList
 
