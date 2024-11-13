@@ -33,7 +33,7 @@ abstract class CustomScrollStateService(
             var middleItemIndex = 0
             var currentItem = 0
 
-                for (index in 0 until visibleItemCount) {
+            for (index in 0 until visibleItemCount) {
                 val itemChild = linearLayoutManager.getChildAt(index) ?: return
 
                 val topView = itemChild.top
