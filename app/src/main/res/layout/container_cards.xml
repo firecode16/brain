@@ -51,6 +51,7 @@
         android:layout_height="420dp"
         android:adjustViewBounds="true"
         android:keepScreenOn="true"
+        android:visibility="visible"
         android:scaleType="fitXY"
         tools:ignore="ContentDescription" />
 

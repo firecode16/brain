@@ -55,6 +55,7 @@ class MediaPlayerService {
 
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.stop()
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.release()
+            mediaPlayList.clear()
             trackHashMap = mutableMapOf()
         }
 

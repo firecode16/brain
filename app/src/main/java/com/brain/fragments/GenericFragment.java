@@ -158,9 +158,9 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // execute network request if cache is expired; otherwise do not update data.
         multimediaAdapter.getMediaDetailList().clear();
         multimediaAdapter.notifyDataSetChanged();
+        MediaPlayerService.Companion.releasePlayer();
         loadFirstPage();
         isLastPage = false;
-        MediaPlayerService.Companion.releasePlayer();
         swipeRefresh.setRefreshing(false);
     }
 
