@@ -14,7 +14,6 @@ import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaslider.adapter.ViewPagerAdapter
 import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
-import com.brain.multimediaslider.impl.TouchListenerImpl
 import com.brain.multimediaslider.model.Multimedia
 
 @SuppressLint("ClickableViewAccessibility")
@@ -43,9 +42,8 @@ class MultimediaSlider @JvmOverloads constructor(
     private var indicatorAlign = "CENTER"
 
     private var itemChangeListener: ItemChangeListenerImpl? = null
-    private var touchListener: TouchListenerImpl? = null
     private lateinit var multimedia: List<Multimedia>
-    private var contentType = ""
+    private var objItemPosition: Int = 0
 
     init {
         LayoutInflater.from(getContext()).inflate(R.layout.slider_viewpager, this, true)
@@ -78,6 +76,7 @@ class MultimediaSlider @JvmOverloads constructor(
         viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign, itemPosition)
         viewPager!!.adapter = viewPagerAdapter
         multimedia = mediaList
+        objItemPosition = itemPosition
 
         if (mediaList.isNotEmpty()) {
             setupDots(mediaList.size)
@@ -117,12 +116,7 @@ class MultimediaSlider @JvmOverloads constructor(
                     itemChangeListener!!.onItemChanged(position)
                 }
 
-                if (multimedia[position].contentType == "video/mp4" || multimedia[position].contentType == "audio/mp3") {
-                    contentType = "video/audio"
-                } else if (multimedia[position].contentType == "image/jpg") {
-                    contentType = "image"
-                }
-                MediaPlayerService.playIndexAndPausePreviousPlayer("SLIDER", contentType, position)
+                MediaPlayerService.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(objItemPosition, position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -148,4 +142,9 @@ class MultimediaSlider @JvmOverloads constructor(
     fun setItemClickListener(itemClickListener: ItemClickListenerImpl) {
         viewPagerAdapter?.setItemClickListener(itemClickListener)
     }
+
+    fun getCurrentItem(): Int {
+        return viewPager!!.currentItem
+    }
+
 }

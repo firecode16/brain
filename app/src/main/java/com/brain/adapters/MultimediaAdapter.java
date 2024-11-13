@@ -115,13 +115,13 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (contentType.equals(VIDEO_MP4)) {
                         int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, null, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, itemPosition, false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else if (contentType.equals(AUDIO_MP3)) {
                         multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
                         multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
                         int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
 
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, null, "SINGLE", false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
+                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemPosition, itemPosition, false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
                     } else {
                         util = new Util(context);
                         util.loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);

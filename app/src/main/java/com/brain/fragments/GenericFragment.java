@@ -56,8 +56,6 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final int ITEMS_SIZE = 10; // items by pagination
     private boolean isLoading = false;
     private boolean isLastPage = false;
-    private int resumePlayerIndexCurrent = -1;
-    private String sourceType = "";
 
     private ApiRestImpl apiRestImpl;
 
@@ -100,10 +98,8 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 recyclerView.addOnScrollListener(new CustomScrollStateService(layoutManager) {
                     @Override
-                    public void visibleItemCenterPosition(@NonNull String source, @NonNull String contentType, int index) {
-                        MediaPlayerService.Companion.playIndexAndPausePreviousPlayer(source, contentType, index);
-                        resumePlayerIndexCurrent = index;
-                        sourceType = source;
+                    public void visibleItemCenterPosition(int itemPosition, int index) {
+                        MediaPlayerService.Companion.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(itemPosition, index);
                     }
 
                     @Override
@@ -164,7 +160,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         multimediaAdapter.notifyDataSetChanged();
         loadFirstPage();
         isLastPage = false;
-        MediaPlayerService.Companion.releaseAllPlayers(sourceType, resumePlayerIndexCurrent);
+        MediaPlayerService.Companion.releasePlayer();
         swipeRefresh.setRefreshing(false);
     }
 
@@ -175,7 +171,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(444004L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(555111L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {
@@ -266,18 +262,17 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onResume() {
         super.onResume();
-        MediaPlayerService.Companion.resumePlayerIndexCurrent(sourceType, resumePlayerIndexCurrent);
+        MediaPlayerService.Companion.resumePlayerIndexCurrent();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        MediaPlayerService.Companion.prepareAllPlayers(sourceType, resumePlayerIndexCurrent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MediaPlayerService.Companion.releaseAllPlayers(sourceType, resumePlayerIndexCurrent);
+        MediaPlayerService.Companion.releasePlayer();
     }
 }

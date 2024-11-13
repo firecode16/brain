@@ -13,6 +13,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
+import com.brain.multimediaplayer.model.Item
 
 /**
  * @author hfredi35@gmail.com
@@ -21,161 +22,67 @@ import androidx.media3.ui.PlayerView
 class MediaPlayerService {
     companion object {
         // for hold all players generated
-        private var playerTrackMapSingle: MutableMap<Int, ExoPlayer> = mutableMapOf()
-        private var playerTrackMapSlider: MutableMap<Int, ExoPlayer> = mutableMapOf()
-        private var playersMap = mutableMapOf<String, MutableMap<Int, ExoPlayer>>()
+        private var mediaPlayList: MutableList<Item> = mutableListOf()
+        private var trackHashMap: Map<Int, List<Item>> = mutableMapOf()
+        private var pairIndexMedia: Pair<Int, Int> = Pair(0, 0)
 
         // for hold current player
-        private var pairCurrentPlayerSingle: Pair<Int, ExoPlayer>? = null
-        private var pairCurrentPlayerSlider: Pair<Int, ExoPlayer>? = null
-        private var currentPlayingVideo: Pair<String, Pair<Int, ExoPlayer>>? = null
+        private var currentPlayingVideo: Pair<Int, Pair<Int, ExoPlayer>>? = null
 
         private lateinit var exoPlayer: ExoPlayer
         private lateinit var dataSourceFactory: DataSource.Factory
         private lateinit var mediaSource: MediaSource
-        private var pairIndexMedia: Pair<Int, String>? = null
 
         fun pauseAllPlayers() {
             if (currentPlayingVideo != null) {
                 currentPlayingVideo!!.second.second.playWhenReady = false
-                currentPlayingVideo!!.second.second.playbackState
             }
         }
 
-        fun resumePlayerIndexCurrent(sourceType: String, index: Int) {
-            when (sourceType) {
-                "SINGLE" -> {
-                    playersMap["SINGLE"]?.get(index)?.playWhenReady  = true
-                }
-                "SLIDER" -> {
-                    if (pairIndexMedia != null) {
-                        val lastIndex = pairIndexMedia!!.first
-                        playersMap["SLIDER"]?.get(lastIndex)?.playWhenReady  = true
-                    }
-                }
-            }
-        }
+        fun resumePlayerIndexCurrent() {
+            val lastItemPosition = pairIndexMedia.first
+            val lastIndex = pairIndexMedia.second
 
-        fun prepareAllPlayers(sourceType: String, index: Int) {
-            when (sourceType) {
-                "SINGLE" -> {
-                    playersMap["SINGLE"]?.get(index)?.prepare()
-                }
-                "SLIDER" -> {
-                    if (pairIndexMedia != null) {
-                        val lastIndex = pairIndexMedia!!.first
-                        playersMap["SLIDER"]?.get(lastIndex)?.prepare()
-                    }
-                }
+            if (trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.playWhenReady == false) {
+                trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.playWhenReady = true
             }
         }
 
         // call when item recycled to improve performance
-        fun releaseAllPlayers(sourceType: String, index: Int) {
-            when (sourceType) {
-                "SINGLE" -> {
-                    playersMap["SINGLE"]?.get(index)?.release()
-                }
-                "SLIDER" -> {
-                    if (pairIndexMedia != null) {
-                        val lastIndex = pairIndexMedia!!.first
-                        playersMap["SLIDER"]?.get(lastIndex)?.release()
-                    }
-                }
-            }
+        fun releasePlayer() {
+            val lastItemPosition = pairIndexMedia.first
+            val lastIndex = pairIndexMedia.second
+
+            trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.stop()
+            trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.release()
+            trackHashMap = mutableMapOf()
+            exoPlayer.clearMediaItems()
         }
 
         // call when scroll to pause any playing player
-        fun playIndexAndPausePreviousPlayer(source: String, contentType: String, index: Int) {
-            when (source) {
-                "SINGLE" -> {
-                    if (playersMap["SINGLE"]?.get(index)?.playWhenReady == false || playersMap["SINGLE"]?.get(index)?.playWhenReady == null) {
-                        if (currentPlayingVideo?.first.equals("SINGLE")) {
-                            currentPlayingVideo?.second?.second?.playWhenReady = false
-                        }
-
-                        if (playersMap["SINGLE"]?.get(index)?.playWhenReady != null) {
-                            playersMap["SINGLE"]?.get(index)?.playWhenReady = true
-                            pairCurrentPlayerSingle = Pair(index, playersMap["SINGLE"]?.get(index)!!)
-                            currentPlayingVideo = Pair("SINGLE", pairCurrentPlayerSingle!!)
-
-                            if (pairCurrentPlayerSlider?.second?.playWhenReady == true) {
-                                pairCurrentPlayerSlider!!.second.playWhenReady = false
-                            }
-                        } else {
-                            if (pairCurrentPlayerSlider?.second?.playWhenReady == true) {
-                                pairCurrentPlayerSlider!!.second.playWhenReady = false
-                            }
-                        }
-                    }
+        fun playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(itemPosition: Int, index: Int) {
+            if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == false || trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == null) {
+                if (currentPlayingVideo != null) {
+                    currentPlayingVideo!!.second.second.playWhenReady = false
                 }
-                "SLIDER" -> {
-                    when (contentType) {
-                        "video/audio" -> {
-                            pairIndexMedia = Pair(index, "video/audio")
-                        }
-                        "image" -> {
-                            pairIndexMedia = Pair(index, "image")
-                        }
-                    }
 
-                    if (pairIndexMedia != null) {
-                        val lastIndex = pairIndexMedia!!.first
-                        if (playersMap["SLIDER"]?.get(lastIndex)?.playWhenReady == false || playersMap["SLIDER"]?.get(lastIndex)?.playWhenReady == null) {
-                            if (currentPlayingVideo?.first.equals("SLIDER")) {
-                                currentPlayingVideo?.second?.second?.playWhenReady = false
-                            }
-
-                            if (playersMap["SLIDER"]?.get(lastIndex)?.playWhenReady != null) {
-                                playersMap["SLIDER"]?.get(lastIndex)?.playWhenReady = true
-                                pairCurrentPlayerSlider = Pair(lastIndex, playersMap["SLIDER"]?.get(lastIndex)!!)
-                                currentPlayingVideo = Pair("SLIDER", pairCurrentPlayerSlider!!)
-
-                                if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
-                                    pairCurrentPlayerSingle!!.second.playWhenReady = false
-                                }
-                            } else {
-                                if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
-                                    pairCurrentPlayerSingle!!.second.playWhenReady = false
-                                }
-                            }
-                        }
-                    } else {
-                        // Scroll item position != 0 then loop playersMap["SLIDER"]
-                        if (index > 0) {
-                            if (playersMap["SLIDER"]?.get(0)?.playWhenReady == false || playersMap["SLIDER"]?.get(0)?.playWhenReady == null) {
-                                if (currentPlayingVideo?.first.equals("SLIDER")) {
-                                    currentPlayingVideo?.second?.second?.playWhenReady = false
-                                }
-
-                                if (playersMap["SLIDER"]?.get(0)?.playWhenReady != null) {
-                                    playersMap["SLIDER"]?.get(0)?.playWhenReady = true
-                                    pairCurrentPlayerSlider = Pair(0, playersMap["SLIDER"]?.get(0)!!)
-                                    currentPlayingVideo = Pair("SLIDER", pairCurrentPlayerSlider!!)
-
-                                    if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
-                                        pairCurrentPlayerSingle!!.second.playWhenReady = false
-                                    }
-                                } else {
-                                    if (pairCurrentPlayerSingle?.second?.playWhenReady == true) {
-                                        pairCurrentPlayerSingle!!.second.playWhenReady = false
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady != null) {
+                    trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady = true
+                    currentPlayingVideo = Pair(itemPosition, Pair(index, trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer!!))
                 }
             }
+            pairIndexMedia = Pair(itemPosition, index)
         }
 
         @SuppressLint("UnsafeOptInUsageError")
-        fun initPlayer(context: Context, url: String, position: Int? = null, itemPosition: Int? = null, source: String, autoPlay: Boolean = false, playerView: PlayerView?, progressBar: ProgressBar?) {
+        fun initPlayer(context: Context, url: String, position: Int? = null, itemPosition: Int? = null, autoPlay: Boolean = false, playerView: PlayerView?, progressBar: ProgressBar?) {
             dataSourceFactory = DefaultHttpDataSource.Factory()
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
 
             exoPlayer = ExoPlayer.Builder(context).build()
             exoPlayer.setMediaSource(mediaSource)
             exoPlayer.prepare()
+            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
             exoPlayer.playWhenReady = autoPlay
 
             playerView?.visibility = View.VISIBLE
@@ -187,34 +94,19 @@ class MediaPlayerService {
             // Bind the player to the view.
             playerView?.player = exoPlayer
 
-            // add player with its index to map
-            when (source) {
-                "SINGLE" -> {
-                    if (playerTrackMapSingle.containsKey(position)) {
-                        playerTrackMapSingle.remove(position)
-                    }
-                    playerTrackMapSingle[position!!] = exoPlayer
-                    playersMap[source] = playerTrackMapSingle
+            // add player with its index to List
+            if (mediaPlayList.isNotEmpty()) {
+                mediaPlayList.removeIf { t -> t.itemPosition == itemPosition && t.position == position }
+            }
+            val item = Item(itemPosition!!, position, exoPlayer)
+            mediaPlayList.add(item)
 
-                    if (position == 0 && currentPlayingVideo == null) {
-                        playersMap["SINGLE"]?.get(position)?.playWhenReady = true
-                        pairCurrentPlayerSingle = Pair(position, playersMap["SINGLE"]?.get(position)!!)
-                        currentPlayingVideo = Pair("SINGLE", pairCurrentPlayerSingle!!)
-                    }
-                }
-                "SLIDER" -> {
-                    if (playerTrackMapSlider.containsKey(position)) {
-                        playerTrackMapSlider.remove(position)
-                    }
-                    playerTrackMapSlider[position!!] = exoPlayer
-                    playersMap[source] = playerTrackMapSlider
+            trackHashMap = mediaPlayList.groupBy { it.itemPosition }
 
-                    if (itemPosition == 0 && currentPlayingVideo == null) {
-                        playersMap["SLIDER"]?.get(position)?.playWhenReady = true
-                        pairCurrentPlayerSlider = Pair(position, playersMap["SLIDER"]?.get(position)!!)
-                        currentPlayingVideo = Pair("SLIDER", pairCurrentPlayerSlider!!)
-                        pairIndexMedia = Pair(position, "video/audio")
-                    }
+            if (itemPosition == 0 && currentPlayingVideo == null) {
+                if (trackHashMap[itemPosition]?.stream()?.findAny()?.get()?.position == 0) {
+                    trackHashMap[itemPosition]?.stream()?.findAny()?.get()?.exoPlayer?.playWhenReady = true
+                    currentPlayingVideo = Pair(itemPosition, Pair(position!!, trackHashMap[itemPosition]?.stream()?.findAny()?.get()!!.exoPlayer))
                 }
             }
 

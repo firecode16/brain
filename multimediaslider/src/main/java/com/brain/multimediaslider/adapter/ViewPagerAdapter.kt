@@ -66,7 +66,7 @@ class ViewPagerAdapter(
                 if (mediaList!![position].contentType.equals("image/jpg")) {
                     Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
                 } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
-                    MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, "SLIDER", false, sliderPlayerView, progressBar)
+                    MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, false, sliderPlayerView, progressBar)
                 } else {}
             }
         }

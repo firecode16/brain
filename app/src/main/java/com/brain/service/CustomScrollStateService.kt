@@ -3,6 +3,8 @@ package com.brain.service
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brain.adapters.MultimediaAdapter
+import com.brain.holders.MultimediaViewHolder
+import com.brain.multimediaslider.MultimediaSlider
 import kotlin.math.abs
 
 
@@ -16,6 +18,8 @@ abstract class CustomScrollStateService(
 ) : RecyclerView.OnScrollListener() {
     private val controlState: Int = RecyclerView.SCROLL_STATE_IDLE
     private var multimediaAdapter: MultimediaAdapter? = null
+    private var multimediaViewHolder: MultimediaViewHolder? = null
+    private var multimediaSlider: MultimediaSlider? = null
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -27,10 +31,9 @@ abstract class CustomScrollStateService(
             val displayMetricsOfHeightInPixels: Int = recyclerView.context.resources.displayMetrics.heightPixels / 2
             var maxCenterOffset = Int.MAX_VALUE
             var middleItemIndex = 0
-            var source = ""
-            var contentType = ""
+            var currentItem = 0
 
-            for (index in 0 until visibleItemCount) {
+                for (index in 0 until visibleItemCount) {
                 val itemChild = linearLayoutManager.getChildAt(index) ?: return
 
                 val topView = itemChild.top
@@ -47,22 +50,18 @@ abstract class CustomScrollStateService(
                     multimediaAdapter = mediaAdapter as MultimediaAdapter?
                     val mediaDetailList = multimediaAdapter?.mediaDetailList
                     val mediaDetail = mediaDetailList?.get(middleItemIndex)
-                    val mediaContent = mediaDetail?.content
 
                     if (mediaDetail?.content?.size != 0 && mediaDetail?.array!! > 1) {
-                        source = "SLIDER"
-                        contentType = "multiple"
+                        multimediaViewHolder = viewHolder as MultimediaViewHolder
+                        multimediaSlider = multimediaViewHolder!!.multimediaSlider
+
+                        currentItem = multimediaSlider!!.getCurrentItem()
                     } else if (mediaDetail.content.size != 0 && mediaDetail.array == 1) {
-                        source = "SINGLE"
-                        if (mediaContent?.get(0)?.contentType == "video/mp4" || mediaContent?.get(0)?.contentType == "audio/mp3") {
-                            contentType = "video/audio"
-                        } else if (mediaContent?.get(0)?.contentType == "image/jpg") {
-                            contentType = "image"
-                        }
+                        currentItem = middleItemIndex
                     }
                 }
             }
-            visibleItemCenterPosition(source, contentType, middleItemIndex)
+            visibleItemCenterPosition(middleItemIndex, currentItem)
         }
     }
 
@@ -79,7 +78,7 @@ abstract class CustomScrollStateService(
         }
     }
 
-    abstract fun visibleItemCenterPosition(source: String, contentType: String, index: Int)
+    abstract fun visibleItemCenterPosition(itemPosition: Int, index: Int)
     abstract fun getTotalPageCount(): Int
     protected abstract fun loadMoreItems()
     abstract fun isLoading(): Boolean
