@@ -56,7 +56,6 @@ class MediaPlayerService {
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.stop()
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.release()
             trackHashMap = mutableMapOf()
-            exoPlayer.clearMediaItems()
         }
 
         // call when scroll to pause any playing player

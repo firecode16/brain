@@ -51,7 +51,7 @@ abstract class CustomScrollStateService(
                     val mediaDetailList = multimediaAdapter?.mediaDetailList
                     val mediaDetail = mediaDetailList?.get(middleItemIndex)
 
-                    if (mediaDetail?.content?.size != 0 && mediaDetail?.array!! > 1) {
+                    if (mediaDetail!!.content.size != 0 && mediaDetail.array!! > 1) {
                         multimediaViewHolder = viewHolder as MultimediaViewHolder
                         multimediaSlider = multimediaViewHolder!!.multimediaSlider
 
