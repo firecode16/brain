@@ -1,6 +1,7 @@
 package com.brain.multimediapuzzlesviewer.view
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
@@ -9,13 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.ViewPager
+import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.adapter.MediaPagerAdapter
 import com.brain.multimediapuzzlesviewer.model.Poster
 import com.google.android.material.tabs.TabLayout
 
-
-internal class MediaViewerView<T>(
+internal class MediaViewerView (
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -33,8 +34,9 @@ internal class MediaViewerView<T>(
     private var mediaPagerAdapter: MediaPagerAdapter? = null
 
     private var objList: List<Poster> = listOf()
-    private var currentPosition: Int = 0
-    private var positionRelease: Int = 0
+    private var itemPosition: Int = 0
+    private var position: Int = 0
+    private var lastPosition: Int = 0
 
     init {
         View.inflate(context, R.layout.multimedia_puzzles_viewer, this)
@@ -53,7 +55,14 @@ internal class MediaViewerView<T>(
         context.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toolbar.setNavigationOnClickListener {
-            //MediaPlayerService.releaseAllPlayers()
+            val intent = Intent()
+            intent.action = "com.brain.Broadcast"
+            intent.putExtra("itemPosition", itemPosition)
+            intent.putExtra("position", lastPosition)
+            intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+            context.sendBroadcast(intent)
+
+            MediaPlayerService.pauseCurrentPlayingVideo()
             onDismiss?.invoke()
         }
 
@@ -110,21 +119,26 @@ internal class MediaViewerView<T>(
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                positionRelease = position
-                //MediaPlayerService.playIndexAndPausePreviousPlayer(position)
+                lastPosition = position
+                MediaPlayerService.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(itemPosition, position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
     }
 
-    internal fun setMultimedia(objList: List<Poster>, currentPosition: Int, url: String) {
+    internal fun setMultimedia(objList: List<Poster>, itemPosition: Int, position: Int, url: String) {
         this.objList = objList
-        this.currentPosition = currentPosition
-        this.mediaPagerAdapter = MediaPagerAdapter(context, objList, url)
+        this.itemPosition = itemPosition
+        this.position = position
+        this.mediaPagerAdapter = MediaPagerAdapter(context, objList, itemPosition, url)
         this.mediaViewPager.adapter = mediaPagerAdapter
-        this.mediaViewPager.setCurrentItem(currentPosition)
+        this.mediaViewPager.setCurrentItem(position)
     }
 
-    internal fun open(url: String) {}
+    internal fun open() {
+        MediaPlayerService.pauseCurrentPlayingVideo()
+        MediaPlayerService.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(this.itemPosition, this.position)
+    }
+
 }

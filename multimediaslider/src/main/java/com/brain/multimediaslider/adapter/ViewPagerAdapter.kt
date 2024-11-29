@@ -16,6 +16,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaslider.R
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
+import com.brain.multimediaslider.model.ItemPlayerView
 import com.brain.multimediaslider.model.Multimedia
 import com.bumptech.glide.Glide
 
@@ -32,6 +33,10 @@ class ViewPagerAdapter(
 
     private var itemClickListener: ItemClickListenerImpl? = null
     private var url: String? = null
+    private lateinit var sliderImageView: ImageView
+    private lateinit var sliderPlayerView: PlayerView
+
+    private var playerViewList: MutableList<ItemPlayerView> = mutableListOf()
 
     override fun getCount(): Int {
         return mediaList!!.size
@@ -45,8 +50,8 @@ class ViewPagerAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val itemView = layoutInflater!!.inflate(R.layout.multimedia_container, container, false)
 
-        val sliderImageView = itemView.findViewById<ImageView>(R.id.sliderImageView)
-        val sliderPlayerView = itemView.findViewById<PlayerView>(R.id.sliderPlayerView)
+        sliderImageView = itemView.findViewById(R.id.sliderImageView)
+        sliderPlayerView = itemView.findViewById(R.id.sliderPlayerView)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
         val footerLinear = itemView.findViewById<LinearLayout>(R.id.footerLinear)
         val textView = itemView.findViewById<TextView>(R.id.textView)
@@ -67,13 +72,15 @@ class ViewPagerAdapter(
                     Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
                 } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
                     MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, false, sliderPlayerView, progressBar)
+                    val itemPlayerView = ItemPlayerView(itemPosition, position, sliderPlayerView)
+                    playerViewList.add(itemPlayerView)
                 } else {}
             }
         }
 
         container.addView(itemView)
-        sliderImageView.setOnClickListener { itemClickListener?.onItemSelected(position) }
-        sliderPlayerView.setOnClickListener { itemClickListener?.onItemSelected(position) }
+        sliderImageView.setOnClickListener { itemClickListener?.onItemSelected(itemPosition, position) }
+        sliderPlayerView.setOnClickListener { itemClickListener?.onItemSelected(itemPosition, position) }
 
         return itemView
     }
@@ -96,6 +103,10 @@ class ViewPagerAdapter(
 
     fun setItemClickListener(itemClickListener: ItemClickListenerImpl) {
         this.itemClickListener = itemClickListener
+    }
+
+    fun setSliderPlayerViewMap(): MutableList<ItemPlayerView> {
+        return playerViewList
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

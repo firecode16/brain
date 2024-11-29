@@ -16,20 +16,20 @@ import com.brain.multimediaslider.model.Multimedia;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnMultimediaSliderClickListener implements ItemClickListenerImpl {
+public class OpenDialogSliderClickListenerService implements ItemClickListenerImpl {
     Context context;
     private final ArrayList<Multimedia> multimediaList;
     List<Poster> posterList;
     Poster model;
 
-    public OnMultimediaSliderClickListener(Context context, ArrayList<Multimedia> multimediaList) {
+    public OpenDialogSliderClickListenerService(Context context, ArrayList<Multimedia> multimediaList) {
         this.context = context;
         this.multimediaList = multimediaList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onItemSelected(int position) {
+    public void onItemSelected(int itemPosition, int position) {
         posterList = new ArrayList<>();
 
         multimediaList.forEach(x -> {
@@ -40,6 +40,6 @@ public class OnMultimediaSliderClickListener implements ItemClickListenerImpl {
             posterList.add(model);
         });
 
-        new MultimediaPuzzlesViewer.Builder<>(context, posterList, position,URL + URL_PART).show();
+        new MultimediaPuzzlesViewer.Builder<>(context, posterList, itemPosition, position,URL + URL_PART).show();
     }
 }

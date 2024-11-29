@@ -29,7 +29,7 @@ import com.brain.model.Profile;
 import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.multimediaslider.model.Multimedia;
 import com.brain.service.OnImageViewClickListenerService;
-import com.brain.service.OnMultimediaSliderClickListener;
+import com.brain.service.OpenDialogSliderClickListenerService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
@@ -140,7 +140,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
                     multimediaViewHolder.multimediaSlider.setMediaList(multimediaList, itemPosition);
-                    multimediaViewHolder.multimediaSlider.setItemClickListener(new OnMultimediaSliderClickListener(context, multimediaList));
+                    multimediaViewHolder.multimediaSlider.setItemClickListener(new OpenDialogSliderClickListenerService(context, multimediaList));
                 }
                 break;
             case VIEW_TYPE_LOADING:

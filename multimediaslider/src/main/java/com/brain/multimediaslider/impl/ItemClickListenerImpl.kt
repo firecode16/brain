@@ -1,5 +1,5 @@
 package com.brain.multimediaslider.impl
 
 interface ItemClickListenerImpl {
-    fun onItemSelected(position: Int)
+    fun onItemSelected(itemPosition: Int, position: Int)
 }

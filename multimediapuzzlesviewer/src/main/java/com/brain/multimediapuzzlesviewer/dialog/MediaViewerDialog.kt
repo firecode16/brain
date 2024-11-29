@@ -7,14 +7,15 @@ import com.brain.multimediapuzzlesviewer.model.BuilderData
 import com.brain.multimediapuzzlesviewer.model.Poster
 import com.brain.multimediapuzzlesviewer.view.MediaViewerView
 
-internal class MediaViewerDialog<T>(
+internal class MediaViewerDialog(
     context: Context,
     private val builderData: BuilderData<Poster>,
-    private val currentPosition: Int,
+    private val itemPosition: Int,
+    private val position: Int,
     private val url: String
 ) {
     private val dialog: AlertDialog
-    private val mediaViewer: MediaViewerView<T> = MediaViewerView(context)
+    private val mediaViewer: MediaViewerView = MediaViewerView(context)
 
     init {
         setupViewerView()
@@ -24,14 +25,13 @@ internal class MediaViewerDialog<T>(
             .setView(mediaViewer)
             .create()
             .apply {
-                setOnShowListener { mediaViewer.open(url) }
+                setOnShowListener { mediaViewer.open() }
             }
     }
 
     private fun setupViewerView() {
         mediaViewer.apply {
-            setBackgroundColor(builderData.backgroundColor)
-            setMultimedia(builderData.mediaList, currentPosition, url)
+            setMultimedia(builderData.mediaList, itemPosition, position, url)
             onDismiss = { dialog.dismiss() }
         }
     }

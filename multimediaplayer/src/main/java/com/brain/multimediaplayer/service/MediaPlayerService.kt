@@ -33,12 +33,6 @@ class MediaPlayerService {
         private lateinit var dataSourceFactory: DataSource.Factory
         private lateinit var mediaSource: MediaSource
 
-        fun pauseAllPlayers() {
-            if (currentPlayingVideo != null) {
-                currentPlayingVideo!!.second.second.playWhenReady = false
-            }
-        }
-
         fun resumePlayerIndexCurrent() {
             val lastItemPosition = pairIndexMedia.first
             val lastIndex = pairIndexMedia.second
@@ -55,16 +49,37 @@ class MediaPlayerService {
 
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.stop()
             trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.release()
+            pairIndexMedia = Pair(0, 0)
+            currentPlayingVideo = null
             mediaPlayList.clear()
             trackHashMap = mutableMapOf()
+        }
+
+        fun pauseCurrentPlayingVideo() {
+            if (currentPlayingVideo != null) {
+                currentPlayingVideo!!.second.second.playWhenReady = false
+            }
+        }
+
+        // call only when Open Dialog, Module: multimedia puzzles viewer.
+        @SuppressLint("UnsafeOptInUsageError")
+        fun prepareIndexesOfMultimediaWhenOpenDialog(itemPosition: Int, index: Int, playerView: PlayerView) {
+            playerView.visibility = View.VISIBLE
+            // When changing track, retain the latest frame instead of showing a black screen
+            playerView.setKeepContentOnPlayerReset(true)
+            // We'll show the controller, change to true if want controllers as pause and start
+            playerView.useController = true
+            playerView.setShowNextButton(false)
+            playerView.setShowPreviousButton(false)
+
+            playerView.player = null
+            playerView.player = trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer
         }
 
         // call when scroll to pause any playing player
         fun playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(itemPosition: Int, index: Int) {
             if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == false || trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == null) {
-                if (currentPlayingVideo != null) {
-                    currentPlayingVideo!!.second.second.playWhenReady = false
-                }
+                pauseCurrentPlayingVideo()
 
                 if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady != null) {
                     trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady = true

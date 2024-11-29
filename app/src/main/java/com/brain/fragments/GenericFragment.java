@@ -250,13 +250,17 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
     }
 
+    public LinearLayoutManager getLinearLayout() {
+        return layoutManager;
+    }
+
     @Override
     public void onRefresh() { }
 
     @Override
     public void onPause() {
         super.onPause();
-        MediaPlayerService.Companion.pauseAllPlayers();
+        MediaPlayerService.Companion.pauseCurrentPlayingVideo();
     }
 
     @Override

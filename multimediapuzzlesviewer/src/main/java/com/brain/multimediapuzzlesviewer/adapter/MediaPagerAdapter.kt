@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
+import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.model.Poster
 import com.bumptech.glide.Glide
@@ -17,7 +18,8 @@ import com.bumptech.glide.Glide
 internal class MediaPagerAdapter(
     val context: Context,
     private val objList: List<Poster>,
-    val url: String
+    private val itemPosition: Int,
+    private val url: String
 ) : PagerAdapter() {
     private var layoutInflater: LayoutInflater? = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
@@ -42,9 +44,8 @@ internal class MediaPagerAdapter(
                 if (objList[position].contentType.equals("image/jpg")) {
                     Glide.with(it).load(url + objList[position].id).into(imageView)
                 } else if (objList[position].contentType.equals("video/mp4") || objList[position].contentType.equals("audio/mp3")) {
-                    //MediaPlayerService.initPlayer(it, url + objList[position].id, position, false, playerView)
-                } else {
-                }
+                    MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(itemPosition, position, playerView)
+                } else {}
             }
         }
 

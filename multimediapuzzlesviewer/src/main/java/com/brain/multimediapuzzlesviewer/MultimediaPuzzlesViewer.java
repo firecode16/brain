@@ -9,15 +9,15 @@ import com.brain.multimediapuzzlesviewer.model.Poster;
 
 import java.util.List;
 
-public class MultimediaPuzzlesViewer<T> {
+public class MultimediaPuzzlesViewer {
     private final Context context;
     private final BuilderData<Poster> builderData;
-    private final MediaViewerDialog<T> dialog;
+    private final MediaViewerDialog dialog;
 
-    protected MultimediaPuzzlesViewer(Context context, BuilderData<Poster> builderData, Integer currentPosition, String url) {
+    protected MultimediaPuzzlesViewer(Context context, BuilderData<Poster> builderData, Integer itemPosition, Integer position, String url) {
         this.context = context;
         this.builderData = builderData;
-        this.dialog = new MediaViewerDialog<>(context, builderData, currentPosition, url);
+        this.dialog = new MediaViewerDialog(context, builderData, itemPosition, position, url);
     }
 
     public void show() {
@@ -32,21 +32,23 @@ public class MultimediaPuzzlesViewer<T> {
         private final Context context;
         private final BuilderData<Poster> data;
         private final String url;
-        private final Integer currentPosition;
+        private final Integer itemPosition;
+        private final Integer position;
 
-        public Builder(Context context, List<Poster> dataList, Integer currentPosition, String url) {
+        public Builder(Context context, List<Poster> dataList, Integer itemPosition, Integer position, String url) {
             this.context = context;
             this.data = new BuilderData<>(dataList);
-            this.currentPosition = currentPosition;
+            this.itemPosition = itemPosition;
+            this.position = position;
             this.url = url;
         }
 
-        public MultimediaPuzzlesViewer<T> build() {
-            return new MultimediaPuzzlesViewer<>(context, data, currentPosition, url);
+        public MultimediaPuzzlesViewer build() {
+            return new MultimediaPuzzlesViewer(context, data, itemPosition, position, url);
         }
 
         public void show() {
-            MultimediaPuzzlesViewer<T> viewer = build();
+            MultimediaPuzzlesViewer viewer = build();
             viewer.show();
         }
     }

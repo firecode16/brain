@@ -1,6 +1,8 @@
 package com.brain.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ import com.brain.R;
 import com.brain.adapters.ViewFragmentPagerAdapter;
 import com.brain.fragments.GenericFragment;
 import com.brain.fragments.ThinkDialogFragment;
+import com.brain.service.BroadcastReceiverService;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     TabLayout tabLayout;
     AppBarLayout.LayoutParams layoutParams;
     CoordinatorLayout coordinatorLayoutForFAB;
+    private BroadcastReceiverService broadcastReceiverService = null;
 
     FloatingActionButton fabOptionMenuTouch;
     FloatingActionButton fabTextPosting;
@@ -69,6 +73,16 @@ public class HomeActivity extends AppCompatActivity {
         setupTabIcons();
 
         initFabAnimations();
+
+        configureReceiver();
+    }
+
+    @SuppressLint("NewApi")
+    private void configureReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.brain.Broadcast");
+        broadcastReceiverService = new BroadcastReceiverService();
+        registerReceiver(broadcastReceiverService, filter, Context.RECEIVER_VISIBLE_TO_INSTANT_APPS | Context.RECEIVER_EXPORTED);
     }
 
     private void initFabAnimations() {
@@ -231,6 +245,16 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getFabUploadVideoClipOnClick(View view) {
         Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
+    }
+
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiverService);
     }
 
 }

@@ -14,6 +14,7 @@ import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaslider.adapter.ViewPagerAdapter
 import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
+import com.brain.multimediaslider.model.ItemPlayerView
 import com.brain.multimediaslider.model.Multimedia
 
 @SuppressLint("ClickableViewAccessibility")
@@ -147,4 +148,28 @@ class MultimediaSlider @JvmOverloads constructor(
         return viewPager!!.currentItem
     }
 
+    private fun getSliderPlayerViewMap(): MutableList<ItemPlayerView> {
+        return viewPagerAdapter!!.setSliderPlayerViewMap()
+    }
+
+    fun callAndExecuteSelectedItem(itemPosition: Int, position: Int) {
+        viewPager!!.setCurrentItem(position)
+        MediaPlayerService.pauseCurrentPlayingVideo()
+        val playerViewList = getSliderPlayerViewMap()
+
+        playerViewList.forEach { item ->
+            if (item.itemPosition == itemPosition) {
+                if (item.position == position) {
+                    MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(item.itemPosition, item.position!!, item.playerView)
+                    item.playerView.useController = false
+                    MediaPlayerService.resumePlayerIndexCurrent()
+                } else {
+                    MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(item.itemPosition, item.position!!, item.playerView)
+                    item.playerView.useController = false
+                }
+            } else {
+                MediaPlayerService.pauseCurrentPlayingVideo()
+            }
+        }
+    }
 }
