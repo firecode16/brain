@@ -148,14 +148,18 @@ class MultimediaSlider @JvmOverloads constructor(
         return viewPager!!.currentItem
     }
 
-    private fun getSliderPlayerViewMap(): MutableList<ItemPlayerView> {
-        return viewPagerAdapter!!.setSliderPlayerViewMap()
+    fun getItemPosition(): Int {
+        return objItemPosition
+    }
+
+    private fun getSliderPlayerViewList(): MutableList<ItemPlayerView> {
+        return viewPagerAdapter!!.setSliderPlayerViewList()
     }
 
     fun callAndExecuteSelectedItem(itemPosition: Int, position: Int) {
         viewPager!!.setCurrentItem(position)
         MediaPlayerService.pauseCurrentPlayingVideo()
-        val playerViewList = getSliderPlayerViewMap()
+        val playerViewList = getSliderPlayerViewList()
 
         playerViewList.forEach { item ->
             if (item.itemPosition == itemPosition) {

@@ -105,7 +105,7 @@ class ViewPagerAdapter(
         this.itemClickListener = itemClickListener
     }
 
-    fun setSliderPlayerViewMap(): MutableList<ItemPlayerView> {
+    fun setSliderPlayerViewList(): MutableList<ItemPlayerView> {
         return playerViewList
     }
 

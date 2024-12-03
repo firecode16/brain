@@ -3,17 +3,14 @@ package com.brain.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.RelativeLayout
-import androidx.media3.ui.PlayerView
+import androidx.recyclerview.widget.RecyclerView
 import com.brain.activities.HomeActivity
 import com.brain.adapters.ViewFragmentPagerAdapter
 import com.brain.fragments.GenericFragment
-import com.brain.multimediaplayer.service.MediaPlayerService
-import com.brain.multimediaslider.MultimediaSlider
+import com.brain.holders.MultimediaViewHolder
 
 class BroadcastReceiverService : BroadcastReceiver() {
     companion object {
-        const val RELATIVE_LAYOUT_CHILD = 1
         const val MEDIA_SLIDER_CHILD = 2
     }
 
@@ -27,10 +24,22 @@ class BroadcastReceiverService : BroadcastReceiver() {
         val fragment: ViewFragmentPagerAdapter = fragmentPagerAdapter as ViewFragmentPagerAdapter
         val firstFragment = fragment.fragments.first()
         val genericFragment: GenericFragment = firstFragment as GenericFragment
-        val viewChild = genericFragment.linearLayout.getChildAt(RELATIVE_LAYOUT_CHILD)
-        val relativeLayout = viewChild as RelativeLayout
 
-        val multimediaSlider: MultimediaSlider = relativeLayout.getChildAt(MEDIA_SLIDER_CHILD) as MultimediaSlider
-        multimediaSlider.callAndExecuteSelectedItem(itemPosition, position)
+        val linearLayoutManager = genericFragment.linearLayout
+        val visibleItemCount = linearLayoutManager.childCount
+        val recycler: RecyclerView = genericFragment.recyclerView
+
+        for (index in 0 until visibleItemCount) {
+            val itemChild = linearLayoutManager.getChildAt(index)
+            val viewHolder = itemChild?.let { recycler.getChildViewHolder(itemChild) }
+            val multimediaHolder = viewHolder as MultimediaViewHolder
+            val multimediaSlider = multimediaHolder.multimediaSlider
+            val currentItemPosition = multimediaSlider.getItemPosition()
+
+            if (currentItemPosition == itemPosition) {
+                multimediaSlider.callAndExecuteSelectedItem(itemPosition, position)
+                break
+            }
+        }
     }
 }

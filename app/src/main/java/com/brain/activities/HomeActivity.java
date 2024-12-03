@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.brain.Broadcast");
         broadcastReceiverService = new BroadcastReceiverService();
-        registerReceiver(broadcastReceiverService, filter, Context.RECEIVER_VISIBLE_TO_INSTANT_APPS | Context.RECEIVER_EXPORTED);
+        registerReceiver(broadcastReceiverService, filter, Context.RECEIVER_EXPORTED);
     }
 
     private void initFabAnimations() {

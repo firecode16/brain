@@ -254,6 +254,10 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         return layoutManager;
     }
 
+    public RecyclerView getRecyclerView() {
+        return recycler;
+    }
+
     @Override
     public void onRefresh() { }
 
