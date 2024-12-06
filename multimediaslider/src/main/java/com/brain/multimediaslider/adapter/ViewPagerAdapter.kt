@@ -22,24 +22,24 @@ import com.bumptech.glide.Glide
 
 class ViewPagerAdapter(
     var context: Context?,
-    mediaList: List<Multimedia>,
+    private var mediaList: List<Multimedia>,
     private var placeholder: Int,
     private var titleBackground: Int,
     private var textAlign: String,
     private var itemPosition: Int
 ) : PagerAdapter() {
-    private var mediaList: List<Multimedia>? = mediaList
     private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     private var itemClickListener: ItemClickListenerImpl? = null
     private var url: String? = null
     private lateinit var sliderImageView: ImageView
     private lateinit var sliderPlayerView: PlayerView
+    private lateinit var progressBar: ProgressBar
 
     private var playerViewList: MutableList<ItemPlayerView> = mutableListOf()
 
     override fun getCount(): Int {
-        return mediaList!!.size
+        return mediaList.size
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
@@ -52,12 +52,12 @@ class ViewPagerAdapter(
 
         sliderImageView = itemView.findViewById(R.id.sliderImageView)
         sliderPlayerView = itemView.findViewById(R.id.sliderPlayerView)
-        val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
+        progressBar = itemView.findViewById(R.id.progressBar)
         val footerLinear = itemView.findViewById<LinearLayout>(R.id.footerLinear)
         val textView = itemView.findViewById<TextView>(R.id.textView)
 
-        if (mediaList!![position].title != null) {
-            textView.text = mediaList!![position].title
+        if (mediaList[position].title != null) {
+            textView.text = mediaList[position].title
             footerLinear.setBackgroundResource(titleBackground)
             textView.gravity = getGravityFromAlign(textAlign)
             footerLinear.gravity = getGravityFromAlign(textAlign)
@@ -65,17 +65,15 @@ class ViewPagerAdapter(
             footerLinear.visibility = View.INVISIBLE
         }
 
-        if (mediaList!![position].url !== null) {
-            url = mediaList!![position].url!!
-            context.let {
-                if (mediaList!![position].contentType.equals("image/jpg")) {
-                    Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
-                } else if (mediaList!![position].contentType.equals("video/mp4") || mediaList!![position].contentType.equals("audio/mp3")) {
-                    MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, false, sliderPlayerView, progressBar)
-                    val itemPlayerView = ItemPlayerView(itemPosition, position, sliderPlayerView)
-                    playerViewList.add(itemPlayerView)
-                } else {}
-            }
+        context.let {
+            url = mediaList[position].url
+            if (mediaList[position].contentType.equals("image/jpg")) {
+                Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
+            } else if (mediaList[position].contentType.equals("video/mp4") || mediaList[position].contentType.equals("audio/mp3")) {
+                MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, false, sliderPlayerView, progressBar)
+                val itemPlayerView = ItemPlayerView(itemPosition, position, sliderPlayerView)
+                playerViewList.add(itemPlayerView)
+            } else {}
         }
 
         container.addView(itemView)

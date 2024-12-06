@@ -39,14 +39,12 @@ internal class MediaPagerAdapter(
         val playerView = itemView.findViewById<PlayerView>(R.id.playerView)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
 
-        if (objList.isNotEmpty()) {
-            context.let {
-                if (objList[position].contentType.equals("image/jpg")) {
-                    Glide.with(it).load(url + objList[position].id).into(imageView)
-                } else if (objList[position].contentType.equals("video/mp4") || objList[position].contentType.equals("audio/mp3")) {
-                    MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(itemPosition, position, playerView)
-                } else {}
-            }
+        context.let {
+            if (objList[position].contentType.equals("image/jpg")) {
+                Glide.with(it).load(url + objList[position].id).into(imageView)
+            } else if (objList[position].contentType.equals("video/mp4") || objList[position].contentType.equals("audio/mp3")) {
+                MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(itemPosition, position, playerView)
+            } else {}
         }
 
         viewGroup.addView(itemView)

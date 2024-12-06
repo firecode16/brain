@@ -30,3 +30,6 @@
 # generated files
 bin/
 gen/
+
+# Kotlin files
+.kotlin

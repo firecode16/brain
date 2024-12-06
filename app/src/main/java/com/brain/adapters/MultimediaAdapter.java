@@ -35,13 +35,11 @@ import com.brain.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_ITEM = 1;
 
-    private static final AtomicLong autID = new AtomicLong();
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
     private String errorMsg;
@@ -75,7 +73,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         multimediaList = new ArrayList<>();
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         viewHolder = switch (viewType) {
@@ -87,7 +85,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 View viewLoading = inflater.inflate(R.layout.footer_loading, viewGroup, false);
                 yield new ProgressViewHolder(viewLoading);
             }
-            default -> viewHolder;
+            default -> null;
         };
         assert viewHolder != null;
         return viewHolder;
@@ -134,9 +132,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 } else {
                     multimediaList.clear();
-                    mediaDetail.getContent().forEach(post -> {
-                        multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview()));
-                    });
+                    mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
 
                     int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
                     multimediaViewHolder.multimediaSlider.setMediaList(multimediaList, itemPosition);
@@ -181,25 +177,6 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addProfile(Profile objProfile) {
         setProfile(objProfile);
-    }
-
-    public void remove(MediaDetail mediaDetail) {
-        int position = mediaDetailList.indexOf(mediaDetail);
-        if (position > -1) {
-            mediaDetailList.remove(position);
-            notifyItemRemoved(position);
-        }
-    }
-
-    public void clear() {
-        isLoadingAdded = false;
-        while (getItemCount() > 0) {
-            remove(getItem(0));
-        }
-    }
-
-    public boolean isEmpty() {
-        return getItemCount() == 0;
     }
 
     public void addLoadingFooter() {

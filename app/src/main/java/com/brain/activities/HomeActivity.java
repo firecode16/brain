@@ -3,10 +3,12 @@ package com.brain.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.brain.R;
@@ -75,6 +78,8 @@ public class HomeActivity extends AppCompatActivity {
         initFabAnimations();
 
         configureReceiver();
+
+        isFullScreen();
     }
 
     @SuppressLint("NewApi")
@@ -85,6 +90,12 @@ public class HomeActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiverService, filter, Context.RECEIVER_EXPORTED);
     }
 
+    private void isFullScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
     private void initFabAnimations() {
         fabOpen = AnimationUtils.loadAnimation(getApplication(), R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(getApplication(), R.anim.fab_close);
@@ -93,17 +104,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewFragmentPagerAdapter adapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
+        ViewFragmentPagerAdapter adapter = new ViewFragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         adapter.addFragment(GenericFragment.newInstance(1), getString(R.string.title_section1));
         adapter.addFragment(GenericFragment.newInstance(2), getString(R.string.title_section2));
-        adapter.addFragment(GenericFragment.newInstance(3), getString(R.string.title_section3));
         viewPager.setAdapter(adapter);
     }
 
     private void setupTabIcons() {
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(Util.getTabIcon[0]);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(Util.getTabIcon[1]);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(Util.getTabIcon[2]);
     }
 
     private void setToolbar() {
@@ -168,18 +177,6 @@ public class HomeActivity extends AppCompatActivity {
                         tabLayout.setLayoutParams(layoutParams);
                         break;
                     case 1:
-                        fabOptionMenuTouch = findViewById(R.id.fabOptionMenu);
-                        fabOptionMenuTouch.setVisibility(View.INVISIBLE);
-
-                        coordinatorLayoutForFAB = findViewById(R.id.coordinatorForFAB);
-                        coordinatorLayoutForFAB.setVisibility(CoordinatorLayout.GONE);
-
-                        layoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-                        layoutParams.setScrollFlags(0);
-                        toolbar.setLayoutParams(layoutParams);
-                        toolbar.setVisibility(Toolbar.GONE);
-                        break;
-                    case 2:
                         fabOptionMenuTouch = findViewById(R.id.fabOptionMenu);
                         fabOptionMenuTouch.setVisibility(View.INVISIBLE);
 

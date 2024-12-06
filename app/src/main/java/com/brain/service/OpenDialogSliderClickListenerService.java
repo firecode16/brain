@@ -40,6 +40,6 @@ public class OpenDialogSliderClickListenerService implements ItemClickListenerIm
             posterList.add(model);
         });
 
-        new MultimediaPuzzlesViewer.Builder<>(context, posterList, itemPosition, position,URL + URL_PART).show();
+        new MultimediaPuzzlesViewer.Builder(context, posterList, itemPosition, position,URL + URL_PART).show();
     }
 }

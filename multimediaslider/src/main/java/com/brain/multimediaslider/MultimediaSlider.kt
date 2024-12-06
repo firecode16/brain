@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaslider.adapter.ViewPagerAdapter
-import com.brain.multimediaslider.impl.ItemChangeListenerImpl
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.model.ItemPlayerView
 import com.brain.multimediaslider.model.Multimedia
@@ -42,7 +41,6 @@ class MultimediaSlider @JvmOverloads constructor(
     private var textAlign = "LEFT"
     private var indicatorAlign = "CENTER"
 
-    private var itemChangeListener: ItemChangeListenerImpl? = null
     private lateinit var multimedia: List<Multimedia>
     private var objItemPosition: Int = 0
 
@@ -76,12 +74,10 @@ class MultimediaSlider @JvmOverloads constructor(
     fun setMediaList(mediaList: List<Multimedia>, itemPosition: Int) {
         viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign, itemPosition)
         viewPager!!.adapter = viewPagerAdapter
+        getPageLimit(mediaList.size)
         multimedia = mediaList
         objItemPosition = itemPosition
-
-        if (mediaList.isNotEmpty()) {
-            setupDots(mediaList.size)
-        }
+        setupDots(mediaList.size)
     }
 
     private fun setupDots(size: Int) {
@@ -112,10 +108,6 @@ class MultimediaSlider @JvmOverloads constructor(
                 }
 
                 dots!![position]!!.setImageDrawable(ContextCompat.getDrawable(context, selectedDot))
-
-                if (itemChangeListener != null) {
-                    itemChangeListener!!.onItemChanged(position)
-                }
 
                 MediaPlayerService.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(objItemPosition, position)
             }
@@ -156,6 +148,13 @@ class MultimediaSlider @JvmOverloads constructor(
         return viewPagerAdapter!!.setSliderPlayerViewList()
     }
 
+    private fun getPageLimit(mediaSize: Int) {
+        if (mediaSize > viewPager!!.offscreenPageLimit) {
+            viewPager!!.offscreenPageLimit = mediaSize - 1
+        }
+    }
+
+    // call when click on dismiss dialog
     fun callAndExecuteSelectedItem(itemPosition: Int, position: Int) {
         viewPager!!.setCurrentItem(position)
         MediaPlayerService.pauseCurrentPlayingVideo()

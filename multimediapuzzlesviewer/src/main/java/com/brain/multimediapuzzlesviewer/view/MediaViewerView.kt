@@ -55,13 +55,7 @@ internal class MediaViewerView (
         context.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toolbar.setNavigationOnClickListener {
-            val intent = Intent()
-            intent.action = "com.brain.Broadcast"
-            intent.putExtra("itemPosition", itemPosition)
-            intent.putExtra("position", lastPosition)
-            intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
-            context.sendBroadcast(intent)
-
+            getIntentAndSendBroadcast()
             MediaPlayerService.pauseCurrentPlayingVideo()
             onDismiss?.invoke()
         }
@@ -139,6 +133,15 @@ internal class MediaViewerView (
     internal fun open() {
         MediaPlayerService.pauseCurrentPlayingVideo()
         MediaPlayerService.playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(this.itemPosition, this.position)
+    }
+
+    private fun getIntentAndSendBroadcast() {
+        val intent = Intent()
+        intent.action = "com.brain.Broadcast"
+        intent.putExtra("itemPosition", itemPosition)
+        intent.putExtra("position", lastPosition)
+        intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+        context.sendBroadcast(intent)
     }
 
 }

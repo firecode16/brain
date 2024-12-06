@@ -11,10 +11,10 @@ import java.util.List;
 
 public class MultimediaPuzzlesViewer {
     private final Context context;
-    private final BuilderData<Poster> builderData;
+    private final BuilderData builderData;
     private final MediaViewerDialog dialog;
 
-    protected MultimediaPuzzlesViewer(Context context, BuilderData<Poster> builderData, Integer itemPosition, Integer position, String url) {
+    protected MultimediaPuzzlesViewer(Context context, BuilderData builderData, Integer itemPosition, Integer position, String url) {
         this.context = context;
         this.builderData = builderData;
         this.dialog = new MediaViewerDialog(context, builderData, itemPosition, position, url);
@@ -28,16 +28,16 @@ public class MultimediaPuzzlesViewer {
         }
     }
 
-    public static class Builder<T> {
+    public static class Builder {
         private final Context context;
-        private final BuilderData<Poster> data;
+        private final BuilderData data;
         private final String url;
         private final Integer itemPosition;
         private final Integer position;
 
         public Builder(Context context, List<Poster> dataList, Integer itemPosition, Integer position, String url) {
             this.context = context;
-            this.data = new BuilderData<>(dataList);
+            this.data = new BuilderData(dataList);
             this.itemPosition = itemPosition;
             this.position = position;
             this.url = url;

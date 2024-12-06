@@ -35,7 +35,6 @@ public class Util {
 
     public static int[] getTabIcon = {
             R.drawable.ic_home_rocket_50,
-            R.drawable.ic_chat,
             R.drawable.ic_setting_50
     };
 

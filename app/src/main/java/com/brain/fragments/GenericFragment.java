@@ -142,8 +142,6 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 RecyclerView.Adapter<UserViewHolder> userViewHolderAdapter = new UserAdapter(getActivity(), userItems);
                 recyclerView.setAdapter(userViewHolderAdapter);
                 break;
-            case 3:
-                break;
         }
     }
 
@@ -171,7 +169,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(555111L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(444004L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {

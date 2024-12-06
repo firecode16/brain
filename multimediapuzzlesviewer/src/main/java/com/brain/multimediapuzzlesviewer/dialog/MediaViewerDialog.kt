@@ -4,12 +4,11 @@ import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.model.BuilderData
-import com.brain.multimediapuzzlesviewer.model.Poster
 import com.brain.multimediapuzzlesviewer.view.MediaViewerView
 
 internal class MediaViewerDialog(
     context: Context,
-    private val builderData: BuilderData<Poster>,
+    private val builderData: BuilderData,
     private val itemPosition: Int,
     private val position: Int,
     private val url: String

@@ -37,6 +37,7 @@ class BroadcastReceiverService : BroadcastReceiver() {
             val currentItemPosition = multimediaSlider.getItemPosition()
 
             if (currentItemPosition == itemPosition) {
+                // call when click on dismiss dialog
                 multimediaSlider.callAndExecuteSelectedItem(itemPosition, position)
                 break
             }
