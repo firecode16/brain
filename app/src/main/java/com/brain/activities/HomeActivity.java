@@ -3,7 +3,6 @@ package com.brain.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +26,7 @@ import com.brain.R;
 import com.brain.adapters.ViewFragmentPagerAdapter;
 import com.brain.fragments.GenericFragment;
 import com.brain.fragments.ThinkDialogFragment;
+import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.service.BroadcastReceiverService;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
 
         configureReceiver();
 
-        isFullScreen();
+        fullScreenAndHideNavigationBar();
     }
 
     @SuppressLint("NewApi")
@@ -90,10 +90,9 @@ public class HomeActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiverService, filter, Context.RECEIVER_EXPORTED);
     }
 
-    private void isFullScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+    private void fullScreenAndHideNavigationBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     private void initFabAnimations() {
@@ -128,6 +127,12 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem searchMenu = menu.findItem(R.id.action_search);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -187,6 +192,8 @@ public class HomeActivity extends AppCompatActivity {
                         layoutParams.setScrollFlags(0);
                         toolbar.setLayoutParams(layoutParams);
                         toolbar.setVisibility(Toolbar.GONE);
+
+                        MediaPlayerService.Companion.pauseCurrentPlayingVideo();
                         break;
                 }
             }
@@ -234,14 +241,14 @@ public class HomeActivity extends AppCompatActivity {
         fabUploadVideoClip.setClickable(false);
     }
 
-    public void getFabTextPostingOnClick(View view) {
+    public void getFabPostsOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = ThinkDialogFragment.newInstance();
         newFragment.show(fm, "Dialog");
     }
 
-    public void getFabUploadVideoClipOnClick(View view) {
-        Toast.makeText(getApplication(), "Floating Action Button 2", Toast.LENGTH_SHORT).show();
+    public void getFabAboutOnClick(View view) {
+        Toast.makeText(getApplication(), "Floating Action About", Toast.LENGTH_SHORT).show();
     }
 
     public ViewPager getViewPager() {
@@ -254,4 +261,9 @@ public class HomeActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiverService);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fullScreenAndHideNavigationBar();
+    }
 }

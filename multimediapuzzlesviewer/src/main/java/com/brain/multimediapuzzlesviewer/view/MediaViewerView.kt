@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.ViewPager
@@ -33,10 +32,10 @@ internal class MediaViewerView (
     private var imageView: ImageView
     private var mediaPagerAdapter: MediaPagerAdapter? = null
 
-    private var objList: List<Poster> = listOf()
     private var itemPosition: Int = 0
     private var position: Int = 0
     private var lastPosition: Int = 0
+    private lateinit var container: String
 
     init {
         View.inflate(context, R.layout.multimedia_puzzles_viewer, this)
@@ -50,9 +49,7 @@ internal class MediaViewerView (
         fragmentFinancing = findViewById(R.id.fragmentFinancing)
         fragmentJoin = findViewById(R.id.fragmentJoin)
 
-        (context as AppCompatActivity).setSupportActionBar(toolbar)
-        context.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        context.supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
 
         toolbar.setNavigationOnClickListener {
             getIntentAndSendBroadcast()
@@ -121,10 +118,10 @@ internal class MediaViewerView (
         })
     }
 
-    internal fun setMultimedia(objList: List<Poster>, itemPosition: Int, position: Int, url: String) {
-        this.objList = objList
+    internal fun setMultimedia(objList: List<Poster>, itemPosition: Int, position: Int, url: String, container: String) {
         this.itemPosition = itemPosition
         this.position = position
+        this.container = container
         this.mediaPagerAdapter = MediaPagerAdapter(context, objList, itemPosition, url)
         this.mediaViewPager.adapter = mediaPagerAdapter
         this.mediaViewPager.setCurrentItem(position)
@@ -140,6 +137,7 @@ internal class MediaViewerView (
         intent.action = "com.brain.Broadcast"
         intent.putExtra("itemPosition", itemPosition)
         intent.putExtra("position", lastPosition)
+        intent.putExtra("container", container)
         intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
         context.sendBroadcast(intent)
     }

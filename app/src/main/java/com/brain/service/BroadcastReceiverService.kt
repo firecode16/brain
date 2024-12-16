@@ -3,8 +3,10 @@ package com.brain.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.brain.activities.HomeActivity
+import com.brain.adapters.MultimediaAdapter
 import com.brain.adapters.ViewFragmentPagerAdapter
 import com.brain.fragments.GenericFragment
 import com.brain.holders.MultimediaViewHolder
@@ -17,6 +19,7 @@ class BroadcastReceiverService : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val itemPosition = intent!!.getIntExtra("itemPosition", 0)
         val position = intent.getIntExtra("position", 0)
+        val container = intent.getStringExtra("container")
 
         context as HomeActivity
         val viewPager = context.viewPager
@@ -33,13 +36,32 @@ class BroadcastReceiverService : BroadcastReceiver() {
             val itemChild = linearLayoutManager.getChildAt(index)
             val viewHolder = itemChild?.let { recycler.getChildViewHolder(itemChild) }
             val multimediaHolder = viewHolder as MultimediaViewHolder
-            val multimediaSlider = multimediaHolder.multimediaSlider
-            val currentItemPosition = multimediaSlider.getItemPosition()
 
-            if (currentItemPosition == itemPosition) {
-                // call when click on dismiss dialog
-                multimediaSlider.callAndExecuteSelectedItem(itemPosition, position)
-                break
+            when (container) {
+                "SLIDER" -> {
+                    val multimediaSlider = multimediaHolder.multimediaSlider
+                    val currentItemPosition = multimediaSlider.getItemPosition()
+
+                    if (currentItemPosition == itemPosition) {
+                        // call when click on dismiss dialog
+                        multimediaSlider.callAndExecuteSelectedItem(itemPosition, position)
+                        break
+                    }
+                }
+                "IMAGE" -> {
+                    Log.i("CONTAINER:: ", "OPEN_$container")
+                    break
+                }
+                "MP4", "MP3" -> {
+                    val mediaAdapter = viewHolder.bindingAdapter
+                    val multimediaAdapter = mediaAdapter as MultimediaAdapter
+                    multimediaAdapter.callAndExecuteSelectedItem(itemPosition, position)
+                    break
+                }
+                else -> {
+                    Log.e("CONTAINER:: ", "NOT_FOUND")
+                    break
+                }
             }
         }
     }

@@ -57,7 +57,7 @@ abstract class CustomScrollStateService(
 
                         currentItem = multimediaSlider!!.getCurrentItem()
                     } else if (mediaDetail.content.size != 0 && mediaDetail.array == 1) {
-                        currentItem = middleItemIndex
+                        currentItem = 0
                     }
                 }
             }

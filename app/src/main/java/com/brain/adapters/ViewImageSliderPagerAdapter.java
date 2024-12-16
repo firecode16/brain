@@ -33,9 +33,9 @@ public class ViewImageSliderPagerAdapter extends PagerAdapter {
     @NonNull
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
+        View view = null; //layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
-        imageViewPreview = view.findViewById(R.id.imagePreview);
+        imageViewPreview = null; //view.findViewById(R.id.imagePreview);
         if (isSingle) {
             model = posterList.get(0);
         } else {

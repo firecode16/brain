@@ -29,9 +29,14 @@ public class Util {
 
     public static final String URL = "http://192.168.1.121:8081/api/";
     public static final String URL_PART = "multimedia/";
+
     public static final String VIDEO_MP4 = "video/mp4";
     public static final String AUDIO_MP3 = "audio/mp3";
     public static final String IMG_JPG = "image/jpg";
+    public static final String IMG_PNG = "image/png";
+    public static final String IMG_GIF = "image/gif";
+    public static final String MP4 = "MP4";
+    public static final String MP3 = "MP3";
 
     public static int[] getTabIcon = {
             R.drawable.ic_home_rocket_50,

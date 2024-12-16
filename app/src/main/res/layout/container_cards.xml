@@ -13,7 +13,7 @@
     <androidx.media3.ui.PlayerView
         android:id="@+id/postMedia"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="500dp"
         android:keepScreenOn="true"
         android:visibility="gone"
         app:resize_mode="fixed_height"
@@ -48,7 +48,7 @@
     <ImageView
         android:id="@+id/imagePost"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="500dp"
         android:adjustViewBounds="true"
         android:keepScreenOn="true"
         android:visibility="visible"
@@ -59,7 +59,7 @@
     <com.brain.multimediaslider.MultimediaSlider
         android:id="@+id/multimediaSlider"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="500dp"
         android:keepScreenOn="true"
         app:iss_corner_radius="5"
         app:iss_error_image="@drawable/error_image_loading"

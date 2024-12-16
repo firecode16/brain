@@ -3,10 +3,7 @@ package com.brain.service;
 import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 
-import android.os.Build;
 import android.view.View;
-
-import androidx.annotation.RequiresApi;
 
 import com.brain.model.MediaContent;
 import com.brain.multimediapuzzlesviewer.MultimediaPuzzlesViewer;
@@ -15,18 +12,21 @@ import com.brain.multimediapuzzlesviewer.model.Poster;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnImageViewClickListenerService implements View.OnClickListener {
+public class OnPlayerViewClickListenerService implements View.OnClickListener {
     private final List<MediaContent> mediaContents;
     private List<Poster> posterList;
     private Poster model;
-    int position;
+    private final int itemPosition;
+    private final int position;
+    private final String container;
 
-    public OnImageViewClickListenerService(List<MediaContent> mediaContents, int position) {
+    public OnPlayerViewClickListenerService(List<MediaContent> mediaContents, int itemPosition, int position, String container) {
         this.mediaContents = mediaContents;
+        this.itemPosition = itemPosition;
         this.position = position;
+        this.container = container;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
         posterList = new ArrayList<>();
@@ -39,6 +39,6 @@ public class OnImageViewClickListenerService implements View.OnClickListener {
             posterList.add(model);
         });
 
-        new MultimediaPuzzlesViewer.Builder(v.getContext(), posterList, position, position, URL + URL_PART, "IMAGE").show();
+        new MultimediaPuzzlesViewer.Builder(v.getContext(), posterList, itemPosition, position, URL + URL_PART, container).show();
     }
 }

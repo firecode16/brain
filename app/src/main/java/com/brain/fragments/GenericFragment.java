@@ -136,6 +136,9 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 layoutManager = new LinearLayoutManager(getActivity());
                 recyclerView.setLayoutManager(layoutManager);
 
+                swipeRefresh.setEnabled(false);
+                progressBar.setVisibility(View.INVISIBLE);
+
                 List<Profile> userItems = new ArrayList<>();
                 userItems.add(new Profile(111101L, "fredi303", "Fredi Hdz", "fredi303@brain.com", null, 15, true));
 
@@ -155,6 +158,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // check if data is stale.
         // execute network request if cache is expired; otherwise do not update data.
         multimediaAdapter.getMediaDetailList().clear();
+        multimediaAdapter.getPlayerViewList().clear();
         multimediaAdapter.notifyDataSetChanged();
         MediaPlayerService.Companion.releasePlayer();
         loadFirstPage();
@@ -169,7 +173,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(444004L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(555111L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {

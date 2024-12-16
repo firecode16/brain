@@ -14,10 +14,10 @@ public class MultimediaPuzzlesViewer {
     private final BuilderData builderData;
     private final MediaViewerDialog dialog;
 
-    protected MultimediaPuzzlesViewer(Context context, BuilderData builderData, Integer itemPosition, Integer position, String url) {
+    protected MultimediaPuzzlesViewer(Context context, BuilderData builderData, Integer itemPosition, Integer position, String url, String container) {
         this.context = context;
         this.builderData = builderData;
-        this.dialog = new MediaViewerDialog(context, builderData, itemPosition, position, url);
+        this.dialog = new MediaViewerDialog(context, builderData, itemPosition, position, url, container);
     }
 
     public void show() {
@@ -34,17 +34,19 @@ public class MultimediaPuzzlesViewer {
         private final String url;
         private final Integer itemPosition;
         private final Integer position;
+        private final String container;
 
-        public Builder(Context context, List<Poster> dataList, Integer itemPosition, Integer position, String url) {
+        public Builder(Context context, List<Poster> dataList, Integer itemPosition, Integer position, String url, String container) {
             this.context = context;
             this.data = new BuilderData(dataList);
             this.itemPosition = itemPosition;
             this.position = position;
             this.url = url;
+            this.container = container;
         }
 
         public MultimediaPuzzlesViewer build() {
-            return new MultimediaPuzzlesViewer(context, data, itemPosition, position, url);
+            return new MultimediaPuzzlesViewer(context, data, itemPosition, position, url, container);
         }
 
         public void show() {
