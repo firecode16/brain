@@ -25,8 +25,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.brain.R;
 import com.brain.adapters.ViewFragmentPagerAdapter;
 import com.brain.fragments.GenericFragment;
-import com.brain.fragments.ThinkDialogFragment;
 import com.brain.multimediaplayer.service.MediaPlayerService;
+import com.brain.multimediaposts.fragments.AboutDialogFragment;
+import com.brain.multimediaposts.fragments.PostsDialogFragment;
 import com.brain.service.BroadcastReceiverService;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
@@ -36,25 +37,26 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    AppBarLayout.LayoutParams layoutParams;
-    CoordinatorLayout coordinatorLayoutForFAB;
+    private Toolbar toolbar;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private AppBarLayout.LayoutParams layoutParams;
+    private CoordinatorLayout coordinatorLayoutForFAB;
     private BroadcastReceiverService broadcastReceiverService = null;
 
-    FloatingActionButton fabOptionMenuTouch;
-    FloatingActionButton fabTextPosting;
-    FloatingActionButton fabUploadVideoClip;
+    private FloatingActionButton fabOptionMenuTouch;
+    private FloatingActionButton fabTextPosting;
+    private FloatingActionButton fabUploadVideoClip;
 
-    Animation fabOpen;
-    Animation fabClose;
-    Animation animationFabOptionMenuRotateForward;
-    Animation animationFabOptionMenuRotateBackward;
+    private Animation fabOpen;
+    private Animation fabClose;
+    private Animation animationFabOptionMenuRotateForward;
+    private Animation animationFabOptionMenuRotateBackward;
 
     ImageView imageView;
 
     private boolean fabStatus = false;
+    private int tabSelected = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,19 +194,26 @@ public class HomeActivity extends AppCompatActivity {
                         layoutParams.setScrollFlags(0);
                         toolbar.setLayoutParams(layoutParams);
                         toolbar.setVisibility(Toolbar.GONE);
-
-                        MediaPlayerService.Companion.pauseCurrentPlayingVideo();
                         break;
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    MediaPlayerService.Companion.pauseCurrentPlayingVideo();
+                    tabSelected = tab.getPosition();
+                    //close fab menu
+                    hideFAB();
+                    fabStatus = false;
+                } else if (tab.getPosition() == 1) {
+                    MediaPlayerService.Companion.resumePlayerIndexCurrent();
+                    tabSelected = tab.getPosition();
+                }
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -243,12 +252,14 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getFabPostsOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        DialogFragment newFragment = ThinkDialogFragment.newInstance();
+        DialogFragment newFragment = PostsDialogFragment.Companion.newInstance();
         newFragment.show(fm, "Dialog");
     }
 
     public void getFabAboutOnClick(View view) {
-        Toast.makeText(getApplication(), "Floating Action About", Toast.LENGTH_SHORT).show();
+        FragmentManager fm = getSupportFragmentManager();
+        DialogFragment newFragment = AboutDialogFragment.Companion.newInstance();
+        newFragment.show(fm, "Dialog");
     }
 
     public ViewPager getViewPager() {
@@ -256,14 +267,26 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiverService);
+    protected void onPause() {
+        super.onPause();
+        MediaPlayerService.Companion.pauseCurrentPlayingVideo();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         fullScreenAndHideNavigationBar();
+        if (tabSelected == 0) {
+            MediaPlayerService.Companion.pauseCurrentPlayingVideo();
+        } else {
+            MediaPlayerService.Companion.resumePlayerIndexCurrent();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiverService);
+        MediaPlayerService.Companion.releasePlayer();
     }
 }

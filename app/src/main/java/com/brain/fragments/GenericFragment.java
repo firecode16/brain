@@ -140,7 +140,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 progressBar.setVisibility(View.INVISIBLE);
 
                 List<Profile> userItems = new ArrayList<>();
-                userItems.add(new Profile(111101L, "fredi303", "Fredi Hdz", "fredi303@brain.com", null, 15, true));
+                userItems.add(new Profile(111101L, "@brain", "Brain StartUp", "startup16@brain.com", null, 916, true));
 
                 RecyclerView.Adapter<UserViewHolder> userViewHolderAdapter = new UserAdapter(getActivity(), userItems);
                 recyclerView.setAdapter(userViewHolderAdapter);
@@ -173,7 +173,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(555111L, currentPage, ITEMS_SIZE);
+        return apiRestImpl.getTopRatedMultimedia(444004L, currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {
@@ -262,27 +262,4 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() { }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MediaPlayerService.Companion.pauseCurrentPlayingVideo();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        MediaPlayerService.Companion.resumePlayerIndexCurrent();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MediaPlayerService.Companion.releasePlayer();
-    }
 }
