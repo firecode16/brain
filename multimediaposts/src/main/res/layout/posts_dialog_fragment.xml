@@ -2,81 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gallery"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:background="@color/pagerSilver"
+    android:fastScrollEnabled="true"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:outlineProvider="none"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/dialogToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
-            android:minHeight="?attr/actionBarSize"
-            app:titleTextColor="@color/black" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ImageView
-        android:layout_width="300sp"
-        android:layout_height="300sp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/imageView"
-        android:layout_marginTop="20sp"
-        android:contentDescription="TODO" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Image"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/imageView"
-        android:id="@+id/buttonPick"
-        android:layout_marginTop="20sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="1dp"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            tools:ignore="UselessParent">
-
-            <Button
-                android:id="@+id/buttonCancel"
-                style="?android:attr/actionButtonStyle"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:text="@string/lbl_cancel"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/pagerSilver">
 
             <Button
                 android:id="@+id/buttonPost"
-                style="?android:attr/actionButtonStyle"
                 android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/button_publish_rounded"
+                android:fontFamily="sans-serif"
                 android:text="@string/lbl_post"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
+                android:textAllCaps="false"
+                android:textColor="@color/pagerSilver"
+                android:textSize="18sp"
+                app:pressedTranslationZ="12dp" />
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appBar"
+        android:layout_marginTop="2dp"
+        android:horizontalSpacing="4dp"
+        android:numColumns="2"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="4dp"
+        tools:ignore="NotSibling" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPlus"
+        android:layout_width="67dp"
+        android:layout_height="67dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:background="@color/teal_200"
+        android:contentDescription="@string/app_name"
+        android:elevation="3dp"
+        android:src="@drawable/outline_plus_one_24"
+        app:backgroundTint="@color/teal_200"
+        app:pressedTranslationZ="12dp"
+        app:tint="@color/white" />
 </RelativeLayout>

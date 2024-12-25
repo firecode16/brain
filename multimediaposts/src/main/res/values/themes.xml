@@ -2,5 +2,12 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.ImagePicker" parent="Theme.Material3.DayNight.NoActionBar" />
+
     <style name="Theme.ImagePicker" parent="Base.Theme.ImagePicker" />
+
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 </resources>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">multimediaposts</string>
     <string name="lbl_cancel">Cancel</string>
-    <string name="lbl_post">Post</string>
+    <string name="lbl_post">Publicar</string>
     <string name="lbl_ok">OK</string>
     <string name="lbl_create_post">Crear Publicación</string>
 </resources>

@@ -20,7 +20,7 @@
         app:pressedTranslationZ="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabTextPosting"
+        android:id="@+id/fabPosts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -32,11 +32,11 @@
         android:visibility="invisible"
         app:backgroundTint="@color/colorFAB"
         app:elevation="6dp"
-        app:fabCustomSize="49dp"
+        app:fabCustomSize="50dp"
         app:pressedTranslationZ="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabUploadVideoClip"
+        android:id="@+id/fabAbout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -48,7 +48,7 @@
         android:visibility="invisible"
         app:backgroundTint="@color/colorFAB"
         app:elevation="6dp"
-        app:fabCustomSize="49dp"
+        app:fabCustomSize="50dp"
         app:pressedTranslationZ="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -58,9 +58,8 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="Floating action button 4"
-        android:onClick="fabUploadPlayMusicOnClick"
         android:src="@android:drawable/ic_menu_share"
         android:visibility="invisible"
         app:backgroundTint="@color/colorFAB"
-        app:fabCustomSize="47dp" />
+        app:fabCustomSize="50dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

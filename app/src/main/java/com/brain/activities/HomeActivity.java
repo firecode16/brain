@@ -45,8 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     private BroadcastReceiverService broadcastReceiverService = null;
 
     private FloatingActionButton fabOptionMenuTouch;
-    private FloatingActionButton fabTextPosting;
-    private FloatingActionButton fabUploadVideoClip;
+    private FloatingActionButton fabPosts;
+    private FloatingActionButton fabAbout;
 
     private Animation fabOpen;
     private Animation fabClose;
@@ -63,8 +63,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         viewPager = findViewById(R.id.pager);
-        fabTextPosting = findViewById(R.id.fabTextPosting);
-        fabUploadVideoClip = findViewById(R.id.fabUploadVideoClip);
+        fabPosts = findViewById(R.id.fabPosts);
+        fabAbout = findViewById(R.id.fabAbout);
         imageView = findViewById(R.id.imagePost);
 
         // add the toolbar
@@ -233,21 +233,21 @@ public class HomeActivity extends AppCompatActivity {
     private void expandFAB() {
         fabOptionMenuTouch.startAnimation(animationFabOptionMenuRotateForward);
 
-        fabTextPosting.startAnimation(fabOpen);
-        fabTextPosting.setClickable(true);
+        fabPosts.startAnimation(fabOpen);
+        fabPosts.setClickable(true);
 
-        fabUploadVideoClip.startAnimation(fabOpen);
-        fabUploadVideoClip.setClickable(true);
+        fabAbout.startAnimation(fabOpen);
+        fabAbout.setClickable(true);
     }
 
     private void hideFAB() {
         fabOptionMenuTouch.startAnimation(animationFabOptionMenuRotateBackward);
 
-        fabTextPosting.startAnimation(fabClose);
-        fabTextPosting.setClickable(false);
+        fabPosts.startAnimation(fabClose);
+        fabPosts.setClickable(false);
 
-        fabUploadVideoClip.startAnimation(fabClose);
-        fabUploadVideoClip.setClickable(false);
+        fabAbout.startAnimation(fabClose);
+        fabAbout.setClickable(false);
     }
 
     public void getFabPostsOnClick(View view) {

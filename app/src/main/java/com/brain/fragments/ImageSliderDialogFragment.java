@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * DELETE THIS CLASS
+ */
 public class ImageSliderDialogFragment extends DialogFragment {
     ViewPager viewPager;
     ViewImageSliderPagerAdapter sliderPagerAdapter;

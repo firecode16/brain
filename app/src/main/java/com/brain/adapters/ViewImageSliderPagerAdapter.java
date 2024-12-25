@@ -16,6 +16,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
+/**
+ * DELETE THIS CLASS
+ */
 public class ViewImageSliderPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     List<Poster> posterList;

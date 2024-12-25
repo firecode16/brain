@@ -61,6 +61,16 @@ class MediaPlayerService {
             }
         }
 
+        fun isMuted(mute: Boolean) {
+            if (currentPlayingVideo != null) {
+                if (mute) {
+                    currentPlayingVideo!!.second.second.volume = 0F
+                } else {
+                    currentPlayingVideo!!.second.second.volume = 1F
+                }
+            }
+        }
+
         // call only when Open Dialog, Module: multimedia puzzles viewer.
         @SuppressLint("UnsafeOptInUsageError")
         fun prepareIndexesOfMultimediaWhenOpenDialog(itemPosition: Int, index: Int, playerView: PlayerView) {

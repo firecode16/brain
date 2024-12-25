@@ -1,58 +1,72 @@
 package com.brain.multimediaposts.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.GridView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaposts.R
-import com.bumptech.glide.Glide
+import com.brain.multimediaposts.adapters.GridItemAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PostsDialogFragment : DialogFragment() {
-    private lateinit var imageView: ImageView
+    private lateinit var gridView: GridView
+    private lateinit var btnPost: Button
+    private lateinit var gridItemAdapter: GridItemAdapter
 
     companion object {
+        const val MAX_ITEMS = 50
+
         fun newInstance(): PostsDialogFragment {
             return PostsDialogFragment()
         }
     }
 
-    private val pickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
-        if (uris.isNotEmpty()) {
-            Log.d("PhotoPicker", "Selected URI: ${uris.size}")
-            Glide.with(requireContext()).load(uris[0]).into(imageView)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+    private val pickMultipleMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_ITEMS)) { uris ->
+            if (uris.isNotEmpty()) {
+                gridItemAdapter = GridItemAdapter(requireContext(), uris)
+                gridView.adapter = gridItemAdapter
+
+                btnPost.isEnabled = true
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MediaPlayerService.Companion.isMuted(true)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Light_NoTitleBar_Fullscreen)
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.posts_dialog_fragment, container, false)
 
         val toolbar = view.findViewById<Toolbar>(R.id.dialogToolbar)
-        imageView = view.findViewById(R.id.imageView)
-        val btnPick = view.findViewById<Button>(R.id.buttonPick)
-        val btnCancel = view.findViewById<Button>(R.id.buttonCancel)
-        val btnPost = view.findViewById<Button>(R.id.buttonPost)
+        gridView = view.findViewById(R.id.gridView)
+        btnPost = view.findViewById(R.id.buttonPost)
+        val btnPlus = view.findViewById<FloatingActionButton>(R.id.fabPlus)
 
-        toolbar.setNavigationIcon(R.drawable.ic_plane_24)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
         toolbar.title = "Crear Publicación"
+        toolbar.setNavigationOnClickListener {
+            onDismissListener()
+        }
 
-        btnPick.setOnClickListener(onPickListener)
-        btnCancel.setOnClickListener(onDismissListener)
+        btnPost.isEnabled = false
         btnPost.setOnClickListener(onPostListener)
+        btnPlus.setOnClickListener(onPickListener)
         return view
     }
 
@@ -60,23 +74,31 @@ class PostsDialogFragment : DialogFragment() {
         pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
 
-    private var onDismissListener: View.OnClickListener = View.OnClickListener {
+    private fun onDismissListener() {
+        MediaPlayerService.Companion.isMuted(false)
         MediaPlayerService.Companion.resumePlayerIndexCurrent()
+        gridItemAdapter = GridItemAdapter()
         dismiss()
     }
 
     private var onPostListener: View.OnClickListener = View.OnClickListener {
+        MediaPlayerService.Companion.isMuted(false)
         MediaPlayerService.Companion.resumePlayerIndexCurrent()
+        Toast.makeText(context, gridItemAdapter.count.toString() + " elementos a Publicar", Toast.LENGTH_SHORT).show()
+        gridItemAdapter = GridItemAdapter()
         dismiss()
     }
 
     override fun onStart() {
         super.onStart()
+        MediaPlayerService.Companion.isMuted(true)
         MediaPlayerService.Companion.pauseCurrentPlayingVideo()
     }
 
     override fun onResume() {
         super.onResume()
+        MediaPlayerService.Companion.isMuted(true)
         MediaPlayerService.Companion.pauseCurrentPlayingVideo()
     }
+
 }

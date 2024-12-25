@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="270dp"
+    android:background="@android:color/transparent"
+    android:elevation="3dp"
+    cardview:cardCornerRadius="3dp">
+
+    <ImageView
+        android:id="@+id/imageViewGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:resize_mode="fixed_height" />
+
+    <ImageView
+        android:id="@+id/playIcon"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:contentDescription="TODO"
+        android:elevation="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/play_circle_outline_24"
+        android:visibility="invisible" />
+</androidx.cardview.widget.CardView>
