@@ -7,20 +7,17 @@ public class Profile implements Serializable {
     private String userName;
     private String fullName;
     private String email;
-    private String backdropName;
-    private Integer countContacts;
+    private String backdropImage;
     private boolean auth;
 
-    public Profile() {
-    }
+    public Profile() { }
 
-    public Profile(long userId, String userName, String fullName, String email, String backdropName, Integer countContacts, boolean auth) {
+    public Profile(long userId, String userName, String fullName, String email, String backdropImage, boolean auth) {
         this.userId = userId;
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
-        this.backdropName = backdropName;
-        this.countContacts = countContacts;
+        this.backdropImage = backdropImage;
         this.auth = auth;
     }
 
@@ -56,20 +53,12 @@ public class Profile implements Serializable {
         this.email = email;
     }
 
-    public String getBackdropName() {
-        return backdropName;
+    public String getBackdropImage() {
+        return backdropImage;
     }
 
-    public void setBackdropName(String backdropName) {
-        this.backdropName = backdropName;
-    }
-
-    public Integer getCountContacts() {
-        return countContacts;
-    }
-
-    public void setCountContacts(Integer countContacts) {
-        this.countContacts = countContacts;
+    public void setBackdropImage(String backdropImage) {
+        this.backdropImage = backdropImage;
     }
 
     public boolean isAuth() {

@@ -6,12 +6,17 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.HttpDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.exoplayer.upstream.DefaultAllocator
 import androidx.media3.ui.PlayerView
 import com.brain.multimediaplayer.model.Item
 
@@ -23,22 +28,17 @@ class MediaPlayerService {
     companion object {
         // for hold all players generated
         private var mediaPlayList: MutableList<Item> = mutableListOf()
-        private var trackHashMap: Map<Int, List<Item>> = mutableMapOf()
         private var pairIndexMedia: Pair<Int, Int> = Pair(0, 0)
 
         // for hold current player
         private var currentPlayingVideo: Pair<Int, Pair<Int, ExoPlayer>>? = null
 
-        private lateinit var exoPlayer: ExoPlayer
-        private lateinit var dataSourceFactory: DataSource.Factory
-        private lateinit var mediaSource: MediaSource
-
         fun resumePlayerIndexCurrent() {
             val lastItemPosition = pairIndexMedia.first
             val lastIndex = pairIndexMedia.second
 
-            if (trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.playWhenReady == false) {
-                trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.playWhenReady = true
+            if (mediaPlayList.find { t -> t.itemPosition == lastItemPosition && t.position == lastIndex }?.exoPlayer?.playWhenReady == false) {
+                mediaPlayList.find { t -> t.itemPosition == lastItemPosition && t.position == lastIndex }?.exoPlayer?.playWhenReady = true
             }
         }
 
@@ -47,12 +47,11 @@ class MediaPlayerService {
             val lastItemPosition = pairIndexMedia.first
             val lastIndex = pairIndexMedia.second
 
-            trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.stop()
-            trackHashMap[lastItemPosition]?.find { t -> t.position == lastIndex }?.exoPlayer?.release()
+            mediaPlayList.find { t -> t.itemPosition == lastItemPosition && t.position == lastIndex }?.exoPlayer?.stop()
+            mediaPlayList.find { t -> t.itemPosition == lastItemPosition && t.position == lastIndex }?.exoPlayer?.release()
             pairIndexMedia = Pair(0, 0)
             currentPlayingVideo = null
             mediaPlayList.clear()
-            trackHashMap = mutableMapOf()
         }
 
         fun pauseCurrentPlayingVideo() {
@@ -83,17 +82,17 @@ class MediaPlayerService {
             playerView.setShowPreviousButton(false)
 
             playerView.player = null
-            playerView.player = trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer
+            playerView.player = mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer
         }
 
         // call when scroll to pause any playing player
         fun playIndexWhenScrolledUpOrDownOrSliderAndPausePreviousPlayer(itemPosition: Int, index: Int) {
-            if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == false || trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady == null) {
+            if (mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer?.playWhenReady == false || mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer?.playWhenReady == null) {
                 pauseCurrentPlayingVideo()
 
-                if (trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady != null) {
-                    trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer?.playWhenReady = true
-                    currentPlayingVideo = Pair(itemPosition, Pair(index, trackHashMap[itemPosition]?.find { t -> t.position == index }?.exoPlayer!!))
+                if (mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer?.playWhenReady != null) {
+                    mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer?.playWhenReady = true
+                    currentPlayingVideo = Pair(itemPosition, Pair(index, mediaPlayList.find { t -> t.itemPosition == itemPosition && t.position == index }?.exoPlayer!!))
                 }
             }
             pairIndexMedia = Pair(itemPosition, index)
@@ -101,21 +100,18 @@ class MediaPlayerService {
 
         @SuppressLint("UnsafeOptInUsageError")
         fun initPlayer(context: Context, url: String, position: Int? = null, itemPosition: Int? = null, autoPlay: Boolean = false, playerView: PlayerView?, progressBar: ProgressBar?) {
-            dataSourceFactory = DefaultHttpDataSource.Factory()
-            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
-
-            exoPlayer = ExoPlayer.Builder(context).build()
-            exoPlayer.setMediaSource(mediaSource)
+            val exoPlayer: ExoPlayer = ExoPlayer.Builder(context, renderersFactory(context)).setLoadControl(loadControl()).build()
+            exoPlayer.setMediaSource(buildMediaSource(url))
             exoPlayer.prepare()
             exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
             exoPlayer.playWhenReady = autoPlay
 
             playerView?.visibility = View.VISIBLE
+            progressBar?.visibility = View.VISIBLE
             // When changing track, retain the latest frame instead of showing a black screen
             playerView?.setKeepContentOnPlayerReset(true)
             // We'll show the controller, change to true if want controllers as pause and start
             playerView?.useController = false
-            playerView?.requestFocus()
             // Bind the player to the view.
             playerView?.player = exoPlayer
 
@@ -126,12 +122,10 @@ class MediaPlayerService {
             val item = Item(itemPosition!!, position, exoPlayer)
             mediaPlayList.add(item)
 
-            trackHashMap = mediaPlayList.groupBy { it.itemPosition }
-
             if (itemPosition == 0 && currentPlayingVideo == null) {
-                if (trackHashMap[itemPosition]?.stream()?.findAny()?.get()?.position == 0) {
-                    trackHashMap[itemPosition]?.stream()?.findAny()?.get()?.exoPlayer?.playWhenReady = true
-                    currentPlayingVideo = Pair(itemPosition, Pair(position!!, trackHashMap[itemPosition]?.stream()?.findAny()?.get()!!.exoPlayer))
+                if (mediaPlayList[itemPosition].position == 0) {
+                    mediaPlayList[itemPosition].exoPlayer.playWhenReady = true
+                    currentPlayingVideo = Pair(itemPosition, Pair(position!!, mediaPlayList[itemPosition].exoPlayer))
                 }
             }
 
@@ -144,12 +138,56 @@ class MediaPlayerService {
                             Log.e("STATE_ENDED:: ", "onPlaybackStateChanged: Video ended.")
                             exoPlayer.seekTo(0)
                         }
+
                         Player.STATE_IDLE -> Log.e("STATE_IDLE:: ", "onPlaybackStateChanged: Video idle.")
+
                         Player.STATE_READY -> progressBar?.visibility = View.GONE
                         else -> Log.e("PLAY_STATE:: ", "NOT_FOUND")
                     }
                 }
+
+                override fun onPlayerError(error: PlaybackException) {
+                    super.onPlayerError(error)
+                    val cause = error.cause
+                    if (cause is HttpDataSource.HttpDataSourceException) {
+                        // An HTTP error occurred.
+                        val httpError = cause
+                        Log.e("PLAYER_ERROR:: ", "onPlaybackException: ${httpError.message}")
+
+                        if (httpError is HttpDataSource.InvalidResponseCodeException) {
+                            Log.e("InvalidResponseCodeException():: ", "responseCodeException: ${httpError.responseCode}")
+                        } else {
+                            Log.e("Try_Calling_httpError():: ", "httpError_getCause(): ${httpError.message}")
+                        }
+                    }
+                }
             })
+        }
+
+        @SuppressLint("UnsafeOptInUsageError")
+        private fun buildMediaSource(url: String): MediaSource {
+            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+            val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(url))
+            return mediaSource
+        }
+
+        @SuppressLint("UnsafeOptInUsageError")
+        private fun renderersFactory(context: Context): DefaultRenderersFactory {
+            return DefaultRenderersFactory(context).setEnableDecoderFallback(true).forceEnableMediaCodecAsynchronousQueueing().setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
+        }
+
+        @SuppressLint("UnsafeOptInUsageError")
+        private fun loadControl(): DefaultLoadControl {
+            return DefaultLoadControl.Builder()
+                .setAllocator(DefaultAllocator(true, 16))
+                .setBufferDurationsMs(
+                    2500,                   //Minimum Video you want to buffer while Playing
+                    5000,                   //Max Video you want to buffer during PlayBack
+                    1500,             //Min Video you want to buffer before start Playing it
+                    2000    //Min video You want to buffer when user resumes video
+                )
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .build()
         }
     }
 }

@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +40,21 @@ public class ProgressViewHolder extends RecyclerView.ViewHolder implements View.
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.load_more_retry) {
-            // logic
+            Toast.makeText(v.getContext(), "Reload data 1 !", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.loadmore_errorlayout) {
-            // logic
+            Toast.makeText(v.getContext(), "Reload data 2 !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void bind(boolean retryPageLoad, String errorMsg) {
+        if (retryPageLoad) {
+            errorLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            errorTxt.setText(errorMsg != null ? errorMsg : errorTxt.getContext().getString(R.string.error_msg_unknown));
+        } else {
+            errorLayout.setVisibility(View.VISIBLE);
+            errorTxt.setText(errorMsg != null ? errorMsg : errorTxt.getContext().getString(R.string.posts_msg_not_found));
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 }

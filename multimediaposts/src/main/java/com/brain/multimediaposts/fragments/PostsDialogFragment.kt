@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridView
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +15,8 @@ import androidx.fragment.app.DialogFragment
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaposts.R
 import com.brain.multimediaposts.adapters.GridItemAdapter
+import com.brain.multimediaposts.model.User
+import com.brain.multimediaposts.service.PostsService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PostsDialogFragment : DialogFragment() {
@@ -25,8 +26,10 @@ class PostsDialogFragment : DialogFragment() {
 
     companion object {
         const val MAX_ITEMS = 50
+        private lateinit var user: User
 
-        fun newInstance(): PostsDialogFragment {
+        fun newInstance(user: User): PostsDialogFragment {
+            this.user = user
             return PostsDialogFragment()
         }
     }
@@ -45,7 +48,7 @@ class PostsDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MediaPlayerService.Companion.isMuted(true)
+        MediaPlayerService.isMuted(true)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Light_NoTitleBar_Fullscreen)
     }
 
@@ -75,30 +78,31 @@ class PostsDialogFragment : DialogFragment() {
     }
 
     private fun onDismissListener() {
-        MediaPlayerService.Companion.isMuted(false)
-        MediaPlayerService.Companion.resumePlayerIndexCurrent()
+        MediaPlayerService.isMuted(false)
+        MediaPlayerService.resumePlayerIndexCurrent()
         gridItemAdapter = GridItemAdapter()
         dismiss()
     }
 
     private var onPostListener: View.OnClickListener = View.OnClickListener {
-        MediaPlayerService.Companion.isMuted(false)
-        MediaPlayerService.Companion.resumePlayerIndexCurrent()
-        Toast.makeText(context, gridItemAdapter.count.toString() + " elementos a Publicar", Toast.LENGTH_SHORT).show()
+        MediaPlayerService.isMuted(false)
+        MediaPlayerService.resumePlayerIndexCurrent()
+        PostsService.savePost(requireContext(), gridItemAdapter, user)
+        PostsService.clean()
         gridItemAdapter = GridItemAdapter()
         dismiss()
     }
 
     override fun onStart() {
         super.onStart()
-        MediaPlayerService.Companion.isMuted(true)
-        MediaPlayerService.Companion.pauseCurrentPlayingVideo()
+        MediaPlayerService.isMuted(true)
+        MediaPlayerService.pauseCurrentPlayingVideo()
     }
 
     override fun onResume() {
         super.onResume()
-        MediaPlayerService.Companion.isMuted(true)
-        MediaPlayerService.Companion.pauseCurrentPlayingVideo()
+        MediaPlayerService.isMuted(true)
+        MediaPlayerService.pauseCurrentPlayingVideo()
     }
 
 }

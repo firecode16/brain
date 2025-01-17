@@ -123,6 +123,7 @@ internal class MediaViewerView (
         this.position = position
         this.container = container
         this.mediaPagerAdapter = MediaPagerAdapter(context, objList, itemPosition, url)
+        this.mediaPagerAdapter?.notifyDataSetChanged()
         this.mediaViewPager.adapter = mediaPagerAdapter
         this.mediaViewPager.setCurrentItem(position)
     }

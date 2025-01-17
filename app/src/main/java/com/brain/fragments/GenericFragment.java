@@ -22,17 +22,19 @@ import com.brain.adapters.MultimediaAdapter;
 import com.brain.adapters.UserAdapter;
 import com.brain.api.ApiRest;
 import com.brain.holders.UserViewHolder;
-import com.brain.impl.ApiRestImpl;
 import com.brain.model.MediaApiResponse;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Result;
 import com.brain.multimediaplayer.service.MediaPlayerService;
+import com.brain.multimediaposts.model.User;
+import com.brain.repository.PostHistoryRepository;
 import com.brain.service.CustomScrollStateService;
 import com.brain.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,18 +55,20 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final int PAGE_START = 0;
     private static final int TOTAL_PAGES = 5;
     private int currentPage = PAGE_START;
-    private static final int ITEMS_SIZE = 10; // items by pagination
+    private static final int ITEMS_SIZE = 20; // items by pagination
     private boolean isLoading = false;
     private boolean isLastPage = false;
 
-    private ApiRestImpl apiRestImpl;
+    private PostHistoryRepository postRepository;
+    private User user;
 
     public GenericFragment() { }
 
-    public static GenericFragment newInstance(int sectionNumber) {
+    public static GenericFragment newInstance(int sectionNumber, User user) {
         GenericFragment fragment = new GenericFragment();
         Bundle args = new Bundle();
         args.putInt(SECTION_FRAGMENT_NUMBER, sectionNumber);
+        args.putSerializable("user", user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,10 +82,12 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         btnRetry = rootView.findViewById(R.id.error_btn_retry);
         txtError = rootView.findViewById(R.id.error_txt_cause);
         swipeRefresh = rootView.findViewById(R.id.swipeRefresh);
+        user = (User) requireArguments().getSerializable("user");
         setUpFragmentView(recycler);
         return rootView;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setUpFragmentView(final RecyclerView recyclerView) {
         util = new Util(getContext());
         assert getArguments() != null;
@@ -90,11 +96,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         switch (sectionFragmentNumber) {
             case 1:
                 layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
-                multimediaAdapter = new MultimediaAdapter(getContext());
-                recyclerView.setHasFixedSize(false);
+                multimediaAdapter = new MultimediaAdapter();
+                recyclerView.setAdapter(null);
+                recyclerView.setLayoutManager(null);
+                recyclerView.setHasFixedSize(true);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(multimediaAdapter);
+                recyclerView.setLayoutManager(layoutManager);
 
                 recyclerView.addOnScrollListener(new CustomScrollStateService(layoutManager) {
                     @Override
@@ -109,9 +117,9 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                     @Override
                     protected void loadMoreItems() {
-                        isLoading = true;
+                        /*isLoading = true;
                         currentPage += 1;
-                        loadNextPage();
+                        loadNextPage();*/
                     }
 
                     @Override
@@ -126,7 +134,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 });
 
                 // init service and load data
-                apiRestImpl = ApiRest.getClient(getContext()).create(ApiRestImpl.class);
+                postRepository = ApiRest.getClient(getContext()).create(PostHistoryRepository.class);
                 loadFirstPage();
 
                 btnRetry.setOnClickListener(v -> loadFirstPage());
@@ -140,7 +148,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 progressBar.setVisibility(View.INVISIBLE);
 
                 List<Profile> userItems = new ArrayList<>();
-                userItems.add(new Profile(111101L, "@brain", "Brain StartUp", "startup16@brain.com", null, 916, true));
+                userItems.add(new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), true));
 
                 RecyclerView.Adapter<UserViewHolder> userViewHolderAdapter = new UserAdapter(getActivity(), userItems);
                 recyclerView.setAdapter(userViewHolderAdapter);
@@ -151,14 +159,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @SuppressLint("NotifyDataSetChanged")
     private void doRefresh() {
         progressBar.setVisibility(View.VISIBLE);
-        if (callTopRatedMultimediaApi().isExecuted()) {
-            callTopRatedMultimediaApi().cancel();
+        if (callPostRepository().isExecuted()) {
+            callPostRepository().cancel();
         }
 
         // check if data is stale.
         // execute network request if cache is expired; otherwise do not update data.
         multimediaAdapter.getMediaDetailList().clear();
-        multimediaAdapter.getPlayerViewList().clear();
         multimediaAdapter.notifyDataSetChanged();
         MediaPlayerService.Companion.releasePlayer();
         loadFirstPage();
@@ -168,12 +175,11 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private Result fetchResults(Response<MediaApiResponse> response) {
         MediaApiResponse topRatedMedia = response.body();
-        assert topRatedMedia != null;
-        return topRatedMedia.getData();
+        return Objects.requireNonNull(topRatedMedia).getData();
     }
 
-    private Call<MediaApiResponse> callTopRatedMultimediaApi() {
-        return apiRestImpl.getTopRatedMultimedia(555111L, currentPage, ITEMS_SIZE);
+    private Call<MediaApiResponse> callPostRepository() {
+        return postRepository.getPosts(Objects.requireNonNull(user).getUserId(), currentPage, ITEMS_SIZE);
     }
 
     private void showErrorView(Throwable throwable) {
@@ -196,19 +202,19 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         hideErrorView();
         currentPage = PAGE_START;
 
-        callTopRatedMultimediaApi().enqueue(new Callback<>() {
+        callPostRepository().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MediaApiResponse> call, @NonNull Response<MediaApiResponse> response) {
                 hideErrorView();
 
                 // Got data. Send it to adapter
                 final Result result = fetchResults(response);
-                final Profile profile = new Profile(111101L, result.getUserName(), result.getFullName(), result.getEmail(), result.getBackdropName(), result.getCountContacts(), result.isAuth());
+                final Profile profile = new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), user.getAuth());
                 List<MediaDetail> mediaDetailList = result.getPost();
 
                 progressBar.setVisibility(View.GONE);
-                multimediaAdapter.addProfile(profile);
                 multimediaAdapter.addAll(mediaDetailList);
+                multimediaAdapter.addProfile(profile);
 
                 if (currentPage <= TOTAL_PAGES) {
                     multimediaAdapter.addLoadingFooter();
@@ -226,7 +232,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void loadNextPage() {
-        callTopRatedMultimediaApi().enqueue(new Callback<>() {
+        callPostRepository().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MediaApiResponse> call, @NonNull Response<MediaApiResponse> response) {
                 multimediaAdapter.removeLoadingFooter();

@@ -1,74 +1,44 @@
 package com.brain.adapters;
 
-import static com.brain.util.Util.AUDIO_MP3;
-import static com.brain.util.Util.MP3;
-import static com.brain.util.Util.MP4;
-import static com.brain.util.Util.URL;
-import static com.brain.util.Util.URL_PART;
-import static com.brain.util.Util.VIDEO_MP4;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.OptIn;
-import androidx.annotation.RequiresApi;
-import androidx.media3.common.util.UnstableApi;
-import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brain.R;
 import com.brain.holders.MultimediaViewHolder;
 import com.brain.holders.ProgressViewHolder;
-import com.brain.model.MediaContent;
 import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.multimediaslider.model.ItemPlayerView;
-import com.brain.multimediaslider.model.Multimedia;
-import com.brain.service.OnImageViewClickListenerService;
-import com.brain.service.OnPlayerViewClickListenerService;
-import com.brain.service.OpenDialogSliderClickListenerService;
-import com.brain.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_ITEM = 1;
-    private static final int CURRENT_ITEM = 0;
 
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
     private String errorMsg;
 
-    private final Context context;
-    protected ArrayList<Multimedia> multimediaList;
-    protected List<MediaDetail> mediaDetailList;
-    private final List<ItemPlayerView> playerViewList = new ArrayList<>();
+    List<MediaDetail> mediaDetailList;
+    List<ItemPlayerView> playerViewList = new ArrayList<>();
 
-    protected Profile profile;
-    Util util;
+    Profile profile;
 
-    public MultimediaAdapter(Context context) {
-        this.context = context;
+    public MultimediaAdapter() {
         this.mediaDetailList = new ArrayList<>();
         this.profile = new Profile();
     }
 
     public List<MediaDetail> getMediaDetailList() {
         return mediaDetailList;
-    }
-
-    public List<ItemPlayerView> getPlayerViewList() {
-        return playerViewList;
     }
 
     public Profile getProfile() {
@@ -82,7 +52,6 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        multimediaList = new ArrayList<>();
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
@@ -101,71 +70,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return viewHolder;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @OptIn(markerClass = UnstableApi.class)
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final MediaDetail mediaDetail = getMediaDetailList().get(position);
-
         switch (getItemViewType(position)) {
             case VIEW_TYPE_ITEM:
-                final MultimediaViewHolder multimediaViewHolder = (MultimediaViewHolder) holder;
-                multimediaViewHolder.userName.setText(getProfile().getUserName());
-                multimediaViewHolder.descrProject.setText(mediaDetail.getOverview());
-
-                List<MediaContent> contentList = mediaDetail.getContent();
-
-                if (contentList.size() == 1) {
-                    String contentType = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).getContentType();
-                    String id = Objects.requireNonNull(mediaDetail.getContent().stream().findFirst().orElse(null)).get_id();
-
-                    if (contentType.equals(VIDEO_MP4)) {
-                        int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
-                        multimediaViewHolder.imagePost.setVisibility(View.INVISIBLE);
-                        multimediaViewHolder.postMedia.setOnClickListener(new OnPlayerViewClickListenerService(contentList, itemPosition, CURRENT_ITEM, MP4));
-
-                        ItemPlayerView itemPlayerView = new ItemPlayerView(itemPosition, CURRENT_ITEM, multimediaViewHolder.postMedia);
-                        playerViewList.add(itemPlayerView);
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, CURRENT_ITEM, itemPosition, false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
-                    } else if (contentType.equals(AUDIO_MP3)) {
-                        int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
-                        multimediaViewHolder.imagePost.setVisibility(View.INVISIBLE);
-                        multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
-                        multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
-                        multimediaViewHolder.postMedia.setOnClickListener(new OnPlayerViewClickListenerService(contentList, itemPosition, CURRENT_ITEM, MP3));
-
-                        ItemPlayerView itemPlayerView = new ItemPlayerView(itemPosition, CURRENT_ITEM, multimediaViewHolder.postMedia);
-                        playerViewList.add(itemPlayerView);
-                        MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, CURRENT_ITEM, itemPosition, false, multimediaViewHolder.postMedia, multimediaViewHolder.progressBar);
-                    } else {
-                        util = new Util(context);
-                        multimediaViewHolder.postMedia.setVisibility(View.INVISIBLE);
-                        multimediaViewHolder.imagePost.setVisibility(View.VISIBLE);
-
-                        util.loadImage(URL + URL_PART + id).into(multimediaViewHolder.imagePost);
-                        multimediaViewHolder.imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));
-                    }
-                } else {
-                    multimediaList.clear();
-                    mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
-
-                    int itemPosition = multimediaViewHolder.getBindingAdapterPosition();
-                    multimediaViewHolder.multimediaSlider.setMediaList(multimediaList, itemPosition);
-                    multimediaViewHolder.multimediaSlider.setItemClickListener(new OpenDialogSliderClickListenerService(context, multimediaList));
-                }
+                MediaDetail mediaDetail = getMediaDetailList().get(position);
+                ((MultimediaViewHolder) holder).bind(mediaDetail, getProfile(), playerViewList, position);
                 break;
             case VIEW_TYPE_LOADING:
-                final ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
-
-                if (retryPageLoad) {
-                    progressViewHolder.errorLayout.setVisibility(View.VISIBLE);
-                    progressViewHolder.progressBar.setVisibility(View.GONE);
-                    progressViewHolder.errorTxt.setText(errorMsg != null ? errorMsg : context.getString(R.string.error_msg_unknown));
-                } else {
-                    progressViewHolder.errorLayout.setVisibility(View.GONE);
-                    progressViewHolder.progressBar.setVisibility(View.VISIBLE);
-                }
+                ((ProgressViewHolder) holder).bind(retryPageLoad, errorMsg);
                 break;
         }
     }
@@ -176,11 +89,21 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return (position == mediaDetailList.size() - 1 && isLoadingAdded) ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    public long getItemId(int position) {
+        return mediaDetailList.get(position).getCollectionId();
     }
 
-    private void add(final MediaDetail mediaDetail) {
+    @Override
+    public int getItemViewType(int position) {
+        int dataSize = mediaDetailList.size() - 1;
+        if (position == dataSize && isLoadingAdded) {
+            return VIEW_TYPE_LOADING;
+        } else {
+            return VIEW_TYPE_ITEM;
+        }
+    }
+
+    private void add(MediaDetail mediaDetail) {
         mediaDetailList.add(mediaDetail);
         notifyItemInserted(mediaDetailList.size() - 1);
     }
@@ -202,7 +125,6 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
-
         int position = mediaDetailList.size() - 1;
         MediaDetail post = getItem(position);
 

@@ -28,6 +28,7 @@ import com.brain.fragments.GenericFragment;
 import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.multimediaposts.fragments.AboutDialogFragment;
 import com.brain.multimediaposts.fragments.PostsDialogFragment;
+import com.brain.multimediaposts.model.User;
 import com.brain.service.BroadcastReceiverService;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
@@ -57,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private boolean fabStatus = false;
     private int tabSelected = -1;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +108,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewFragmentPagerAdapter adapter = new ViewFragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        adapter.addFragment(GenericFragment.newInstance(1), getString(R.string.title_section1));
-        adapter.addFragment(GenericFragment.newInstance(2), getString(R.string.title_section2));
+        user = (User) getIntent().getSerializableExtra("user");
+        adapter.addFragment(GenericFragment.newInstance(1, user), getString(R.string.title_section1));
+        adapter.addFragment(GenericFragment.newInstance(2, user), getString(R.string.title_section2));
         viewPager.setAdapter(adapter);
     }
 
@@ -252,7 +255,8 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getFabPostsOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        DialogFragment newFragment = PostsDialogFragment.Companion.newInstance();
+        user = (User) getIntent().getSerializableExtra("user");
+        DialogFragment newFragment = PostsDialogFragment.Companion.newInstance(Objects.requireNonNull(user));
         newFragment.show(fm, "Dialog");
     }
 

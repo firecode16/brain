@@ -2,22 +2,12 @@ package com.brain.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.brain.R;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -33,6 +23,7 @@ public class Util {
     public static final String VIDEO_MP4 = "video/mp4";
     public static final String AUDIO_MP3 = "audio/mp3";
     public static final String IMG_JPG = "image/jpg";
+    public static final String IMG_JPEG = "image/jpeg";
     public static final String IMG_PNG = "image/png";
     public static final String IMG_GIF = "image/gif";
     public static final String MP4 = "MP4";
@@ -72,19 +63,5 @@ public class Util {
     private boolean isNetworkConnected() {
         @SuppressLint("ServiceCast") ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo() != null;
-    }
-
-    public RequestBuilder<Drawable> loadImage(@NonNull String url) {
-        return Glide.with(context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                return false;
-            }
-        });
     }
 }

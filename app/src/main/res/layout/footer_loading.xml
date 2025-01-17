@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     tools:background="#fafafa">
 
     <ProgressBar
@@ -37,7 +37,7 @@
             android:padding="8dp"
             android:src="@drawable/ic_refresh_black_24dp"
             android:tintMode="src_in"
-            app:tint="#AAADC4" />
+            app:tint="#A6A8BC" />
 
         <LinearLayout
             android:layout_width="match_parent"

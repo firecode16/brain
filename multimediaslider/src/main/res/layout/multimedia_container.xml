@@ -22,10 +22,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:resize_mode="fixed_height"
+        android:background="@color/playerView_black_background"
+        app:resize_mode="fit"
         app:show_shuffle_button="false"
         app:show_subtitle_button="false"
-        app:surface_type="texture_view">
+        app:surface_type="surface_view">
 
         <ProgressBar
             android:id="@+id/progressBar"

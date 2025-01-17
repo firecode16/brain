@@ -24,7 +24,7 @@ class MultimediaSlider @JvmOverloads constructor(
 ) : RelativeLayout(context, attrs, defStyleAttr) {
     private var viewPager: ViewPager? = null
     private var sliderDots: LinearLayout? = null
-    private var viewPagerAdapter: ViewPagerAdapter? = null
+    private var pagerAdapter: ViewPagerAdapter? = null
 
     private var dots: Array<ImageView?>? = null
 
@@ -35,13 +35,11 @@ class MultimediaSlider @JvmOverloads constructor(
 
     private var selectedDot = 0
     private var unselectedDot = 0
-    private var errorImage = 0
     private var placeholder = 0
     private var titleBackground = 0
     private var textAlign = "LEFT"
     private var indicatorAlign = "CENTER"
 
-    private lateinit var multimedia: List<Multimedia>
     private var objItemPosition: Int = 0
 
     init {
@@ -71,11 +69,12 @@ class MultimediaSlider @JvmOverloads constructor(
         setupViewPager(viewPager)
     }
 
-    fun setMediaList(mediaList: List<Multimedia>, itemPosition: Int) {
-        viewPagerAdapter = ViewPagerAdapter(context, mediaList, placeholder, titleBackground, textAlign, itemPosition)
+    fun setMediaList(mediaList: MutableList<Multimedia>, itemPosition: Int) {
+        val viewPagerAdapter = ViewPagerAdapter(context, mediaList, titleBackground, textAlign, itemPosition)
+        viewPagerAdapter.notifyDataSetChanged()
         viewPager!!.adapter = viewPagerAdapter
+        this.pagerAdapter = viewPagerAdapter
         getPageLimit(mediaList.size)
-        multimedia = mediaList
         objItemPosition = itemPosition
         setupDots(mediaList.size)
     }
@@ -133,7 +132,7 @@ class MultimediaSlider @JvmOverloads constructor(
     }
 
     fun setItemClickListener(itemClickListener: ItemClickListenerImpl) {
-        viewPagerAdapter?.setItemClickListener(itemClickListener)
+        this.pagerAdapter!!.setItemClickListener(itemClickListener)
     }
 
     fun getCurrentItem(): Int {
@@ -145,12 +144,12 @@ class MultimediaSlider @JvmOverloads constructor(
     }
 
     private fun getSliderPlayerViewList(): MutableList<ItemPlayerView> {
-        return viewPagerAdapter!!.setSliderPlayerViewList()
+        return this.pagerAdapter!!.setSliderPlayerViewList()
     }
 
     private fun getPageLimit(mediaSize: Int) {
         if (mediaSize > viewPager!!.offscreenPageLimit) {
-            viewPager!!.offscreenPageLimit = mediaSize - 1
+            viewPager!!.offscreenPageLimit = mediaSize
         }
     }
 

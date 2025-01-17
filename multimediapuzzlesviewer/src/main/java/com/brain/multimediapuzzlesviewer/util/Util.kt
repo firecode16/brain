@@ -1,4 +1,4 @@
-package com.brain.multimediaslider.util
+package com.brain.multimediapuzzlesviewer.util
 
 class Util {
     companion object {

@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.brain.adapters.MultimediaAdapter
 import com.brain.holders.MultimediaViewHolder
+import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaslider.MultimediaSlider
 import kotlin.math.abs
-
 
 /**
  * @Author FLE
@@ -62,6 +62,8 @@ abstract class CustomScrollStateService(
                 }
             }
             visibleItemCenterPosition(middleItemIndex, currentItem)
+        } else {
+            MediaPlayerService.Companion.pauseCurrentPlayingVideo()
         }
     }
 
@@ -71,11 +73,11 @@ abstract class CustomScrollStateService(
         val totalItemCount: Int = linearLayoutManager.itemCount
         val firstVisibleItemPosition: Int = linearLayoutManager.findFirstVisibleItemPosition()
 
-        if (!isLoading() && !isLastPage()) {
+        /*if (!isLoading() && !isLastPage()) {
             if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                 loadMoreItems()
             }
-        }
+        }*/
     }
 
     abstract fun visibleItemCenterPosition(itemPosition: Int, index: Int)

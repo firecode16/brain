@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:text="Comments Fragment. Sala de Comentarios"
-    android:textColor="#0F9D58"
-    android:textSize="22sp"
-    android:textStyle="bold"
+    android:text="Espacio para los comentarios"
+    android:textColor="#696A69"
+    android:textSize="20sp"
+    android:textStyle="normal"
     android:visibility="visible" />

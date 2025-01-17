@@ -2,18 +2,29 @@ package com.brain.multimediapuzzlesviewer.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediapuzzlesviewer.R
 import com.brain.multimediapuzzlesviewer.model.Poster
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.AUDIO_MP3
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_GIF
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_JPEG
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_JPG
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_PNG
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.VIDEO_MP4
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.gif.GifDrawable
 
 internal class MediaPagerAdapter(
     val context: Context,
@@ -39,12 +50,39 @@ internal class MediaPagerAdapter(
         val playerView = itemView.findViewById<PlayerView>(R.id.playerView)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
 
-        context.let {
-            if (objList[position].contentType.equals("image/jpg")) {
-                Glide.with(it).load(url + objList[position].id).into(imageView)
-            } else if (objList[position].contentType.equals("video/mp4") || objList[position].contentType.equals("audio/mp3")) {
-                MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(itemPosition, position, playerView)
-            } else {}
+        val contentType: String = objList[position].contentType
+
+        when (contentType) {
+            IMG_JPG, IMG_JPEG, IMG_PNG -> {
+                val drawable: Drawable? = imageView.getDrawable()
+                val adjustUrl: String = url + objList[position].id
+
+                if (drawable is GifDrawable) {
+                    imageView.setImageDrawable(null)
+                    Glide.with(imageView.context).asBitmap().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                } else if (drawable == null) {
+                    Glide.with(imageView.context).asBitmap().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                }
+            }
+
+            IMG_GIF -> {
+                val drawable: Drawable? = imageView.getDrawable()
+                val adjustUrl: String = url + objList[position].id
+
+                if (drawable is BitmapDrawable) {
+                    imageView.setImageBitmap(null)
+                    Glide.with(imageView.context).asGif().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                } else if (drawable == null) {
+                    Glide.with(imageView.context).asGif().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                }
+            }
+
+            VIDEO_MP4, AUDIO_MP3 -> {
+                val player: Player? = playerView.player
+                if (player == null) {
+                    MediaPlayerService.prepareIndexesOfMultimediaWhenOpenDialog(itemPosition, position, playerView)
+                }
+            }
         }
 
         viewGroup.addView(itemView)

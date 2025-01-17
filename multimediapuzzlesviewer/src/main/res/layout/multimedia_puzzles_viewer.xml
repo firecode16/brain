@@ -12,7 +12,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:contentDescription="sroll view"
         android:scrollbars="none">
 
@@ -30,13 +30,13 @@
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/mediaViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="720dp"
+                    android:layout_height="750dp"
                     android:contentDescription="slider media view pager" />
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="720dp"
+                    android:layout_height="750dp"
                     android:contentDescription="TODO"
                     android:scaleType="centerCrop"
                     android:visibility="visible" />
@@ -44,14 +44,14 @@
                 <androidx.media3.ui.PlayerView
                     android:id="@+id/playerView"
                     android:layout_width="match_parent"
-                    android:layout_height="720dp"
-                    android:fitsSystemWindows="true"
+                    android:layout_height="750dp"
                     android:keepScreenOn="true"
                     android:visibility="gone"
-                    app:resize_mode="fixed_height"
+                    android:background="@color/playerView_black_background"
+                    app:resize_mode="fit"
                     app:show_shuffle_button="false"
                     app:show_subtitle_button="false"
-                    app:surface_type="texture_view">
+                    app:surface_type="surface_view">
 
                     <ProgressBar
                         android:id="@+id/progressBar"
@@ -102,10 +102,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Financing Fragment. Sala de Financiacion"
-                    android:textColor="#0F9D58"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
+                    android:text="Espacio de financiacion"
+                    android:textColor="#696A69"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
                     android:visibility="gone" />
 
                 <TextView
@@ -113,10 +113,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Financing Fragment. Sala de Participacion o interes en el proyecto"
-                    android:textColor="#0F9D58"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
+                    android:text="Espacio para unirse al proyecto"
+                    android:textColor="#696A69"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
                     android:visibility="gone" />
                 <!-- =====================================================  -->
             </LinearLayout>

@@ -2,6 +2,8 @@ package com.brain.multimediaslider.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import androidx.viewpager.widget.PagerAdapter
 import com.brain.multimediaplayer.service.MediaPlayerService
@@ -18,12 +21,19 @@ import com.brain.multimediaslider.R
 import com.brain.multimediaslider.impl.ItemClickListenerImpl
 import com.brain.multimediaslider.model.ItemPlayerView
 import com.brain.multimediaslider.model.Multimedia
+import com.brain.multimediaslider.util.Util.Companion.AUDIO_MP3
+import com.brain.multimediaslider.util.Util.Companion.IMG_GIF
+import com.brain.multimediaslider.util.Util.Companion.IMG_JPEG
+import com.brain.multimediaslider.util.Util.Companion.IMG_JPG
+import com.brain.multimediaslider.util.Util.Companion.IMG_PNG
+import com.brain.multimediaslider.util.Util.Companion.VIDEO_MP4
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.gif.GifDrawable
 
 class ViewPagerAdapter(
     var context: Context?,
-    private var mediaList: List<Multimedia>,
-    private var placeholder: Int,
+    private var mediaList: MutableList<Multimedia>,
     private var titleBackground: Int,
     private var textAlign: String,
     private var itemPosition: Int
@@ -31,11 +41,6 @@ class ViewPagerAdapter(
     private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     private var itemClickListener: ItemClickListenerImpl? = null
-    private var url: String? = null
-    private lateinit var sliderImageView: ImageView
-    private lateinit var sliderPlayerView: PlayerView
-    private lateinit var progressBar: ProgressBar
-
     private var playerViewList: MutableList<ItemPlayerView> = mutableListOf()
 
     override fun getCount(): Int {
@@ -50,9 +55,9 @@ class ViewPagerAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val itemView = layoutInflater!!.inflate(R.layout.multimedia_container, container, false)
 
-        sliderImageView = itemView.findViewById(R.id.sliderImageView)
-        sliderPlayerView = itemView.findViewById(R.id.sliderPlayerView)
-        progressBar = itemView.findViewById(R.id.progressBar)
+        val sliderImageView: ImageView = itemView.findViewById(R.id.sliderImageView)
+        val sliderPlayerView: PlayerView = itemView.findViewById(R.id.sliderPlayerView)
+        val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
         val footerLinear = itemView.findViewById<LinearLayout>(R.id.footerLinear)
         val textView = itemView.findViewById<TextView>(R.id.textView)
 
@@ -65,15 +70,38 @@ class ViewPagerAdapter(
             footerLinear.visibility = View.INVISIBLE
         }
 
-        context.let {
-            url = mediaList[position].url
-            if (mediaList[position].contentType.equals("image/jpg")) {
-                Glide.with(it!!).load(url).centerCrop().into(sliderImageView)
-            } else if (mediaList[position].contentType.equals("video/mp4") || mediaList[position].contentType.equals("audio/mp3")) {
-                MediaPlayerService.initPlayer(it!!, url!!, position, itemPosition, false, sliderPlayerView, progressBar)
-                val itemPlayerView = ItemPlayerView(itemPosition, position, sliderPlayerView)
-                playerViewList.add(itemPlayerView)
-            } else {}
+        val url: String = mediaList[position].url
+        val contentType: String = mediaList[position].contentType
+
+        when (contentType) {
+            IMG_JPG, IMG_JPEG, IMG_PNG -> {
+                val drawable: Drawable? = sliderImageView.getDrawable()
+                if (drawable is GifDrawable) {
+                    sliderImageView.setImageDrawable(null)
+                    Glide.with(sliderImageView.context).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                } else if (drawable == null) {
+                    Glide.with(sliderImageView.context).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                }
+            }
+
+            IMG_GIF -> {
+                val drawable: Drawable? = sliderImageView.getDrawable()
+                if (drawable is BitmapDrawable) {
+                    sliderImageView.setImageBitmap(null)
+                    Glide.with(sliderImageView.context).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                } else if (drawable == null) {
+                    Glide.with(sliderImageView.context).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                }
+            }
+
+            VIDEO_MP4, AUDIO_MP3 -> {
+                val player: Player? = sliderPlayerView.player
+                if (player == null) {
+                    MediaPlayerService.initPlayer(sliderPlayerView.context, url, position, itemPosition, false, sliderPlayerView, progressBar)
+                    val itemPlayerView = ItemPlayerView(itemPosition, position, sliderPlayerView)
+                    playerViewList.add(itemPlayerView)
+                }
+            }
         }
 
         container.addView(itemView)
