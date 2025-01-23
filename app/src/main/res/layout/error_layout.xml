@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/error_layout"
+        android:id="@+id/infoPost_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -37,6 +37,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
             android:text="Retry"
+            android:visibility="visible"
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </merge>

@@ -2,8 +2,6 @@ package com.brain.multimediaslider.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +26,6 @@ import com.brain.multimediaslider.util.Util.Companion.IMG_JPG
 import com.brain.multimediaslider.util.Util.Companion.IMG_PNG
 import com.brain.multimediaslider.util.Util.Companion.VIDEO_MP4
 import com.brain.multimediaslider.util.Util.Companion.loadImage
-import com.bumptech.glide.load.resource.gif.GifDrawable
 
 class ViewPagerAdapter(
     context: Context,
@@ -74,26 +71,17 @@ class ViewPagerAdapter(
 
         when (contentType) {
             IMG_JPG, IMG_JPEG, IMG_PNG -> {
-                val drawable: Drawable? = sliderImageView.getDrawable()
-                if (drawable is GifDrawable) {
-                    sliderImageView.setImageDrawable(null)
-                    loadImage("BITMAP", url, sliderImageView.context, sliderImageView)
-                } else if (drawable == null) {
-                    loadImage("BITMAP", url, sliderImageView.context, sliderImageView)
-                }
+                sliderImageView.setImageResource(0)
+                loadImage(url, sliderImageView.context, sliderImageView)
             }
 
             IMG_GIF -> {
-                val drawable: Drawable? = sliderImageView.getDrawable()
-                if (drawable is BitmapDrawable) {
-                    sliderImageView.setImageBitmap(null)
-                    loadImage("GIF", url, sliderImageView.context, sliderImageView)
-                } else if (drawable == null) {
-                    loadImage("GIF", url, sliderImageView.context, sliderImageView)
-                }
+                sliderImageView.setImageResource(0)
+                loadImage(url, sliderImageView.context, sliderImageView)
             }
 
             VIDEO_MP4, AUDIO_MP3 -> {
+                sliderImageView.setImageResource(0)
                 val player: Player? = sliderPlayerView.player
                 if (player == null) {
                     MediaPlayerService.initPlayer(sliderPlayerView.context, url, position, itemPosition, false, sliderPlayerView, progressBar)

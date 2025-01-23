@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.media3.ui.PlayerView;
@@ -47,6 +48,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
 
     ImageView imagePost;
     public MultimediaSlider multimediaSlider;
+    ImageView share;
 
     TextView userName;
     TextView descrProject;
@@ -63,9 +65,16 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
 
         imagePost = itemView.findViewById(R.id.imagePost);
         multimediaSlider = itemView.findViewById(R.id.multimediaSlider);
+        share = itemView.findViewById(R.id.share);
 
         userName = itemView.findViewById(R.id.userName);
         descrProject = itemView.findViewById(R.id.descrProject);
+
+        share.setOnClickListener(this::shareClick);
+    }
+
+    private void shareClick(View v) {
+        Toast.makeText(v.getContext(), "click share", Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint({"UnsafeOptInUsageError", "UseCompatLoadingForDrawables"})
@@ -139,7 +148,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
             multimediaList = new ArrayList<>();
             mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
             int itemPosition = getBindingAdapterPosition();
-            imagePost.setImageDrawable(null);
+            imagePost.setImageResource(0);
             multimediaSlider.setVisibility(View.VISIBLE);
 
             multimediaSlider.setMediaList(multimediaList, itemPosition);

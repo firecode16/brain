@@ -25,24 +25,24 @@ class Util {
         const val IMG_GIF = "image/gif"
 
         @SuppressLint("CheckResult")
-        fun loadImage(type: String, url: String, ctx: Context, imageView: ImageView) {
-            val drawable = Glide.with(ctx)
+        fun loadImage(url: String, ctx: Context, imageView: ImageView) {
+            Glide.with(ctx)
+                .load(url)
+                .skipMemoryCache(true)
+                .placeholder(circularProgress(ctx))
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
+                        return false
+                    }
 
-            if (type == "BITMAP") {
-                drawable.asBitmap()
-            } else if (type == "GIF") {
-                drawable.asGif()
-            }
-
-            drawable.load(url).placeholder(circularProgress(ctx)).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
-                    return false
-                }
-
-                override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>?, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-                    return false
-                }
-            }).transition(DrawableTransitionOptions.withCrossFade(500)).into(imageView)
+                    override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>?, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+                        return false
+                    }
+                })
+                .transition(DrawableTransitionOptions.withCrossFade(500))
+                .into(imageView)
         }
 
         private fun circularProgress(ctx: Context): Drawable {

@@ -46,7 +46,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private MultimediaAdapter multimediaAdapter;
     private Util util;
     private ProgressBar progressBar;
-    private LinearLayout errorLayout;
+    private LinearLayout infoPost;
     private Button btnRetry;
     private TextView txtError;
 
@@ -77,7 +77,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         View rootView = inflater.inflate(R.layout.recycler_view, container, false);
         recycler = rootView.findViewById(R.id.recyclerView);
         progressBar = rootView.findViewById(R.id.beginProgress);
-        errorLayout = rootView.findViewById(R.id.error_layout);
+        infoPost = rootView.findViewById(R.id.infoPost_layout);
         btnRetry = rootView.findViewById(R.id.error_btn_retry);
         txtError = rootView.findViewById(R.id.error_txt_cause);
         swipeRefresh = rootView.findViewById(R.id.swipeRefresh);
@@ -179,16 +179,16 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void showErrorView(Throwable throwable) {
-        if (errorLayout.getVisibility() == View.GONE) {
-            errorLayout.setVisibility(View.VISIBLE);
+        if (infoPost.getVisibility() == View.GONE) {
+            infoPost.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             txtError.setText(util.fetchErrorMessage(throwable));
         }
     }
 
     private void hideErrorView() {
-        if (errorLayout.getVisibility() == View.VISIBLE) {
-            errorLayout.setVisibility(View.GONE);
+        if (infoPost.getVisibility() == View.VISIBLE) {
+            infoPost.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
     }
@@ -221,6 +221,11 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         multimediaAdapter.addLoadingFooter();
                     } else {
                         isLastPage = true;
+                    }
+
+                    if (mediaDetailList.isEmpty()) {
+                        infoPost.setVisibility(View.VISIBLE);
+                        btnRetry.setVisibility(View.GONE);
                     }
                 }
                 progressBar.setVisibility(View.GONE);

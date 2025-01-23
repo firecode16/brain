@@ -86,17 +86,22 @@ public class Util {
             drawable.asGif();
         }
 
-        drawable.load(url).placeholder(circularProgress(ctx)).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
-            @Override
-            public boolean onLoadFailed(GlideException e, Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
+        drawable.load(url)
+                .skipMemoryCache(true)
+                .placeholder(circularProgress(ctx))
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .listener(new RequestListener<>() {
+                    @Override
+                    public boolean onLoadFailed(GlideException e, Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-            @Override
-            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                return false;
-            }
-        }).into(imageView);
+                    @Override
+                    public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                }).into(imageView);
     }
 
     private static Drawable circularProgress(Context ctx) {

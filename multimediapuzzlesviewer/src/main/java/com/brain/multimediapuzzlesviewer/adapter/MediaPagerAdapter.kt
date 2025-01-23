@@ -2,8 +2,6 @@ package com.brain.multimediapuzzlesviewer.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +21,6 @@ import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_JPG
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_PNG
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.VIDEO_MP4
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.loadImage
-import com.bumptech.glide.load.resource.gif.GifDrawable
 
 internal class MediaPagerAdapter(
     val context: Context,
@@ -53,27 +50,13 @@ internal class MediaPagerAdapter(
 
         when (contentType) {
             IMG_JPG, IMG_JPEG, IMG_PNG -> {
-                val drawable: Drawable? = imageView.getDrawable()
                 val adjustUrl: String = url + objList[position].id
-
-                if (drawable is GifDrawable) {
-                    imageView.setImageDrawable(null)
-                    loadImage("BITMAP", adjustUrl, imageView.context, imageView)
-                } else if (drawable == null) {
-                    loadImage("BITMAP", adjustUrl, imageView.context, imageView)
-                }
+                loadImage(adjustUrl, imageView.context, imageView)
             }
 
             IMG_GIF -> {
-                val drawable: Drawable? = imageView.getDrawable()
                 val adjustUrl: String = url + objList[position].id
-
-                if (drawable is BitmapDrawable) {
-                    imageView.setImageBitmap(null)
-                    loadImage("GIF", adjustUrl, imageView.context, imageView)
-                } else if (drawable == null) {
-                    loadImage("GIF", adjustUrl, imageView.context, imageView)
-                }
+                loadImage(adjustUrl, imageView.context, imageView)
             }
 
             VIDEO_MP4, AUDIO_MP3 -> {
