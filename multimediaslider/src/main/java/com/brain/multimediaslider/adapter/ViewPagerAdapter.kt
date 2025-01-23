@@ -27,18 +27,17 @@ import com.brain.multimediaslider.util.Util.Companion.IMG_JPEG
 import com.brain.multimediaslider.util.Util.Companion.IMG_JPG
 import com.brain.multimediaslider.util.Util.Companion.IMG_PNG
 import com.brain.multimediaslider.util.Util.Companion.VIDEO_MP4
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.brain.multimediaslider.util.Util.Companion.loadImage
 import com.bumptech.glide.load.resource.gif.GifDrawable
 
 class ViewPagerAdapter(
-    var context: Context?,
+    context: Context,
     private var mediaList: MutableList<Multimedia>,
     private var titleBackground: Int,
     private var textAlign: String,
     private var itemPosition: Int
 ) : PagerAdapter() {
-    private var layoutInflater: LayoutInflater? = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+    private var layoutInflater: LayoutInflater? = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     private var itemClickListener: ItemClickListenerImpl? = null
     private var playerViewList: MutableList<ItemPlayerView> = mutableListOf()
@@ -78,9 +77,9 @@ class ViewPagerAdapter(
                 val drawable: Drawable? = sliderImageView.getDrawable()
                 if (drawable is GifDrawable) {
                     sliderImageView.setImageDrawable(null)
-                    Glide.with(sliderImageView.context).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                    loadImage("BITMAP", url, sliderImageView.context, sliderImageView)
                 } else if (drawable == null) {
-                    Glide.with(sliderImageView.context).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                    loadImage("BITMAP", url, sliderImageView.context, sliderImageView)
                 }
             }
 
@@ -88,9 +87,9 @@ class ViewPagerAdapter(
                 val drawable: Drawable? = sliderImageView.getDrawable()
                 if (drawable is BitmapDrawable) {
                     sliderImageView.setImageBitmap(null)
-                    Glide.with(sliderImageView.context).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                    loadImage("GIF", url, sliderImageView.context, sliderImageView)
                 } else if (drawable == null) {
-                    Glide.with(sliderImageView.context).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(sliderImageView)
+                    loadImage("GIF", url, sliderImageView.context, sliderImageView)
                 }
             }
 

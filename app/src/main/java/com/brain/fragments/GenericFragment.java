@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,15 +40,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    protected RecyclerView recycler;
-    protected SwipeRefreshLayout swipeRefresh;
-    protected LinearLayoutManager layoutManager;
-    protected MultimediaAdapter multimediaAdapter;
-    protected Util util;
-    protected ProgressBar progressBar;
-    protected LinearLayout errorLayout;
-    protected Button btnRetry;
-    protected TextView txtError;
+    private RecyclerView recycler;
+    private SwipeRefreshLayout swipeRefresh;
+    private LinearLayoutManager layoutManager;
+    private MultimediaAdapter multimediaAdapter;
+    private Util util;
+    private ProgressBar progressBar;
+    private LinearLayout errorLayout;
+    private Button btnRetry;
+    private TextView txtError;
 
     private static final String SECTION_FRAGMENT_NUMBER = "section_fragment_number";
     private static final int PAGE_START = 0;
@@ -88,7 +87,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void setUpFragmentView(final RecyclerView recyclerView) {
+    private void setUpFragmentView(RecyclerView recyclerView) {
         util = new Util(getContext());
         assert getArguments() != null;
         int sectionFragmentNumber = getArguments().getInt(SECTION_FRAGMENT_NUMBER);
@@ -100,7 +99,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 recyclerView.setAdapter(null);
                 recyclerView.setLayoutManager(null);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setItemAnimator(null);
                 recyclerView.setAdapter(multimediaAdapter);
                 recyclerView.setLayoutManager(layoutManager);
 
@@ -117,9 +116,9 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                     @Override
                     protected void loadMoreItems() {
-                        /*isLoading = true;
+                        isLoading = true;
                         currentPage += 1;
-                        loadNextPage();*/
+                        loadNextPage();
                     }
 
                     @Override
@@ -138,7 +137,12 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 loadFirstPage();
 
                 btnRetry.setOnClickListener(v -> loadFirstPage());
-                swipeRefresh.setOnRefreshListener(this::doRefresh);
+                swipeRefresh.setOnRefreshListener(() -> {
+                    multimediaAdapter = new MultimediaAdapter();
+                    recyclerView.setAdapter(null);
+                    recyclerView.setAdapter(multimediaAdapter);
+                    doRefresh();
+                });
                 break;
             case 2:
                 layoutManager = new LinearLayoutManager(getActivity());
@@ -156,21 +160,13 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void doRefresh() {
+        swipeRefresh.setRefreshing(false);
         progressBar.setVisibility(View.VISIBLE);
-        if (callPostRepository().isExecuted()) {
-            callPostRepository().cancel();
-        }
 
-        // check if data is stale.
-        // execute network request if cache is expired; otherwise do not update data.
-        multimediaAdapter.getMediaDetailList().clear();
-        multimediaAdapter.notifyDataSetChanged();
         MediaPlayerService.Companion.releasePlayer();
         loadFirstPage();
         isLastPage = false;
-        swipeRefresh.setRefreshing(false);
     }
 
     private Result fetchResults(Response<MediaApiResponse> response) {
@@ -197,6 +193,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadFirstPage() {
         // To ensure list is visible when retry button in error view is clicked
         hideErrorView();
@@ -208,19 +205,25 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 hideErrorView();
 
                 // Got data. Send it to adapter
-                final Result result = fetchResults(response);
-                final Profile profile = new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), user.getAuth());
-                List<MediaDetail> mediaDetailList = result.getPost();
+                if (response.isSuccessful() && response.body() != null) {
+                    // Got data. Send it to adapter
+                    Result result = fetchResults(response);
+                    Profile profile = new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), user.getAuth());
 
-                progressBar.setVisibility(View.GONE);
-                multimediaAdapter.addAll(mediaDetailList);
-                multimediaAdapter.addProfile(profile);
+                    List<MediaDetail> mediaDetailList = result.getPost();
+                    multimediaAdapter.getMediaDetailList().clear();
+                    multimediaAdapter.getPlayerList().clear();
+                    multimediaAdapter.addAll(mediaDetailList);
+                    multimediaAdapter.addProfile(profile);
+                    multimediaAdapter.notifyDataSetChanged();
 
-                if (currentPage <= TOTAL_PAGES) {
-                    multimediaAdapter.addLoadingFooter();
-                } else {
-                    isLastPage = true;
+                    if (currentPage <= TOTAL_PAGES) {
+                        multimediaAdapter.addLoadingFooter();
+                    } else {
+                        isLastPage = true;
+                    }
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

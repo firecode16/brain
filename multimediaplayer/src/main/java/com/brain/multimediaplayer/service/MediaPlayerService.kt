@@ -113,6 +113,7 @@ class MediaPlayerService {
             // We'll show the controller, change to true if want controllers as pause and start
             playerView?.useController = false
             // Bind the player to the view.
+            playerView?.player = null
             playerView?.player = exoPlayer
 
             // add player with its index to List

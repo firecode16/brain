@@ -28,12 +28,15 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private String errorMsg;
 
     List<MediaDetail> mediaDetailList;
-    List<ItemPlayerView> playerViewList = new ArrayList<>();
+    List<ItemPlayerView> playerViewList;
 
     Profile profile;
 
+    private MultimediaViewHolder multimediaHolder;
+
     public MultimediaAdapter() {
         this.mediaDetailList = new ArrayList<>();
+        this.playerViewList = new ArrayList<>();
         this.profile = new Profile();
     }
 
@@ -49,23 +52,25 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.profile = profile;
     }
 
+    public List<ItemPlayerView> getPlayerList() {
+        return playerViewList;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder viewHolder;
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        View view;
+        RecyclerView.ViewHolder viewHolder = null;
 
-        viewHolder = switch (viewType) {
-            case VIEW_TYPE_ITEM -> {
-                View viewItem = inflater.inflate(R.layout.container_cards, viewGroup, false);
-                yield new MultimediaViewHolder(viewItem);
-            }
-            case VIEW_TYPE_LOADING -> {
-                View viewLoading = inflater.inflate(R.layout.footer_loading, viewGroup, false);
-                yield new ProgressViewHolder(viewLoading);
-            }
-            default -> null;
-        };
+        if (viewType == VIEW_TYPE_ITEM) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.container_cards, viewGroup, false);
+            multimediaHolder = new MultimediaViewHolder(view);
+            viewHolder = multimediaHolder;
+        } else if (viewType == VIEW_TYPE_LOADING) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.footer_loading, viewGroup, false);
+            viewHolder = new ProgressViewHolder(view);
+        }
+
         assert viewHolder != null;
         return viewHolder;
     }
@@ -75,7 +80,8 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (getItemViewType(position)) {
             case VIEW_TYPE_ITEM:
                 MediaDetail mediaDetail = getMediaDetailList().get(position);
-                ((MultimediaViewHolder) holder).bind(mediaDetail, getProfile(), playerViewList, position);
+                multimediaHolder = (MultimediaViewHolder) holder;
+                multimediaHolder.bind(mediaDetail, getProfile(), playerViewList, position);
                 break;
             case VIEW_TYPE_LOADING:
                 ((ProgressViewHolder) holder).bind(retryPageLoad, errorMsg);
@@ -90,7 +96,11 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public long getItemId(int position) {
-        return mediaDetailList.get(position).getCollectionId();
+        Long collectionId = mediaDetailList.get(position).getCollectionId();
+        if (collectionId != null) {
+            return collectionId;
+        }
+        return 0L;
     }
 
     @Override
@@ -105,7 +115,8 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void add(MediaDetail mediaDetail) {
         mediaDetailList.add(mediaDetail);
-        notifyItemInserted(mediaDetailList.size() - 1);
+        int position = mediaDetailList.size() - 1;
+        notifyItemInserted(position);
     }
 
     public void addAll(List<MediaDetail> mediaDetail) {

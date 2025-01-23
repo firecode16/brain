@@ -52,12 +52,17 @@
                 style="@style/Base.TextAppearance.AppCompat.Body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textSize="14sp"
                 tools:text="What went wrong" />
 
             <TextView
                 style="@style/Base.TextAppearance.AppCompat.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="normal"
                 android:text="Tap to reload" />
         </LinearLayout>
     </LinearLayout>

@@ -10,6 +10,7 @@ import static com.brain.util.Util.MP4;
 import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
+import static com.brain.util.Util.loadImage;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,8 +35,6 @@ import com.brain.multimediaslider.model.Multimedia;
 import com.brain.service.OnImageViewClickListenerService;
 import com.brain.service.OnPlayerViewClickListenerService;
 import com.brain.service.OpenDialogSliderClickListenerService;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 
 import java.util.ArrayList;
@@ -117,9 +116,9 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
 
                     if (drawable instanceof GifDrawable) {
                         imagePost.setImageDrawable(null);
-                        Glide.with(imagePost.getContext()).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(imagePost);
+                        loadImage("BITMAP", url, imagePost.getContext(), imagePost);
                     } else if (drawable == null) {
-                        Glide.with(imagePost.getContext()).asBitmap().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(imagePost);
+                        loadImage("BITMAP", url, imagePost.getContext(), imagePost);
                     }
                     imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));
                 }
@@ -129,9 +128,9 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
                     Drawable drawable = imagePost.getDrawable();
                     if (drawable instanceof BitmapDrawable) {
                         imagePost.setImageBitmap(null);
-                        Glide.with(imagePost.getContext()).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(imagePost);
+                        loadImage("GIF", url, imagePost.getContext(), imagePost);
                     } else if (drawable == null) {
-                        Glide.with(imagePost.getContext()).asGif().load(url).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(imagePost);
+                        loadImage("GIF", url, imagePost.getContext(), imagePost);
                     }
                     imagePost.setOnClickListener(new OnImageViewClickListenerService(contentList, position));
                 }
@@ -140,6 +139,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
             multimediaList = new ArrayList<>();
             mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
             int itemPosition = getBindingAdapterPosition();
+            imagePost.setImageDrawable(null);
             multimediaSlider.setVisibility(View.VISIBLE);
 
             multimediaSlider.setMediaList(multimediaList, itemPosition);

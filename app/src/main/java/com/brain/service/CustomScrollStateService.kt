@@ -73,11 +73,11 @@ abstract class CustomScrollStateService(
         val totalItemCount: Int = linearLayoutManager.itemCount
         val firstVisibleItemPosition: Int = linearLayoutManager.findFirstVisibleItemPosition()
 
-        /*if (!isLoading() && !isLastPage()) {
+        if (!isLoading() && !isLastPage()) {
             if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                 loadMoreItems()
             }
-        }*/
+        }
     }
 
     abstract fun visibleItemCenterPosition(itemPosition: Int, index: Int)

@@ -22,8 +22,7 @@ import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_JPEG
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_JPG
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.IMG_PNG
 import com.brain.multimediapuzzlesviewer.util.Util.Companion.VIDEO_MP4
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.brain.multimediapuzzlesviewer.util.Util.Companion.loadImage
 import com.bumptech.glide.load.resource.gif.GifDrawable
 
 internal class MediaPagerAdapter(
@@ -59,9 +58,9 @@ internal class MediaPagerAdapter(
 
                 if (drawable is GifDrawable) {
                     imageView.setImageDrawable(null)
-                    Glide.with(imageView.context).asBitmap().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                    loadImage("BITMAP", adjustUrl, imageView.context, imageView)
                 } else if (drawable == null) {
-                    Glide.with(imageView.context).asBitmap().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                    loadImage("BITMAP", adjustUrl, imageView.context, imageView)
                 }
             }
 
@@ -71,9 +70,9 @@ internal class MediaPagerAdapter(
 
                 if (drawable is BitmapDrawable) {
                     imageView.setImageBitmap(null)
-                    Glide.with(imageView.context).asGif().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                    loadImage("GIF", adjustUrl, imageView.context, imageView)
                 } else if (drawable == null) {
-                    Glide.with(imageView.context).asGif().load(adjustUrl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView)
+                    loadImage("GIF", adjustUrl, imageView.context, imageView)
                 }
             }
 

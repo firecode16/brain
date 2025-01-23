@@ -24,7 +24,7 @@ class MultimediaSlider @JvmOverloads constructor(
 ) : RelativeLayout(context, attrs, defStyleAttr) {
     private var viewPager: ViewPager? = null
     private var sliderDots: LinearLayout? = null
-    private var pagerAdapter: ViewPagerAdapter? = null
+    private var viewPagerAdapter: ViewPagerAdapter? = null
 
     private var dots: Array<ImageView?>? = null
 
@@ -35,7 +35,6 @@ class MultimediaSlider @JvmOverloads constructor(
 
     private var selectedDot = 0
     private var unselectedDot = 0
-    private var placeholder = 0
     private var titleBackground = 0
     private var textAlign = "LEFT"
     private var indicatorAlign = "CENTER"
@@ -53,7 +52,6 @@ class MultimediaSlider @JvmOverloads constructor(
         period = typedArray.getInt(R.styleable.MultimediaSlider_iss_period, 1000).toLong()
         delay = typedArray.getInt(R.styleable.MultimediaSlider_iss_delay, 1000).toLong()
         autoCycle = typedArray.getBoolean(R.styleable.MultimediaSlider_iss_auto_cycle, false)
-        placeholder = typedArray.getResourceId(R.styleable.MultimediaSlider_iss_placeholder, R.drawable.default_placeholder)
         selectedDot = typedArray.getResourceId(R.styleable.MultimediaSlider_iss_selected_dot, R.drawable.selected_dot)
         unselectedDot = typedArray.getResourceId(R.styleable.MultimediaSlider_iss_unselected_dot, R.drawable.unselected_dot)
         titleBackground = typedArray.getResourceId(R.styleable.MultimediaSlider_iss_title_background, R.drawable.gradient)
@@ -65,17 +63,17 @@ class MultimediaSlider @JvmOverloads constructor(
         if (typedArray.getString(R.styleable.MultimediaSlider_iss_indicator_align) != null) {
             indicatorAlign = typedArray.getString(R.styleable.MultimediaSlider_iss_indicator_align)!!
         }
-
-        setupViewPager(viewPager)
     }
 
     fun setMediaList(mediaList: MutableList<Multimedia>, itemPosition: Int) {
-        val viewPagerAdapter = ViewPagerAdapter(context, mediaList, titleBackground, textAlign, itemPosition)
-        viewPagerAdapter.notifyDataSetChanged()
-        viewPager!!.adapter = viewPagerAdapter
-        this.pagerAdapter = viewPagerAdapter
-        getPageLimit(mediaList.size)
+        viewPagerAdapter = ViewPagerAdapter(context, mediaList, titleBackground, textAlign, itemPosition)
+        setAdapter(mediaList)
         objItemPosition = itemPosition
+    }
+
+    private fun setAdapter(mediaList: MutableList<Multimedia>) {
+        viewPager!!.adapter = viewPagerAdapter
+        getPageLimit(mediaList.size)
         setupDots(mediaList.size)
     }
 
@@ -95,10 +93,11 @@ class MultimediaSlider @JvmOverloads constructor(
         }
 
         dots!![0]!!.setImageDrawable(ContextCompat.getDrawable(context, selectedDot))
+        setupViewPager()
     }
 
-    private fun setupViewPager(viewPager: ViewPager?) {
-        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+    private fun setupViewPager() {
+        viewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
@@ -132,7 +131,7 @@ class MultimediaSlider @JvmOverloads constructor(
     }
 
     fun setItemClickListener(itemClickListener: ItemClickListenerImpl) {
-        this.pagerAdapter!!.setItemClickListener(itemClickListener)
+        this.viewPagerAdapter!!.setItemClickListener(itemClickListener)
     }
 
     fun getCurrentItem(): Int {
@@ -144,7 +143,7 @@ class MultimediaSlider @JvmOverloads constructor(
     }
 
     private fun getSliderPlayerViewList(): MutableList<ItemPlayerView> {
-        return this.pagerAdapter!!.setSliderPlayerViewList()
+        return this.viewPagerAdapter!!.setSliderPlayerViewList()
     }
 
     private fun getPageLimit(mediaSize: Int) {

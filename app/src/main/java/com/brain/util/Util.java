@@ -2,12 +2,23 @@ package com.brain.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.brain.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -63,5 +74,37 @@ public class Util {
     private boolean isNetworkConnected() {
         @SuppressLint("ServiceCast") ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo() != null;
+    }
+
+    @SuppressLint("CheckResult")
+    public static void loadImage(String type, String url, Context ctx, ImageView imageView) {
+        var drawable = Glide.with(ctx);
+
+        if (type.equals("BITMAP")) {
+            drawable.asBitmap();
+        } else if (type.equals("GIF")) {
+            drawable.asGif();
+        }
+
+        drawable.load(url).placeholder(circularProgress(ctx)).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).listener(new RequestListener<>() {
+            @Override
+            public boolean onLoadFailed(GlideException e, Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                return false;
+            }
+        }).into(imageView);
+    }
+
+    private static Drawable circularProgress(Context ctx) {
+        var circularProgress = new CircularProgressDrawable(ctx);
+        circularProgress.setStrokeWidth(6f);
+        circularProgress.setCenterRadius(50f);
+        circularProgress.setColorSchemeColors(Color.GRAY);
+        circularProgress.start();
+        return circularProgress;
     }
 }
