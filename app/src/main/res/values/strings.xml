@@ -18,4 +18,6 @@
     <string name="error_msg_unknown">An unexpected error occurred</string>
     <string name="error_msg_no_internet">Not connected to internet</string>
     <string name="error_msg_timeout">The server took too long to respond</string>
+    <!-- Profile -->
+    <string name="title_activity_profile">Profile</string>
 </resources>

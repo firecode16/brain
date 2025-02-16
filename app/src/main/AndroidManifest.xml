@@ -44,5 +44,9 @@
         <activity
             android:name=".activities.RegisterActivity"
             tools:ignore="MissingClass" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            tools:ignore="MissingClass" />
+
     </application>
 </manifest>

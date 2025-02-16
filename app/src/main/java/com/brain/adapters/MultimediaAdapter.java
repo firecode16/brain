@@ -124,7 +124,7 @@ public class MultimediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         multimediaViewHolder.volumeControl.setVisibility(View.VISIBLE);
                         multimediaViewHolder.postMedia.setVisibility(View.VISIBLE);
                         multimediaViewHolder.postMedia.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_FIT);
-                        multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_96));
+                        multimediaViewHolder.postMedia.setDefaultArtwork(context.getDrawable(R.drawable.ic_audio_372));
                         int itemIndex = multimediaViewHolder.getBindingAdapterPosition();
 
                         MediaPlayerService.Companion.initPlayer(context, URL + URL_PART + id, itemIndex, false, multimediaViewHolder);

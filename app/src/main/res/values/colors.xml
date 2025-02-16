@@ -20,4 +20,11 @@
     <color name="selectedTabIndicatorColor">#00BCD4</color>
     <!-- FAB color -->
     <color name="colorFAB">#38C376</color>
+
+    <!--colors for profile-->
+    <color name="profilePrimaryDark">#FF3B30</color>
+    <color name="profileAccentColor">#F7F7F7</color>
+    <color name="profileBackground">#FF3B30</color>
+    <color name="blackTextColor">#000</color>
+    <color name="profileEditTextColor">#707070</color>
 </resources>

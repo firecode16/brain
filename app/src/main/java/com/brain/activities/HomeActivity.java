@@ -1,12 +1,14 @@
 package com.brain.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -49,6 +51,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private boolean fabStatus = false;
 
+    private final boolean response = true;
+    private Intent navigation = null;
+    private ImageView btnProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,17 @@ public class HomeActivity extends AppCompatActivity {
         fabTextPosting = findViewById(R.id.fabTextPosting);
         fabUploadVideoClip = findViewById(R.id.fabUploadVideoClip);
         imageView = findViewById(R.id.imagePost);
+        btnProfile = findViewById(R.id.btnProfile);
+
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (response) {
+                    navigation = new Intent(HomeActivity.this, ProfileActivity.class);
+                    HomeActivity.this.startActivity(navigation);
+                }
+            }
+        });
 
         // add the toolbar
         setToolbar();
@@ -97,8 +114,6 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
-        ImageView actionAvatar = findViewById(R.id.actionAvatar);
-        actionAvatar.setOnClickListener(v -> Toast.makeText(getApplication(), "Action Avatar.", Toast.LENGTH_SHORT).show());
     }
 
     @Override
