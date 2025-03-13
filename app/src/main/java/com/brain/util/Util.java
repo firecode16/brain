@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.auth0.android.jwt.JWT;
 import com.brain.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -20,15 +21,25 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * @author firecode16
+ *
+ */
 public class Util {
 
     private final Context context;
 
-    public static final String URL = "http://192.168.1.121:8081/api/";
+    public static final String BASE_URL = "http://192.168.1.5:8081/api/";
+    public static final String BASE_AUTH_URL = "http://192.168.1.5:8082/api/";
     public static final String URL_PART = "multimedia/";
 
     public static final String VIDEO_MP4 = "video/mp4";
@@ -39,6 +50,8 @@ public class Util {
     public static final String IMG_GIF = "image/gif";
     public static final String MP4 = "MP4";
     public static final String MP3 = "MP3";
+
+    private static final AtomicLong atomic = new AtomicLong(0);
 
     public static int[] getTabIcon = {
             R.drawable.ic_home_rocket_50,
@@ -111,5 +124,27 @@ public class Util {
         circularProgress.setColorSchemeColors(Color.GRAY);
         circularProgress.start();
         return circularProgress;
+    }
+
+    public static Boolean isTokenExpired(String token) {
+        // decode the JWT token to verify its validity
+        JWT jwt = new JWT(token);
+        Date expiresAt = jwt.getExpiresAt(); // date expiration token
+        return expiresAt != null && expiresAt.after(new Date());
+    }
+
+    @SuppressLint("NewApi")
+    public static Long generateUID() {
+        long timestamp = Instant.now().toEpochMilli();
+        long increment = atomic.incrementAndGet();
+        String result = timestamp + "".trim() + increment;
+        return Long.valueOf(result);
+    }
+
+    @SuppressLint("NewApi")
+    public static String getCurrentDateTime() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return currentDateTime.format(dateTimeFormatter);
     }
 }

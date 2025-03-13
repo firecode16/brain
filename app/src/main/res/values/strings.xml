@@ -1,7 +1,10 @@
 <resources>
+    <string name="title_login">Login</string>
     <string name="app_name">brain</string>
-    <string name="register">REGISTER</string>
+    <string name="register">Registrar</string>
+    <string name="ok">Aceptar</string>
     <string name="login_email_hint">Email</string>
+    <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="signup_login_hint">Already have an account? Sign In</string>
     <string name="login_signup_hint">Don\'t have an account? Sign Up</string>

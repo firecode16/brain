@@ -1,6 +1,6 @@
 package com.brain.api;
 
-import static com.brain.util.Util.URL;
+import static com.brain.util.Util.BASE_URL;
 
 import android.content.Context;
 
@@ -42,7 +42,7 @@ public class ApiRest {
 
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {
-            retrofit = new Retrofit.Builder().client(buildClient(context)).addConverterFactory(GsonConverterFactory.create()).baseUrl(URL).build();
+            retrofit = new Retrofit.Builder().client(buildClient(context)).addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build();
         }
         return retrofit;
     }

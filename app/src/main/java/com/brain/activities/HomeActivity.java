@@ -37,6 +37,10 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
+/**
+ * @author brain30316@gmail.com
+ *
+ */
 public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager viewPager;

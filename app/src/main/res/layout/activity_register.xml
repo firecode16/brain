@@ -15,8 +15,7 @@
                 android:weightSum="12"
                 android:baselineAligned="false">
 
-                <LinearLayout
-                    style="@style/parent"
+                <LinearLayout style="@style/parent"
                     android:background="@drawable/login_shape_bk"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -25,8 +24,7 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <ImageView
-                        style="@style/parent"
+                    <ImageView style="@style/parent"
                         android:background="@drawable/ic_login_bk"
                         android:contentDescription="login background" />
                 </LinearLayout>
@@ -41,8 +39,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp">
 
-                <TextView
-                    style="@style/headerText"
+                <TextView style="@style/headerText"
                     android:layout_gravity="center"
                     android:text="Brain"
                     android:layout_marginTop="40dp" />

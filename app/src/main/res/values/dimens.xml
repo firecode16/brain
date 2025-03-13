@@ -2,7 +2,7 @@
     <dimen name="headerTextSize">22sp</dimen>
     <dimen name="newsMoreTextSize">15sp</dimen>
     <dimen name="loginCardRadius">20dp</dimen>
-    <dimen name="loginViewsMargin">30dp</dimen>
+    <dimen name="loginViewsMargin">32dp</dimen>
     <dimen name="signup_text_margin_top">10dp</dimen>
     <dimen name="selected_tab_indicator_height">2dp</dimen>
 

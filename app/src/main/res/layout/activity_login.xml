@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     style="@style/loginParent"
+    android:orientation="vertical"
     tools:context=".activities.LoginActivity">
 
     <ScrollView style="@style/parent">
@@ -12,21 +12,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
-                android:weightSum="12"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:weightSum="12">
 
-                <LinearLayout
-                    style="@style/parent"
-                    android:layout_height="match_parent"
+                <LinearLayout style="@style/parent"
                     android:layout_width="match_parent"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="0dp"
+                    android:layout_height="match_parent"
                     android:background="@drawable/login_shape_bk"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:gravity="center">
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp">
 
-                    <ImageView
-                        style="@style/parent"
+                    <ImageView style="@style/parent"
                         android:layout_height="259dp"
                         android:background="@drawable/ic_login_bk"
                         android:contentDescription="login background" />
@@ -37,18 +35,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
-                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="70dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp">
+                android:orientation="vertical">
 
-                <TextView
-                    style="@style/headerText"
+                <TextView style="@style/headerText"
                     android:layout_gravity="center"
-                    android:text="BRAIN"
-                    android:textStyle="bold"
+                    android:layout_marginTop="70dp"
                     android:fontFamily="sans-serif"
-                    android:layout_marginTop="70dp" />
+                    android:text="Brain"
+                    android:textStyle="bold" />
 
                 <include layout="@layout/layout_login" />
             </LinearLayout>

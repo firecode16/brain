@@ -4,7 +4,7 @@ import android.view.View
 import com.brain.model.MediaContent
 import com.brain.multimediapuzzlesviewer.MultimediaPuzzlesViewer
 import com.brain.multimediapuzzlesviewer.model.Poster
-import com.brain.util.Util.URL
+import com.brain.util.Util.BASE_URL
 import com.brain.util.Util.URL_PART
 
 class OnPlayerViewClickListenerService(
@@ -15,7 +15,7 @@ class OnPlayerViewClickListenerService(
 ) : View.OnClickListener {
     private lateinit var posterList: MutableList<Poster>
     private lateinit var model: Poster
-    private val adjustUrl: String = URL + URL_PART
+    private val adjustUrl: String = BASE_URL + URL_PART
 
     override fun onClick(v: View) {
         posterList = mutableListOf()

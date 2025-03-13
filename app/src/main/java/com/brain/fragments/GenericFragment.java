@@ -39,6 +39,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * @author brain30316@gmail.com
+ *
+ */
 public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView recycler;
     private SwipeRefreshLayout swipeRefresh;
@@ -152,7 +156,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 progressBar.setVisibility(View.INVISIBLE);
 
                 List<Profile> userItems = new ArrayList<>();
-                userItems.add(new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), true));
+                userItems.add(new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getPhone(), user.getRegistrationDate(), user.getAuth()));
 
                 RecyclerView.Adapter<UserViewHolder> userViewHolderAdapter = new UserAdapter(getActivity(), userItems);
                 recyclerView.setAdapter(userViewHolderAdapter);
@@ -208,7 +212,7 @@ public class GenericFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (response.isSuccessful() && response.body() != null) {
                     // Got data. Send it to adapter
                     Result result = fetchResults(response);
-                    Profile profile = new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getBackdropImage(), user.getAuth());
+                    Profile profile = new Profile(user.getUserId(), user.getUserName(), user.getFullName(), user.getEmail(), user.getPhone(), user.getRegistrationDate(), user.getAuth());
 
                     List<MediaDetail> mediaDetailList = result.getPost();
                     multimediaAdapter.getMediaDetailList().clear();

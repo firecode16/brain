@@ -7,9 +7,8 @@ data class User(
     var userName: String,
     var fullName: String,
     var email: String,
-    var phone: Long,
-    var overview: String,
-    var backdropImage: String,
+    var phone: String,
+    var registrationDate: String,
     var countContacts: Int,
     var auth: Boolean = false
 ) : Serializable

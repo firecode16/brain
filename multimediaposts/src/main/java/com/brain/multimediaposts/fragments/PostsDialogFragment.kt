@@ -62,7 +62,7 @@ class PostsDialogFragment : DialogFragment() {
         val btnPlus = view.findViewById<FloatingActionButton>(R.id.fabPlus)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
-        toolbar.title = "Crear Publicación"
+        toolbar.title = "Crear publicación"
         toolbar.setNavigationOnClickListener {
             onDismissListener()
         }

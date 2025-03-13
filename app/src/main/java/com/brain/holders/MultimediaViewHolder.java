@@ -1,13 +1,13 @@
 package com.brain.holders;
 
 import static com.brain.util.Util.AUDIO_MP3;
+import static com.brain.util.Util.BASE_URL;
 import static com.brain.util.Util.IMG_GIF;
 import static com.brain.util.Util.IMG_JPEG;
 import static com.brain.util.Util.IMG_JPG;
 import static com.brain.util.Util.IMG_PNG;
 import static com.brain.util.Util.MP3;
 import static com.brain.util.Util.MP4;
-import static com.brain.util.Util.URL;
 import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
 import static com.brain.util.Util.loadImage;
@@ -41,6 +41,10 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author brain30316@gmail.com
+ *
+ */
 public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     PlayerView postMedia;
     ProgressBar progressBar;
@@ -79,7 +83,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
 
     @SuppressLint({"UnsafeOptInUsageError", "UseCompatLoadingForDrawables"})
     public void bind(MediaDetail mediaDetail, Profile profile, List<ItemPlayerView> playerViewList, int position) {
-        userName.setText(profile.getUserName());
+        userName.setText(profile.getFullName());
         descrProject.setText(mediaDetail.getOverview());
 
         List<MediaContent> contentList = mediaDetail.getContent();
@@ -87,7 +91,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
         if (mediaDetail.getArray() == 1) {
             String contentType = mediaDetail.getContent().get(CURRENT_ITEM).getContentType();
             String id = mediaDetail.getContent().get(CURRENT_ITEM).get_id();
-            String url = URL + URL_PART + id;
+            String url = BASE_URL + URL_PART + id;
             int itemPosition = getBindingAdapterPosition();
 
             switch (contentType) {
@@ -146,7 +150,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
             }
         } else {
             multimediaList = new ArrayList<>();
-            mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
+            mediaDetail.getContent().forEach(post -> multimediaList.add(new Multimedia(post.get_id(), post.getContentType(), BASE_URL + URL_PART + post.get_id(), mediaDetail.getOverview())));
             int itemPosition = getBindingAdapterPosition();
             imagePost.setImageResource(0);
             multimediaSlider.setVisibility(View.VISIBLE);
