@@ -36,13 +36,11 @@
 
                 <ImageView
                     android:id="@+id/actionAvatar"
-                    style="?attr/actionButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_avatar"
-                    tools:ignore="ContentDescription" />
+                    android:layout_width="43dp"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_account_avatar_24" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 

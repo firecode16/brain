@@ -15,8 +15,8 @@ import androidx.fragment.app.DialogFragment
 import com.brain.multimediaplayer.service.MediaPlayerService
 import com.brain.multimediaposts.R
 import com.brain.multimediaposts.adapters.GridItemAdapter
-import com.brain.multimediaposts.model.User
 import com.brain.multimediaposts.service.PostsService
+import com.brain.userprofile.model.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PostsDialogFragment : DialogFragment() {
@@ -34,17 +34,16 @@ class PostsDialogFragment : DialogFragment() {
         }
     }
 
-    private val pickMultipleMedia =
-        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_ITEMS)) { uris ->
-            if (uris.isNotEmpty()) {
-                gridItemAdapter = GridItemAdapter(requireContext(), uris)
-                gridView.adapter = gridItemAdapter
+    private val pickMultipleMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_ITEMS)) { uris ->
+        if (uris.isNotEmpty()) {
+            gridItemAdapter = GridItemAdapter(requireContext(), uris)
+            gridView.adapter = gridItemAdapter
 
-                btnPost.isEnabled = true
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
+            btnPost.isEnabled = true
+        } else {
+            Log.d("PhotoPicker", "No media selected")
         }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

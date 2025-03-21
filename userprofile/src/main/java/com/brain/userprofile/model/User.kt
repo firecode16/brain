@@ -1,4 +1,4 @@
-package com.brain.multimediaposts.model
+package com.brain.userprofile.model
 
 import java.io.Serializable
 

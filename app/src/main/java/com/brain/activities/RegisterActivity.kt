@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.brain.R
 import com.brain.model.RegisterRequest
 import com.brain.model.RegisterResponse
-import com.brain.multimediaposts.model.User
 import com.brain.repository.AuthRepository
+import com.brain.userprofile.model.User
 import com.brain.util.AuthPreferences
 import com.brain.util.Util.BASE_AUTH_URL
 import com.brain.util.Util.generateUID

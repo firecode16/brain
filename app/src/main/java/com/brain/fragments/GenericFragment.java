@@ -26,9 +26,9 @@ import com.brain.model.MediaDetail;
 import com.brain.model.Profile;
 import com.brain.model.Result;
 import com.brain.multimediaplayer.service.MediaPlayerService;
-import com.brain.multimediaposts.model.User;
 import com.brain.repository.PostHistoryRepository;
 import com.brain.service.CustomScrollStateService;
+import com.brain.userprofile.model.User;
 import com.brain.util.Util;
 
 import java.util.ArrayList;

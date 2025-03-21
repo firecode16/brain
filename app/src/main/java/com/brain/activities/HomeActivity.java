@@ -2,6 +2,7 @@ package com.brain.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +12,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -28,8 +28,9 @@ import com.brain.fragments.GenericFragment;
 import com.brain.multimediaplayer.service.MediaPlayerService;
 import com.brain.multimediaposts.fragments.AboutDialogFragment;
 import com.brain.multimediaposts.fragments.PostsDialogFragment;
-import com.brain.multimediaposts.model.User;
 import com.brain.service.BroadcastReceiverService;
+import com.brain.userprofile.ProfileActivity;
+import com.brain.userprofile.model.User;
 import com.brain.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -129,7 +130,11 @@ public class HomeActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
         ImageView actionAvatar = findViewById(R.id.actionAvatar);
-        actionAvatar.setOnClickListener(v -> Toast.makeText(getApplication(), "Action Avatar.", Toast.LENGTH_SHORT).show());
+        actionAvatar.setOnClickListener(v -> {
+            Intent navigation = new Intent(HomeActivity.this, ProfileActivity.class);
+            navigation.putExtra("user", user);
+            startActivity(navigation);
+        });
     }
 
     @Override

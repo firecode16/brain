@@ -6,9 +6,9 @@ import android.os.Looper
 import android.widget.Toast
 import com.brain.multimediaposts.adapters.GridItemAdapter
 import com.brain.multimediaposts.model.PostResponse
-import com.brain.multimediaposts.model.User
 import com.brain.multimediaposts.repository.PostsRepository
 import com.brain.multimediaposts.util.Util.Companion.BASE_URL
+import com.brain.userprofile.model.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody

@@ -13,7 +13,7 @@ import com.brain.model.LoginRequest
 import com.brain.model.LoginResponse
 import com.brain.model.RefreshTokenRequest
 import com.brain.model.RefreshTokenResponse
-import com.brain.multimediaposts.model.User
+import com.brain.userprofile.model.User
 import com.brain.util.AuthPreferences
 import com.brain.util.Util.isTokenExpired
 import com.google.android.material.textfield.TextInputEditText

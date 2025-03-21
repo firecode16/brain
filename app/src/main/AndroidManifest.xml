@@ -35,6 +35,8 @@
         <activity
             android:name=".activities.RegisterActivity"
             tools:ignore="MissingClass" />
+        <activity android:name="com.brain.userprofile.ProfileActivity"
+            tools:ignore="MissingClass" />
 
         <receiver
             android:name=".service.BroadcastReceiverService"
