@@ -34,6 +34,8 @@
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -83,7 +85,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:fontFamily="sans-serif"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteTextColor"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="4dp"
+                    android:text="Guardar"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:backgroundTint="@android:color/holo_red_light" />
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

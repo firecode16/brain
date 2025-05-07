@@ -24,6 +24,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.brain.userprofile.model.User
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.button.MaterialButton
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var backdropProfile: ImageView
@@ -34,6 +35,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var txtPhone: TextView
     private lateinit var txtEmail: TextView
     private lateinit var toolbar: Toolbar
+    private lateinit var btnSave: MaterialButton
     private var user: User? = null
     private val requestCodePermissions = 1001
 
@@ -51,6 +53,7 @@ class ProfileActivity : AppCompatActivity() {
         txtPhone = findViewById(R.id.txtPhone)
         txtEmail = findViewById(R.id.txtEmail)
         toolbar = findViewById(R.id.toolbarProfile)
+        btnSave = findViewById(R.id.btnSave)
 
         user = intent.getSerializableExtra("user", User::class.java)
 
@@ -119,6 +122,8 @@ class ProfileActivity : AppCompatActivity() {
             .circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(imgProfile)
+
+        btnSaveShow()
     }
 
     private fun loadImgBackdropProfile(uri: Uri) {
@@ -127,6 +132,8 @@ class ProfileActivity : AppCompatActivity() {
             .placeholder(circularProgress(this))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(backdropProfile)
+
+        btnSaveShow()
     }
 
     private fun circularProgress(ctx: Context): Drawable {
@@ -152,5 +159,9 @@ class ProfileActivity : AppCompatActivity() {
 
     private var onBackToHome: View.OnClickListener = View.OnClickListener {
         finish()
+    }
+
+    private fun btnSaveShow() {
+        btnSave.visibility = View.VISIBLE
     }
 }
