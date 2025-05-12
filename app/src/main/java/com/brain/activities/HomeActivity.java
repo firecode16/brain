@@ -1,5 +1,8 @@
 package com.brain.activities;
 
+import static com.brain.userprofile.util.Util.URL_AVATAR_PART;
+import static com.brain.util.Util.BASE_AUTH_URL;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +35,8 @@ import com.brain.service.BroadcastReceiverService;
 import com.brain.userprofile.ProfileActivity;
 import com.brain.userprofile.model.User;
 import com.brain.util.Util;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -60,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
     private Animation animationFabOptionMenuRotateBackward;
 
     ImageView imageView;
+    ImageView actionAvatar;
 
     private boolean fabStatus = false;
     private int tabSelected = -1;
@@ -73,6 +79,7 @@ public class HomeActivity extends AppCompatActivity {
         fabPosts = findViewById(R.id.fabPosts);
         fabAbout = findViewById(R.id.fabAbout);
         imageView = findViewById(R.id.imagePost);
+        actionAvatar = findViewById(R.id.actionAvatar);
 
         // add the toolbar
         setToolbar();
@@ -129,12 +136,13 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
-        ImageView actionAvatar = findViewById(R.id.actionAvatar);
         actionAvatar.setOnClickListener(v -> {
             Intent navigation = new Intent(HomeActivity.this, ProfileActivity.class);
             navigation.putExtra("user", user);
             startActivity(navigation);
         });
+
+        loadAvatarProfile(actionAvatar);
     }
 
     @Override
@@ -275,6 +283,16 @@ public class HomeActivity extends AppCompatActivity {
         newFragment.show(fm, "Dialog");
     }
 
+    private void loadAvatarProfile(ImageView imgAvatar) {
+        user = (User) getIntent().getSerializableExtra("user");
+        Glide.with(getApplicationContext())
+                .load(BASE_AUTH_URL + URL_AVATAR_PART + user.getUserId())
+                .skipMemoryCache(true)
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imgAvatar);
+    }
+
     public ViewPager getViewPager() {
         return viewPager;
     }
@@ -289,6 +307,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fullScreenAndHideNavigationBar();
+        loadAvatarProfile(actionAvatar);
+
         if (tabSelected == 0) {
             MediaPlayerService.Companion.pauseCurrentPlayingVideo();
         } else {

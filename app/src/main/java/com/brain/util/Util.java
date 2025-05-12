@@ -38,8 +38,8 @@ public class Util {
 
     private final Context context;
 
-    public static final String BASE_URL = "http://192.168.1.7:8081/api/";
-    public static final String BASE_AUTH_URL = "http://192.168.1.7:8082/api/";
+    public static final String BASE_URL = "http://192.168.1.2:8081/api/";
+    public static final String BASE_AUTH_URL = "http://192.168.1.2:8082/api/";
     public static final String URL_PART = "multimedia/";
 
     public static final String VIDEO_MP4 = "video/mp4";

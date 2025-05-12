@@ -100,9 +100,11 @@ class RegisterActivity : AppCompatActivity() {
             txtFullName.text.toString(),
             txtEmail.text.toString(),
             txtPhoneNumber.text.toString(),
+            null,
+            null,
+            "",
             currentDateTime.toString(),
-            20,
-            true
+            0
         )
 
         navigation = Intent(this@RegisterActivity, HomeActivity::class.java)

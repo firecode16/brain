@@ -124,8 +124,11 @@ class LoginActivity : AppCompatActivity() {
             fullName!!,
             email!!,
             phone!!,
+            null,
+            null,
+            "",
             dateTime!!,
-            20,
+            0,
             true
         )
 

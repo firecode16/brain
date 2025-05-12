@@ -20,8 +20,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.brain.userprofile.model.User
+import com.brain.userprofile.service.ProfileService
+import com.brain.userprofile.util.Util.Companion.BASE_URL
+import com.brain.userprofile.util.Util.Companion.URL_AVATAR_PART
+import com.brain.userprofile.util.Util.Companion.URL_BACKDROP_PART
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.button.MaterialButton
@@ -37,6 +42,8 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var btnSave: MaterialButton
     private var user: User? = null
+    private var uriBackdropProfile: Uri? = null
+    private var uriImgProfile: Uri? = null
     private val requestCodePermissions = 1001
 
     @SuppressLint("NewApi")
@@ -63,12 +70,23 @@ class ProfileActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener(onBackToHome)
         backdropProfile.setOnClickListener(onPickBackdropListener)
         imgProfile.setOnClickListener(onPickProfileListener)
+        btnSave.setOnClickListener(onUpdateProfile)
+
+        initLoadProfileImages()
     }
 
     @SuppressLint("NewApi")
     private fun fullScreenAndHideNavigationBar() {
         window.setFlags(android.R.attr.windowFullscreen, android.R.attr.windowFullscreen)
         window.decorView.windowInsetsController?.hide(WindowInsets.Type.systemBars())
+    }
+
+    private fun initLoadProfileImages() {
+        val backdropUri = BASE_URL + URL_BACKDROP_PART + user!!.userId
+        val avatarUri = BASE_URL + URL_AVATAR_PART + user!!.userId
+        loadImgBackdropProfile(backdropUri.toUri())
+        loadImgProfileWithRoundCorners(avatarUri.toUri())
+        urlBackdropAndAvatarIsNull()
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,8 +116,8 @@ class ProfileActivity : AppCompatActivity() {
     private val pickProfileMedia = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
-            val uri: Uri? = data!!.data
-            loadImgProfileWithRoundCorners(uri!!)
+            uriImgProfile = data!!.data
+            loadImgProfileWithRoundCorners(uriImgProfile!!)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -108,8 +126,8 @@ class ProfileActivity : AppCompatActivity() {
     private val pickBackdropMedia = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
-            val uri: Uri? = data!!.data
-            loadImgBackdropProfile(uri!!)
+            uriBackdropProfile = data!!.data
+            loadImgBackdropProfile(uriBackdropProfile!!)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -161,7 +179,24 @@ class ProfileActivity : AppCompatActivity() {
         finish()
     }
 
+    private var onUpdateProfile: View.OnClickListener = View.OnClickListener {
+        user?.backdropProfile = uriBackdropProfile
+        user?.avatarProfile = uriImgProfile
+        ProfileService.updateProfile(user!!, applicationContext)
+        ProfileService.clean()
+    }
+
+    private fun urlBackdropAndAvatarIsNull() {
+        if (uriBackdropProfile == null || uriImgProfile == null) {
+            btnSaveHidden()
+        }
+    }
+
     private fun btnSaveShow() {
         btnSave.visibility = View.VISIBLE
+    }
+
+    private fun btnSaveHidden() {
+        btnSave.visibility = View.INVISIBLE
     }
 }

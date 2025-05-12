@@ -33,7 +33,7 @@
             <LinearLayout
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="200dp"
                 android:layout_centerInParent="true"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
@@ -41,7 +41,7 @@
                 <ImageView
                     android:id="@+id/backdropProfile"
                     android:layout_width="match_parent"
-                    android:layout_height="170dp"
+                    android:layout_height="200dp"
                     android:contentDescription="TODO"
                     android:scaleType="centerCrop"
                     android:gravity="center_horizontal"
@@ -50,10 +50,10 @@
 
             <ImageView
                 android:id="@+id/imgProfile"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="111dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="140dp"
                 android:contentDescription="TODO"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_account_profile_24" />
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="135dp"
-                android:layout_marginTop="165dp"
+                android:layout_marginTop="180dp"
                 android:fontFamily="sans-serif"
                 android:textColor="#7A7979"
                 android:textSize="28sp"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="135dp"
-                android:layout_marginTop="215dp"
+                android:layout_marginTop="230dp"
                 android:fontFamily="sans-serif"
                 android:textColor="#7A7979"
                 android:textSize="14sp"
