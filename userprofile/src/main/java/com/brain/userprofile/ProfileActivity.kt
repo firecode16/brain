@@ -28,7 +28,11 @@ import com.brain.userprofile.util.Util.Companion.BASE_URL
 import com.brain.userprofile.util.Util.Companion.URL_AVATAR_PART
 import com.brain.userprofile.util.Util.Companion.URL_BACKDROP_PART
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.button.MaterialButton
 
 class ProfileActivity : AppCompatActivity() {
@@ -139,13 +143,24 @@ class ProfileActivity : AppCompatActivity() {
             .placeholder(circularProgress(this))
             .circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
+                    imgProfile.setImageResource(R.drawable.ic_account_profile_24)
+                    return true
+                }
+
+                override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>?, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+                    return false
+                }
+            })
             .into(imgProfile)
 
         btnSaveShow()
     }
 
     private fun loadImgBackdropProfile(uri: Uri) {
-        Glide.with(this).load(uri)
+        Glide.with(this)
+            .load(uri)
             .skipMemoryCache(true)
             .placeholder(circularProgress(this))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -157,7 +172,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun circularProgress(ctx: Context): Drawable {
         val circularProgress = CircularProgressDrawable(ctx)
         circularProgress.strokeWidth = 5f
-        circularProgress.centerRadius = 20f
+        circularProgress.centerRadius = 25f
         circularProgress.setColorSchemeColors(ContextCompat.getColor(ctx, R.color.circular_progress_gray))
         circularProgress.start()
         return circularProgress
