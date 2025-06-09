@@ -3,6 +3,7 @@
     <string name="app_name">brain</string>
     <string name="register">Registrar</string>
     <string name="ok">Aceptar</string>
+    <string name="gmail">Login with Gmail</string>
     <string name="login_email_hint">Email</string>
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>

@@ -82,5 +82,21 @@
             android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
             android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/btnGmail"
+            style="@style/loginGmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/loginViewsMargin"
+            android:drawableStart="@drawable/ic_gmail_36"
+            android:drawablePadding="3dp"
+            android:fontFamily="sans-serif"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/gmail"
+            android:textAllCaps="false"
+            android:textSize="16sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

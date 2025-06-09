@@ -28,6 +28,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
     private var navigation: Intent? = null
     private lateinit var btnSignIn: Button
+    private lateinit var btnGmail: Button
     private lateinit var txtUserName: TextInputEditText
     private lateinit var txtPassword: TextInputEditText
     private lateinit var user: User
@@ -39,12 +40,17 @@ class LoginActivity : AppCompatActivity() {
         txtUserName = findViewById(R.id.editTextUsername)
         txtPassword = findViewById(R.id.editTextPassword)
         btnSignIn = findViewById(R.id.btnSignIn)
+        btnGmail = findViewById(R.id.btnGmail)
 
         btnSignIn.setOnClickListener {
             val username = txtUserName.text.toString()
             val password = txtPassword.text.toString()
 
             loginUser(username, password)
+        }
+
+        btnGmail.setOnClickListener {
+            Toast.makeText(this, "Logueo con Gmail. Proximamente.",Toast.LENGTH_SHORT).show()
         }
     }
 

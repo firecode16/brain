@@ -5,5 +5,5 @@
     <!-- radius for actions control -->
     <corners android:radius="20dp" />
     <!-- background color for actions control -->
-    <solid android:color="#DCDBDB" />
+    <solid android:color="#CECCCC" />
 </shape>

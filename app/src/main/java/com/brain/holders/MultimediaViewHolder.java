@@ -12,11 +12,19 @@ import static com.brain.util.Util.URL_PART;
 import static com.brain.util.Util.VIDEO_MP4;
 import static com.brain.util.Util.loadImage;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,14 +61,23 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     ImageView imagePost;
     public MultimediaSlider multimediaSlider;
     ImageView share;
+    ImageView icLike;
+    LinearLayout like;
+    LinearLayout emojiContainer;
+    Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler autoDismissHandler = new Handler();
+    private final Runnable autoDismissRunnable = this::hideEmojiContainerAnimated;
+
+    Boolean isLongPress = false;
 
     TextView userName;
-    TextView descrProject;
+    TextView descrPost;
 
     private static final int CURRENT_ITEM = 0;
     ItemPlayerView itemPlayerView;
     List<Multimedia> multimediaList;
 
+    @SuppressLint("ClickableViewAccessibility")
     public MultimediaViewHolder(@NonNull View itemView) {
         super(itemView);
         postMedia = itemView.findViewById(R.id.postMedia);
@@ -70,11 +87,96 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
         imagePost = itemView.findViewById(R.id.imagePost);
         multimediaSlider = itemView.findViewById(R.id.multimediaSlider);
         share = itemView.findViewById(R.id.share);
+        like = itemView.findViewById(R.id.ctrlLike);
+        icLike = itemView.findViewById(R.id.icLike);
+        emojiContainer = itemView.findViewById(R.id.emojiContainer);
 
         userName = itemView.findViewById(R.id.userName);
-        descrProject = itemView.findViewById(R.id.descrProject);
+        descrPost = itemView.findViewById(R.id.descrPost);
 
         share.setOnClickListener(this::shareClick);
+        like.setOnTouchListener(this::likeClick);
+
+        itemView.findViewById(R.id.thumbsUp).setOnClickListener(evt -> onEmojiSelected("\uD83D\uDC4D"));
+        itemView.findViewById(R.id.thumbsDown).setOnClickListener(evt -> onEmojiSelected("\uD83D\uDC4E"));
+        itemView.findViewById(R.id.rocket).setOnClickListener(evt -> onEmojiSelected("\uD83D\uDE80"));
+    }
+
+    private boolean likeClick(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN -> {
+                isLongPress = false;
+                handler.postDelayed(() -> {
+                    isLongPress = true;
+                    showEmojiContainer();
+                }, 300);
+                return true;
+            }
+            case MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                handler.removeCallbacksAndMessages(null);
+                if (!isLongPress) {
+                    Toast.makeText(v.getContext(), "Like enviado", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void onEmojiSelected(String reaction) {
+        autoDismissHandler.removeCallbacks(autoDismissRunnable); // Cancel auto-dismiss
+        hideEmojiContainerAnimated();
+        Toast.makeText(emojiContainer.getContext(), reaction, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showEmojiContainer() {
+        emojiContainer.setVisibility(View.VISIBLE);
+        for (int i = 0; i < emojiContainer.getChildCount(); i++) {
+            View emoji = emojiContainer.getChildAt(i);
+            emoji.setScaleX(0f);
+            emoji.setScaleY(0f);
+            emoji.setAlpha(1f);
+            emoji.setTranslationY(50f);
+
+            // Scaled
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(emoji, View.SCALE_X, 1.2f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(emoji, View.SCALE_Y, 1.2f, 1f);
+            // Floating emojis Up
+            ObjectAnimator moveUp = ObjectAnimator.ofFloat(emoji, View.TRANSLATION_Y, 0f);
+
+            AnimatorSet set = new AnimatorSet();
+            set.setStartDelay(i * 100L); // chain effect
+            set.setDuration(300);
+            set.playTogether(scaleX, scaleY, moveUp);
+            set.start();
+        }
+
+        // Auto-dismiss before 3 sec.
+        autoDismissHandler.postDelayed(autoDismissRunnable, 3000);
+    }
+
+    private void hideEmojiContainerAnimated() {
+        for (int i = 0; i < emojiContainer.getChildCount(); i++) {
+            View emoji = emojiContainer.getChildAt(i);
+
+            ObjectAnimator fadeOut = ObjectAnimator.ofFloat(emoji, View.ALPHA, 0f);
+            fadeOut.setDuration(200);
+            fadeOut.setStartDelay(i * 50L);
+
+            if (i == emojiContainer.getChildCount() - 1) {
+                fadeOut.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        emojiContainer.setVisibility(View.GONE);
+                        for (int j = 0; j < emojiContainer.getChildCount(); j++) {
+                            emojiContainer.getChildAt(j).setAlpha(1f);
+                        }
+                    }
+                });
+            }
+
+            fadeOut.start();
+        }
     }
 
     private void shareClick(View v) {
@@ -84,7 +186,7 @@ public class MultimediaViewHolder extends RecyclerView.ViewHolder {
     @SuppressLint({"UnsafeOptInUsageError", "UseCompatLoadingForDrawables"})
     public void bind(MediaDetail mediaDetail, Profile profile, List<ItemPlayerView> playerViewList, int position) {
         userName.setText(profile.getFullName());
-        descrProject.setText(mediaDetail.getOverview());
+        descrPost.setText(mediaDetail.getOverview());
 
         List<MediaContent> contentList = mediaDetail.getContent();
 
